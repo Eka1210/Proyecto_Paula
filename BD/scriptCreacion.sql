@@ -1,0 +1,330 @@
+-- MySQL dump 10.13  Distrib 8.1.0, for macos13 (arm64)
+--
+-- Host: 127.0.0.1    Database: ventas_paula
+-- ------------------------------------------------------
+-- Server version	8.1.0
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!50503 SET NAMES utf8mb4 */;
+/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
+/*!40103 SET TIME_ZONE='+00:00' */;
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+
+--
+-- Table structure for table `cart`
+--
+
+DROP TABLE IF EXISTS `cart`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `cart` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `userId` int NOT NULL,
+  `active` tinyint NOT NULL,
+  `promotionID` int DEFAULT NULL,
+  `paymentID` int NOT NULL,
+  `deliveryID` int NOT NULL,
+  `status` varchar(255) NOT NULL DEFAULT 'Pendiente',
+  `deliveryD` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `cartID_UNIQUE` (`id`),
+  KEY `fk_cart_users1_idx` (`userId`),
+  KEY `fk_cart_promotions1_idx` (`promotionID`),
+  KEY `paymentID` (`paymentID`),
+  KEY `deliveryID` (`deliveryID`),
+  CONSTRAINT `cart_ibfk_1` FOREIGN KEY (`userId`) REFERENCES `users` (`id`),
+  CONSTRAINT `cart_ibfk_2` FOREIGN KEY (`paymentID`) REFERENCES `paymentMethods` (`id`),
+  CONSTRAINT `cart_ibfk_3` FOREIGN KEY (`deliveryID`) REFERENCES `deliveryMethods` (`id`),
+  CONSTRAINT `fk_cart_promotions1` FOREIGN KEY (`promotionID`) REFERENCES `promotions` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `categories`
+--
+
+DROP TABLE IF EXISTS `categories`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `categories` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `tipo` varchar(45) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `id_UNIQUE` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `clients`
+--
+
+DROP TABLE IF EXISTS `clients`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `clients` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `name` varchar(30) NOT NULL,
+  `surname` varchar(30) NOT NULL,
+  `admin` tinyint NOT NULL,
+  `verified` tinyint NOT NULL,
+  `token` varchar(15) NOT NULL,
+  `phone` varchar(50) NOT NULL,
+  `province` varchar(50) NOT NULL,
+  `canton` varchar(50) NOT NULL,
+  `distrito` varchar(100) NOT NULL,
+  `userID` int NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `userID_UNIQUE` (`id`),
+  KEY `userID` (`userID`),
+  CONSTRAINT `clients_ibfk_1` FOREIGN KEY (`userID`) REFERENCES `users` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `deliveryMethods`
+--
+
+DROP TABLE IF EXISTS `deliveryMethods`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `deliveryMethods` (
+  `id` int NOT NULL AUTO_INCREMENT COMMENT 'Primary Key',
+  `create_time` datetime DEFAULT NULL COMMENT 'Create Time',
+  `name` varchar(255) NOT NULL,
+  `description` varchar(255) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `options`
+--
+
+DROP TABLE IF EXISTS `options`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `options` (
+  `id` int NOT NULL AUTO_INCREMENT COMMENT 'Primary Key',
+  `create_time` datetime DEFAULT NULL COMMENT 'Create Time',
+  `name` varchar(255) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `optionsxproduct`
+--
+
+DROP TABLE IF EXISTS `optionsxproduct`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `optionsxproduct` (
+  `id` int NOT NULL AUTO_INCREMENT COMMENT 'Primary Key',
+  `create_time` datetime DEFAULT NULL COMMENT 'Create Time',
+  `optionID` int NOT NULL,
+  `productID` int NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `optionID` (`optionID`),
+  KEY `productID` (`productID`),
+  CONSTRAINT `optionsxproduct_ibfk_1` FOREIGN KEY (`optionID`) REFERENCES `options` (`id`),
+  CONSTRAINT `optionsxproduct_ibfk_2` FOREIGN KEY (`productID`) REFERENCES `products` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `paymentMethods`
+--
+
+DROP TABLE IF EXISTS `paymentMethods`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `paymentMethods` (
+  `id` int NOT NULL AUTO_INCREMENT COMMENT 'Primary Key',
+  `create_time` datetime DEFAULT NULL COMMENT 'Create Time',
+  `name` varchar(255) NOT NULL,
+  `description` varchar(255) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `products`
+--
+
+DROP TABLE IF EXISTS `products`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `products` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `name` varchar(45) NOT NULL,
+  `description` varchar(45) NOT NULL,
+  `price` decimal(10,2) NOT NULL,
+  `cantidad` int DEFAULT NULL,
+  `imagen` varchar(255) DEFAULT NULL,
+  `categoryID` int NOT NULL,
+  `encargo` tinyint(3) unsigned zerofill NOT NULL DEFAULT '000',
+  `promotion` tinyint NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `productID_UNIQUE` (`id`),
+  KEY `fk_products_categories1_idx` (`categoryID`),
+  CONSTRAINT `fk_products_categories1` FOREIGN KEY (`categoryID`) REFERENCES `categories` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `productsxcart`
+--
+
+DROP TABLE IF EXISTS `productsxcart`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `productsxcart` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `cartID` int NOT NULL,
+  `productID` int NOT NULL,
+  `quantity` int NOT NULL,
+  `price` decimal(10,2) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `fk_cart_has_products_products1_idx` (`productID`),
+  KEY `fk_cart_has_products_cart1_idx` (`cartID`),
+  CONSTRAINT `fk_cart_has_products_cart1` FOREIGN KEY (`cartID`) REFERENCES `cart` (`id`),
+  CONSTRAINT `fk_cart_has_products_products1` FOREIGN KEY (`productID`) REFERENCES `products` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `productsxsale`
+--
+
+DROP TABLE IF EXISTS `productsxsale`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `productsxsale` (
+  `salesID` int NOT NULL,
+  `productID` int NOT NULL,
+  `quantity` int NOT NULL,
+  `price` decimal(10,2) NOT NULL,
+  PRIMARY KEY (`salesID`,`productID`),
+  KEY `fk_sales_has_products_products1_idx` (`productID`),
+  KEY `fk_sales_has_products_sales1_idx` (`salesID`),
+  CONSTRAINT `fk_sales_has_products_products1` FOREIGN KEY (`productID`) REFERENCES `products` (`id`),
+  CONSTRAINT `fk_sales_has_products_sales1` FOREIGN KEY (`salesID`) REFERENCES `sales` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `promotions`
+--
+
+DROP TABLE IF EXISTS `promotions`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `promotions` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `description` varchar(50) NOT NULL,
+  `percentage` decimal(10,2) NOT NULL,
+  `active` tinyint NOT NULL,
+  `productID` int NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `promotionID_UNIQUE` (`id`),
+  KEY `productID` (`productID`),
+  CONSTRAINT `promotions_ibfk_1` FOREIGN KEY (`productID`) REFERENCES `products` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `review`
+--
+
+DROP TABLE IF EXISTS `review`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `review` (
+  `id` int NOT NULL AUTO_INCREMENT COMMENT 'Primary Key',
+  `create_time` datetime DEFAULT NULL COMMENT 'Create Time',
+  `review` varchar(255) NOT NULL,
+  `productID` int NOT NULL,
+  `rating` float NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `productID` (`productID`),
+  CONSTRAINT `review_ibfk_1` FOREIGN KEY (`productID`) REFERENCES `products` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `sales`
+--
+
+DROP TABLE IF EXISTS `sales`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `sales` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `descripcion` varchar(100) NOT NULL,
+  `monto` decimal(10,2) NOT NULL,
+  `fecha` datetime NOT NULL,
+  `discount` decimal(10,2) DEFAULT NULL,
+  `userId` int DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `ventasID_UNIQUE` (`id`),
+  KEY `fk_sales_users1_idx` (`userId`),
+  CONSTRAINT `fk_sales_users1` FOREIGN KEY (`userId`) REFERENCES `clients` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `users`
+--
+
+DROP TABLE IF EXISTS `users`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `users` (
+  `id` int NOT NULL AUTO_INCREMENT COMMENT 'Primary Key',
+  `create_time` datetime DEFAULT NULL COMMENT 'Create Time',
+  `username` varchar(255) NOT NULL,
+  `email` varchar(45) NOT NULL,
+  `password` varchar(45) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `wishList`
+--
+
+DROP TABLE IF EXISTS `wishList`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `wishList` (
+  `id` int NOT NULL AUTO_INCREMENT COMMENT 'Primary Key',
+  `create_time` datetime DEFAULT NULL COMMENT 'Create Time',
+  `userID` int NOT NULL,
+  `productID` int NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `userID` (`userID`),
+  KEY `productID` (`productID`),
+  CONSTRAINT `wishlist_ibfk_1` FOREIGN KEY (`userID`) REFERENCES `users` (`id`),
+  CONSTRAINT `wishlist_ibfk_2` FOREIGN KEY (`productID`) REFERENCES `products` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping routines for database 'ventas_paula'
+--
+/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
+
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+
+-- Dump completed on 2024-12-24 14:13:12
