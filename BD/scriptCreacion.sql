@@ -70,9 +70,6 @@ CREATE TABLE `clients` (
   `id` int NOT NULL AUTO_INCREMENT,
   `name` varchar(30) NOT NULL,
   `surname` varchar(30) NOT NULL,
-  `admin` tinyint NOT NULL,
-  `verified` tinyint NOT NULL,
-  `token` varchar(15) NOT NULL,
   `phone` varchar(50) NOT NULL,
   `province` varchar(50) NOT NULL,
   `canton` varchar(50) NOT NULL,
@@ -97,7 +94,26 @@ CREATE TABLE `deliveryMethods` (
   `create_time` datetime DEFAULT NULL COMMENT 'Create Time',
   `name` varchar(255) NOT NULL,
   `description` varchar(255) NOT NULL,
+  `cost` int NOT NULL,
   PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `directionsxclient`
+--
+
+DROP TABLE IF EXISTS `directionsxclient`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `directionsxclient` (
+  `provincia` varchar(255) DEFAULT NULL,
+  `canton` varchar(255) DEFAULT NULL,
+  `distrito` varchar(255) DEFAULT NULL,
+  `direccion` varchar(255) DEFAULT NULL,
+  `clientID` int NOT NULL,
+  KEY `clientID` (`clientID`),
+  CONSTRAINT `directionsxclient_ibfk_1` FOREIGN KEY (`clientID`) REFERENCES `clients` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -124,11 +140,9 @@ DROP TABLE IF EXISTS `optionsxproduct`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `optionsxproduct` (
-  `id` int NOT NULL AUTO_INCREMENT COMMENT 'Primary Key',
   `create_time` datetime DEFAULT NULL COMMENT 'Create Time',
   `optionID` int NOT NULL,
   `productID` int NOT NULL,
-  PRIMARY KEY (`id`),
   KEY `optionID` (`optionID`),
   KEY `productID` (`productID`),
   CONSTRAINT `optionsxproduct_ibfk_1` FOREIGN KEY (`optionID`) REFERENCES `options` (`id`),
@@ -184,12 +198,10 @@ DROP TABLE IF EXISTS `productsxcart`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `productsxcart` (
-  `id` int NOT NULL AUTO_INCREMENT,
   `cartID` int NOT NULL,
   `productID` int NOT NULL,
   `quantity` int NOT NULL,
   `price` decimal(10,2) NOT NULL,
-  PRIMARY KEY (`id`),
   KEY `fk_cart_has_products_products1_idx` (`productID`),
   KEY `fk_cart_has_products_cart1_idx` (`cartID`),
   CONSTRAINT `fk_cart_has_products_cart1` FOREIGN KEY (`cartID`) REFERENCES `cart` (`id`),
@@ -290,6 +302,9 @@ CREATE TABLE `users` (
   `username` varchar(255) NOT NULL,
   `email` varchar(45) NOT NULL,
   `password` varchar(45) NOT NULL,
+  `admin` tinyint NOT NULL DEFAULT '0',
+  `verified` tinyint NOT NULL DEFAULT '0',
+  `token` varchar(15) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -302,11 +317,9 @@ DROP TABLE IF EXISTS `wishList`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `wishList` (
-  `id` int NOT NULL AUTO_INCREMENT COMMENT 'Primary Key',
   `create_time` datetime DEFAULT NULL COMMENT 'Create Time',
   `userID` int NOT NULL,
   `productID` int NOT NULL,
-  PRIMARY KEY (`id`),
   KEY `userID` (`userID`),
   KEY `productID` (`productID`),
   CONSTRAINT `wishlist_ibfk_1` FOREIGN KEY (`userID`) REFERENCES `users` (`id`),
@@ -327,4 +340,4 @@ CREATE TABLE `wishList` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-12-24 14:13:12
+-- Dump completed on 2024-12-24 17:19:29
