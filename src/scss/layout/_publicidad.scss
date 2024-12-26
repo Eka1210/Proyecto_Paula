@@ -1,0 +1,28 @@
+@use 'base/variables' as v;
+@use 'base/mixins' as m;
+
+.publicidad {
+    padding: 0 3rem;
+    margin: 0 1rem 3rem 1rem;
+    background-color: v.$hueso;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    .contenido-publicidad{
+        flex-direction: column;
+        text-align: center;
+        p{
+            color: v.$vino;
+            font-weight: v.$bold;
+            font-size: 3.5rem;
+        }
+        span {
+            font-size: 3rem;
+        }
+    }
+    .flecha {
+        color: v.$blanco;
+        font-weight: v.$bold;
+        font-size: 10rem;
+    }
+}

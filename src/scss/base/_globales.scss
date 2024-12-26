@@ -1,0 +1,87 @@
+@use 'variables' as v;
+@use 'mixins' as m;
+
+html {
+    font-size: 62.5%;
+    box-sizing: border-box;
+    height: 100%;
+}
+body {
+    min-height: 100%;
+    display: flex;
+    flex-direction: column;
+    color: v.$negro;
+}
+*, *:before, *:after {
+    box-sizing: inherit;
+}
+body {
+    font-family: v.$fuente_principal;
+    font-size: 1.6rem;
+}
+.container {
+    width: 100%;
+    margin: 0 auto;
+}
+a {
+    text-decoration: none;
+}
+
+img {
+    max-width: 100%;
+}
+
+.align-left {
+    text-align: left;
+}
+
+.align-right {
+    text-align: right;
+}
+
+.align-center {
+    text-align: center;
+}
+
+.sm-container {
+    width: min(95%, 80rem);
+    margin: auto;
+}
+
+.orange-btn {
+    @include m.boton(v.$naranja, v.$blanco, 0);
+    margin: 1rem 0;
+}
+
+.blue-btn {
+    @include m.boton(v.$azul, v.$blanco, 0);
+    margin: 1rem 0;
+}
+.red-btn-block {
+    @include m.boton(v.$rojo, v.$blanco, 0);
+    @include m.tablet {
+        width: 100%;
+    }
+    margin: 1rem 0;
+}
+
+.red-btn {
+    @include m.boton(v.$rojo, v.$blanco, 0);
+    margin: 1rem 0;
+}
+
+.flex{
+    display: flex;
+}
+
+.image-small {
+    width: 20rem;
+}
+
+.w-100 {
+    width: 100%;
+}
+
+.space{
+    margin: auto;
+}

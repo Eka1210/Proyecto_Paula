@@ -1,0 +1,107 @@
+@use 'base/variables' as v;
+@use 'base/mixins' as m;
+
+
+.header{
+    display: flex;
+    padding: 2rem;
+    justify-content: space-between;
+    align-items: center;
+    .logo{
+        display: block;
+        p{
+            color:v.$vino;
+            font-weight: v.$bold;
+            font-size: 3rem;
+            margin: 0;
+            text-align: right;
+            span{
+                color: v.$dorado;
+            }
+        }
+    }
+
+    .actions{
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        padding: 0;
+        width: 30%;
+        .login{
+            background-color: v.$vino;
+            border-radius: 5rem;
+            padding: 1.5rem 2.5rem;
+            color: v.$blanco;
+            width: 50%;
+            margin: 1rem;
+            text-align: center;
+        }
+        .carrito{
+            background-color: v.$vino;
+            border-radius: 5rem;
+            height: 5rem;
+            width: 12rem;
+            color: v.$blanco;
+            background-image: url('../img/cart.png');
+            background-size: 40%;
+            background-repeat: no-repeat;
+            background-position: center;
+        }
+    }
+}
+
+.search-bar{
+    display: flex;
+    align-items: center;
+    margin: 0 3rem;
+    width: 70%;
+    .buscador{
+        position: relative;
+        flex: 1;
+        display: inline-block;
+    }
+    input[type="text"]{
+        border: none;
+        padding: 1.5rem 3rem;
+        background-color: v.$gris;
+        flex: 1;
+        border-radius: 5rem;
+        width: 100%;
+    }
+
+    .search-button{
+        margin: 0 1rem;
+        background: none;
+        border: none;
+        cursor: pointer;
+        position: absolute;
+        right: 5px;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 30px;
+        height: 30px;
+        background-image: url('../img/searchIcon.png');
+        background-size: 70%;
+        background-repeat: no-repeat;
+        background-position: center;
+    }
+}
+
+
+.navegacion{
+    display: flex;
+    background-color: v.$vinoC;
+    margin-bottom: 2rem;
+    a{
+        color: v.$blanco;
+        padding: 2rem 5rem;
+        font-size: 1.8rem;
+        &:hover{
+            background-color: v.$vino;
+        }
+        &.active{
+            background-color: v.$vino;
+        }
+    }
+}
+

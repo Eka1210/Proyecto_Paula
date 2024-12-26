@@ -1,0 +1,46 @@
+@use 'base/variables' as v;
+@use 'base/mixins' as m;
+
+.form{
+    display: flex;
+    flex-direction: column;
+    &__description{
+        margin: 0 0 1rem 0;
+        color: v.$gris-oscuro;
+    }
+    &__field{
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        margin: 1.5rem 0;
+    }
+
+    &__label, &__legend{
+        display: block;
+        font-size: 2.2rem;
+        color: v.$naranja;
+        font-weight: v.$bold;
+    }
+
+    &__input, &__textarea, &__select{
+       border: none;
+       background-color: v.$gris;
+       border-radius: 1rem;
+       padding: 1.5rem;
+    }
+
+    &__submit {
+        @include m.boton(v.$azul, v.$blanco, 2.5rem);
+        align-self: center;
+        margin: 1.5rem;
+    }
+
+    &__submit--orange{
+        @include m.boton(v.$naranja, v.$blanco, 0);
+        align-self: flex-start;
+    }
+
+    &__textarea{
+        height: 20rem;
+    }
+}

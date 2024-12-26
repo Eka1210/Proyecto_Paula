@@ -1,0 +1,30 @@
+@use 'base/variables' as v;
+@use 'base/mixins' as m;
+
+
+
+
+.categorias{
+    display: flex;
+    justify-content: space-between;
+    background-color: v.$vino;
+
+    .categoria{
+        display: flex;
+        flex-direction: column;
+        p{
+            color: v.$hueso;
+            text-align: center;
+        }
+
+        padding: 3rem 3rem 1rem 3rem;
+
+    }
+    .escuela{
+        @include m.circulo('../img/cuidado-personal.png')
+
+    }
+
+    height: auto;
+
+}

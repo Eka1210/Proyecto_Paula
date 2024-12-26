@@ -1,0 +1,10 @@
+@use 'base/variables' as v;
+@use 'base/mixins' as m;
+.action {
+    color: v.$azul;
+    margin-bottom: 1rem;
+    font-size: 1.6rem;
+    span{
+        color: v.$naranja;
+    }
+}
