@@ -61,3 +61,81 @@
     background-size: 65%;
     padding: 0;
 }
+
+@mixin container {
+    width: min(95%, 140rem);
+    margin: 0 auto;
+}
+
+@mixin md-container {
+    width: min(95%, 80rem);
+    margin: 0 auto;
+}
+
+@mixin sm-container {
+    width: min(95%, 60rem);
+    margin: 0 auto;
+}
+@mixin headings{
+    font-family: v.$fuente_principal;
+    font-weight: v.$black;
+    color: v.$vino;
+    margin: 2rem 0;
+}
+
+@mixin fluid-text ($min, $max) {
+    font-size: clamp($min, -0.8rem + 10vw ,$max);
+}
+
+@mixin gradient-text($start, $end){
+    background: linear-gradient(to right, $start, $end);
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+@mixin shadow{
+    // box-shadow: rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px;
+
+    -webkit-box-shadow: 4px 4px 8px 0px rgba(0, 0, 0, 0.5);
+    -moz-box-shadow: 4px 4px 8px 0px rgba(0,0,0,0.5);
+    box-shadow: 4px 4px 8px 0px rgba(0,0,0,0.5);
+
+    // box-shadow:  6px 6px 12px #868686,
+    //          -6px -6px 12px #ffffff;
+}
+
+@mixin reset-list{
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+@mixin card{
+    border: 1px solid lighten(v.$gray, 10);
+    padding: 3rem;
+
+    &__name{
+        font-weight: v.$black-font;
+        font-size: 2.6rem;
+        margin: 2rem 0;
+    }
+}
+
+@mixin bg-gradient($bgcolor){
+    background-image: linear-gradient(to left top, $bgcolor, lighten($bgcolor, 15%));
+}
+
+@mixin page-name{
+    display: flex;
+    flex-direction: column;
+    margin: 2rem 0 0rem 0;
+    text-align: center;
+    font-weight: v.$regular;
+    font-size: 2.3rem;
+    padding: 0;
+    span{
+        @include headings;
+        font-size: 3.6rem;
+        margin: .5rem 0 3rem 0;
+    }
+}

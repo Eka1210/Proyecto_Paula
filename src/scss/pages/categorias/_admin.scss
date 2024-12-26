@@ -1,0 +1,47 @@
+@use 'base/mixins' as m;
+@use 'base/variables' as v;
+
+.admin_actions{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    flex-grow:1;
+}
+
+.admins{
+    padding: 1rem 1rem 3rem 1rem;
+    background-color: v.$blanco;
+    border-radius: 1rem;
+    margin: 2rem 2rem auto 2rem;
+    
+
+    &_actions{
+        display: flex;
+        align-items: center;
+        margin-top: 2rem;
+        &__type1{
+            @include m.boton(v.$vinoC, v.$blanco, 0rem);
+            width: 50rem;
+            border-radius: 0.5rem;
+            margin-top: 2rem;
+            text-decoration: none;
+            display: block;
+        }
+
+        &__type2{
+            @include m.boton(v.$dorado, v.$blanco, 0rem);
+            width: 50rem;
+            border-radius: 0.5rem;
+            margin-top: 2rem;
+            text-decoration: none;
+            display: inline-block;
+        }
+        
+    }
+
+    &__empty{
+        text-align: center;
+        font-size: 2rem;
+    }
+}

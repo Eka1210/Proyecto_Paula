@@ -40,7 +40,7 @@
         Inicio</a>
         <a <?php if ($page == 'productos') { echo 'class="active"'; } ?> href="/productos">
         Productos</a>
-        <a <?php if ($page == 'categorias') { echo 'class="active"'; } ?> href="/categorias">
+        <a <?php if ($page == 'categorias') { echo 'class="active"'; } ?> href="/admin/categorias">
         Categorías</a>
         <a <?php if ($page == 'contacto') { echo 'class="active"'; } ?> href="/contacto">
         Contacto</a>
