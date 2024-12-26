@@ -14,4 +14,14 @@ class Category extends ActiveRecord{
         $this->nombre = $args['nombre'] ?? '';
         $this->descripcion = $args['descripcion'] ?? '';
     }
+    public function validate(){
+        if(!$this->nombre){
+            self::setAlerta('error', 'El nombre es obligatorio');
+        }
+        if(!$this->descripcion){
+            self::setAlerta('error', 'La descripcion es obligatoria');
+        }
+    
+        return self::$alertas;
+    }
 }

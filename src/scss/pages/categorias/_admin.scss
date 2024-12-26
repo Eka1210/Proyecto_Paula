@@ -45,3 +45,68 @@
         font-size: 2rem;
     }
 }
+
+.create-form{
+    width: min(95%, 80rem);
+    margin: auto auto 5rem auto;
+    .form__field{
+        input, select, textarea{
+            color:v.$vino;
+            font-weight: v.$bold;
+        }
+    }
+}
+
+.categoryCard{
+    color: v.$vino;
+    padding: 2rem;
+    border-radius: 2rem;
+    @include m.shadow;
+   
+    &--inactiva{
+        background-color: lighten(v.$negro, 80%);
+        .activityCard__name,
+        .activityCard__view{
+            color: lighten(v.$negro, 40%);
+        }
+        .activityCard__info__content{
+            color: lighten(v.$negro, 50%);
+        }
+    }
+
+    &__container{
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 2rem;
+    }
+
+    &__view{
+        color: v.$vinoC;
+        // align to bottom
+        align-self: flex-end;
+        font-size: 1.5rem;
+    }
+    
+    &__name{
+        margin: 0;
+        color: v.$vino;
+        font-size: 2.5rem;
+    }
+    &__info__content{
+        margin: .8rem 0;
+        font-size: 1.7rem;
+        span{
+            font-weight: v.$bold;
+        }
+    }
+    // Apply some styles to the first element of the activities list
+    &:first-child{
+        background-color: v.$vinoC;
+        .activityCard__name,
+        .activityCard__view{
+            color: v.$blanco;
+        }
+
+    }
+}

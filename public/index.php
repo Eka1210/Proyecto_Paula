@@ -17,6 +17,10 @@ $router->get('/admin/categorias', [CategoryController::class, 'admin']);
 $router->post('/admin/categorias', [CategoryController::class, 'admin']);
 $router->get('/admin/categorias/crear', [CategoryController::class, 'crear']);
 $router->post('/admin/categorias/crear', [CategoryController::class, 'crear']);
+$router->get('/admin/categorias/editar', [CategoryController::class, 'ver']);
+$router->post('/admin/categorias/editar', [CategoryController::class, 'ver']);
+$router->get('/editar/categoria', [CategoryController::class, 'editar']);
+$router->post('/editar/categoria', [CategoryController::class, 'editar']);
 
 
 

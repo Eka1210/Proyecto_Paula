@@ -116,6 +116,12 @@ class ActiveRecord {
         return array_shift( $resultado ) ;
     }
 
+    public static function find2($nombre) {
+        $query = "SELECT id FROM " . static::$tabla  ." WHERE nombre = '$nombre'";
+        $result = self::$db->query($query);
+        return ( $result ) ;
+    }
+
     // Obtener Registros con cierta cantidad
     public static function get($limite) {
         $query = "SELECT * FROM " . static::$tabla . " LIMIT " . $limite;
