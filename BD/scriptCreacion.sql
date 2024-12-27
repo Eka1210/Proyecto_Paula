@@ -60,6 +60,25 @@ CREATE TABLE `categories` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Table structure for table `categoriesxproduct`
+--
+
+DROP TABLE IF EXISTS `categoriesxproduct`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `categoriesxproduct` (
+  `create_time` datetime DEFAULT NULL COMMENT 'Create Time',
+  `categoryID` int NOT NULL,
+  `productID` int NOT NULL,
+  KEY `categoryID` (`categoryID`),
+  KEY `productID` (`productID`),
+  CONSTRAINT `categoriesxproduct_ibfk_1` FOREIGN KEY (`categoryID`) REFERENCES `categories` (`id`),
+  CONSTRAINT `categoriesxproduct_ibfk_2` FOREIGN KEY (`productID`) REFERENCES `products` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+
+--
 -- Table structure for table `clients`
 --
 
@@ -182,7 +201,6 @@ CREATE TABLE `products` (
   `imagen` varchar(255) DEFAULT NULL,
   `categoryID` int NOT NULL,
   `encargo` tinyint(3) unsigned zerofill NOT NULL DEFAULT '000',
-  `promotion` tinyint NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   UNIQUE KEY `productID_UNIQUE` (`id`),
   KEY `fk_products_categories1_idx` (`categoryID`),
@@ -262,9 +280,12 @@ CREATE TABLE `review` (
   `review` varchar(255) NOT NULL,
   `productID` int NOT NULL,
   `rating` float NOT NULL,
+  `userID` INT NOT NULL,
   PRIMARY KEY (`id`),
   KEY `productID` (`productID`),
-  CONSTRAINT `review_ibfk_1` FOREIGN KEY (`productID`) REFERENCES `products` (`id`)
+  KEY `userID` (`userID`),
+  CONSTRAINT `review_ibfk_1` FOREIGN KEY (`productID`) REFERENCES `products` (`id`),
+  CONSTRAINT `review_ibfk_2` FOREIGN KEY (`userID`) REFERENCES `users` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
