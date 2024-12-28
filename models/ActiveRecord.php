@@ -192,7 +192,7 @@ class ActiveRecord {
 
     public static function deleteByProduct($productId) {
         // Eliminar todas las relaciones de categorías con el producto especificado
-        $query = "DELETE FROM categoriesXProduct WHERE productID = $productId";
+        $query = "DELETE FROM categoriesxproduct WHERE productID = $productId";
         $resultado = self::$db->query($query);
         return $resultado;
     }

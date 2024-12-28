@@ -53,10 +53,11 @@ DROP TABLE IF EXISTS `categories`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `categories` (
   `id` int NOT NULL AUTO_INCREMENT,
-  `tipo` varchar(45) NOT NULL,
+  `nombre` varchar(45) NOT NULL,
+  `descripcion` varchar(255) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `id_UNIQUE` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -67,7 +68,6 @@ DROP TABLE IF EXISTS `categoriesxproduct`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `categoriesxproduct` (
-  `create_time` datetime DEFAULT NULL COMMENT 'Create Time',
   `categoryID` int NOT NULL,
   `productID` int NOT NULL,
   KEY `categoryID` (`categoryID`),
@@ -76,7 +76,6 @@ CREATE TABLE `categoriesxproduct` (
   CONSTRAINT `categoriesxproduct_ibfk_2` FOREIGN KEY (`productID`) REFERENCES `products` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
 
 --
 -- Table structure for table `clients`
@@ -199,13 +198,10 @@ CREATE TABLE `products` (
   `price` decimal(10,2) NOT NULL,
   `cantidad` int DEFAULT NULL,
   `imagen` varchar(255) DEFAULT NULL,
-  `categoryID` int NOT NULL,
   `encargo` tinyint(3) unsigned zerofill NOT NULL DEFAULT '000',
   PRIMARY KEY (`id`),
-  UNIQUE KEY `productID_UNIQUE` (`id`),
-  KEY `fk_products_categories1_idx` (`categoryID`),
-  CONSTRAINT `fk_products_categories1` FOREIGN KEY (`categoryID`) REFERENCES `categories` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  UNIQUE KEY `productID_UNIQUE` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -280,7 +276,7 @@ CREATE TABLE `review` (
   `review` varchar(255) NOT NULL,
   `productID` int NOT NULL,
   `rating` float NOT NULL,
-  `userID` INT NOT NULL,
+  `userID` int NOT NULL,
   PRIMARY KEY (`id`),
   KEY `productID` (`productID`),
   KEY `userID` (`userID`),
@@ -361,4 +357,4 @@ CREATE TABLE `wishList` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-12-24 17:19:29
+-- Dump completed on 2024-12-27 20:43:06

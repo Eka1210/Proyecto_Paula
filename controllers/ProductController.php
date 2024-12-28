@@ -32,6 +32,8 @@ class ProductController {
                     $productoId = $datos['id'];
 
                     foreach ($categoriasSeleccionadas as $categoriaId) {
+                        echo $productoId;
+                        echo $categoriaId;
                         $categoriaProducto = new CategoryXProduct([
                             'productID' => $productoId,
                             'categoryID' => $categoriaId
@@ -64,7 +66,6 @@ class ProductController {
             $producto->cantidad = $producto->cantidad;
             $producto->imagen = $producto->imagen;
             $producto->encargo = $producto->encargo;
-            $producto->promotion = $producto->promotion;
         }
         $alertas = Category::getAlertas();
         $router->render('ProductsSpects/viewProduct', [
@@ -89,7 +90,6 @@ class ProductController {
         $producto->cantidad = $producto->cantidad;
         $producto->imagen = $producto->imagen;
         $producto->encargo = $producto->encargo;
-        $producto->promotion = $producto->promotion;
 
         $categorias = Category::all();
         $categoriaxP = CategoryXProduct::all();
@@ -101,8 +101,6 @@ class ProductController {
             }
         }
         if($_SERVER['REQUEST_METHOD'] === 'POST'){
-
-            error_log('Alertas en editar: ' . json_encode($alertas));
             if (isset($_POST['categories']) && !empty($_POST['categories'])) {
                 CategoryXProduct::deleteByProduct($producto->id);
                 $categoriasSeleccionadas = $_POST['categories'];
@@ -116,7 +114,6 @@ class ProductController {
                 }
 
             }
-            
             $producto->sincronizar($_POST);
             $alertas = $producto->validate();
             if(empty($alertas)){
