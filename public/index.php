@@ -31,6 +31,8 @@ $router->get('/admin/productos/editar', [ProductController::class, 'ver']);
 $router->post('/admin/productos/editar', [ProductController::class, 'ver']);
 $router->get('/editar/producto', [ProductController::class, 'editar']);
 $router->post('/editar/producto', [ProductController::class, 'editar']);
+$router->get('/admin/productos/eliminar', [ProductController::class, 'eliminar']);
+$router->post('/admin/productos/eliminar', [ProductController::class, 'eliminar']);
 
 
 // Comprueba y valida las rutas, que existan y les asigna las funciones del Controlador

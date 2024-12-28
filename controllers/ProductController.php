@@ -131,4 +131,48 @@ class ProductController {
             'categoriasP'=>$categoriasP
         ]);
     }
+
+
+    public static function eliminar(Router $router){
+        $alertas = [];
+        $productos = Product::all();
+
+        foreach ($productos as $producto) {
+            $producto->name = $producto->name;
+            $producto->id = $producto->id;
+            $producto->description = $producto->description;
+            $producto->price = $producto->price;
+            $producto->cantidad = $producto->cantidad;
+            $producto->imagen = $producto->imagen;
+            $producto->encargo = $producto->encargo;
+        }
+        if($_SERVER['REQUEST_METHOD'] === 'POST'){
+            $id = $_POST['id'];
+            $producto = Product::find($id); 
+            $valid = true;
+
+            $categorias = Category::all();
+            $categoriaxP = CategoryXProduct::all();
+            $categoriasP = [];
+            foreach($categoriaxP as $categoria){
+                if($categoria->productID == $producto->id ){
+                    $categoriaP = Category::find($categoria->categoryID);
+                    $categoriasP[] = $categoriaP; 
+                }
+            }
+            CategoryXProduct::deleteByProduct($producto->id);
+                
+            if($valid){
+                $producto->eliminar();
+                header('Location: /admin/productos/eliminar');
+            }else{
+                header('Location: /admin?error=1');
+            }
+        }
+        $alertas = Category::getAlertas();
+        $router->render('ProductsSpects/deleteProduct', [
+            'alertas' => $alertas,
+            'productos' => $productos
+        ]);
+    }
 }

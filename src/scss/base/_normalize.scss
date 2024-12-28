@@ -196,12 +196,21 @@
   [type="button"],
   [type="reset"],
   [type="submit"] {
-    -webkit-appearance: button;
+      background: none;  /* Elimina el fondo */
+      border: none;      /* Elimina el borde */
+      padding: 0;        /* Elimina el relleno */
+      color: inherit;    /* Hereda el color del texto del contenedor */
+      font: inherit;     /* Hereda la fuente del contenedor */
+      text-align: inherit;/* Hereda el texto */
+      cursor: pointer;   /* Cambia el cursor a puntero */
   }
-  
-  /**
-   * Remove the inner border and padding in Firefox.
-   */
+
+  button:focus,
+  [type="button"]:focus,
+  [type="reset"]:focus,
+  [type="submit"]:focus {
+      outline: none;  /* Elimina el contorno al hacer foco */
+  }
   
   button::-moz-focus-inner,
   [type="button"]::-moz-focus-inner,

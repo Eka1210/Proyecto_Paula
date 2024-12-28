@@ -6,7 +6,7 @@
             <br>
             <a href="productos/editar" class="admins_actions__type1">Editar Producto</a>
             <br>
-            <a href="productos/editar" class="admins_actions__type1">Eliminar Producto</a>
+            <a href="productos/eliminar" class="admins_actions__type1">Eliminar Producto</a>
             <br>
         <?php } ?>
 
