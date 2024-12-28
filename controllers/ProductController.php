@@ -2,168 +2,136 @@
 
 namespace Controllers;
 use MVC\Router;
-use Model\Producto;
-use Model\Categorias;
-use Model\Usuario;
-use Model\Sale;
-use Intervention\Image\ImageManagerStatic as Image;
-use Model\productsxcart;
-use Model\productsxsale;
+use Model\Product;
+use Model\Category;
+use Model\CategoryXProduct;
 
 class ProductController {
-    public static function index(Router $router){
-        isAdmin();
-        $result = $_GET['result'] ?? null;
-        $error = $_GET['error'] ?? null;
-
-        $productos = Producto::all();
-        $categorias = Categorias::all();
-
-        $router->render('admin/index', [
-            'productos' => $productos,
-            'categorias' => $categorias,
-            'result' => $result,
-            'error' => $error,
-            'page' => 'admin'
-        ]);
+    public static function admin(Router $router)
+    {
+        $router->render('ProductsSpects/gestionProductos');
     }
     
     public static function crear(Router $router){
-        isAdmin();
-        $producto = new Producto();
-        $alerta = Producto::getAlertas();
-        $categorias = Categorias::all();
-        if($_SERVER['REQUEST_METHOD'] === 'POST'){
-            $producto = new Producto($_POST);
-            $imageName = md5(uniqid(rand(), true)) .  '.jpg';
-            if($_FILES['imagen']['tmp_name']){
-                $image = Image::make($_FILES['imagen']['tmp_name'])->fit(800, 600);
-                $producto->setImage($imageName);
+        $producto = new Product();
+        $alertas = [];
+        $categorias = Category::all();
+    
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            if ($_POST['encargo'] == 1) {
+                $_POST['cantidad'] = 0;
             }
+            $producto = new Product($_POST);
             $alertas = $producto->validate();
-            if(empty($alertas)){
-                if(!is_dir(IMAGES_DIR)){
-                    mkdir(IMAGES_DIR);
-                }
-                $image->save(IMAGES_DIR . $imageName);
-                $producto->guardar();
-                header('Location: /admin?result=1');
+            
+            if (empty($alertas)) {
+                $datos = $producto->guardar();
+    
+                if ($datos) {
+                    $categoriasSeleccionadas = $_POST['categories'] ?? [];
+                    $productoId = $datos['id'];
+
+                    foreach ($categoriasSeleccionadas as $categoriaId) {
+                        $categoriaProducto = new CategoryXProduct([
+                            'productID' => $productoId,
+                            'categoryID' => $categoriaId
+                        ]);
+                        $categoriaProducto->guardar();
+                    }
+    
+                    // Redirigir con mensaje de éxito
+                    header('Location: /admin/productos');
+                    exit;
+                } 
             }
         }
-        $router->render('admin/crear', [
+    
+        $router->render('ProductsSpects/createProduct', [
             'categorias' => $categorias,
             'alertas' => $alertas,
             'producto' => $producto
         ]);
     }
+    public static function ver(Router $router){
+        $alertas = [];
+        $productos = Product::all();
 
-    public static function actualizar(Router $router){
-        isAdmin();
-        $id = validateORredirect('/admin');
-        $producto = Producto::find($id);
-        $alertas = Producto::getAlertas();
-        $categorias = Categorias::all();
+        foreach ($productos as $producto) {
+            $producto->name = $producto->name;
+            $producto->id = $producto->id;
+            $producto->description = $producto->description;
+            $producto->price = $producto->price;
+            $producto->cantidad = $producto->cantidad;
+            $producto->imagen = $producto->imagen;
+            $producto->encargo = $producto->encargo;
+            $producto->promotion = $producto->promotion;
+        }
+        $alertas = Category::getAlertas();
+        $router->render('ProductsSpects/viewProduct', [
+            'alertas' => $alertas,
+            'productos' => $productos
+        ]);
+    }
+
+    public static function editar(Router $router){
+        //isAdmin();
+        $alertas = [];
+        $producto = $_GET['id'] ?? null;
+        $productoID = Product::find3($producto);
+        $resultado = $productoID->fetch_assoc()['id'];
+
+        $producto = Product::find($resultado);
+        
+        $producto->name = $producto->name;
+        $producto->id = $producto->id;
+        $producto->description = $producto->description;
+        $producto->price = $producto->price;
+        $producto->cantidad = $producto->cantidad;
+        $producto->imagen = $producto->imagen;
+        $producto->encargo = $producto->encargo;
+        $producto->promotion = $producto->promotion;
+
+        $categorias = Category::all();
+        $categoriaxP = CategoryXProduct::all();
+        $categoriasP = [];
+        foreach($categoriaxP as $categoria){
+            if($categoria->productID == $producto->id ){
+                $categoriaP = Category::find($categoria->categoryID);
+                $categoriasP[] = $categoriaP; 
+            }
+        }
         if($_SERVER['REQUEST_METHOD'] === 'POST'){
 
-            $producto->sincronizar($_POST);
-            if($_FILES['imagen']['name'] != ""){
-                $imageName = md5(uniqid(rand(), true)) .  '.jpg';
-                if($_FILES['imagen']){
-                    $image = Image::make($_FILES['imagen']['tmp_name'])->fit(800, 600);
-                    $producto->setImage($imageName);
-                    if(!is_dir(IMAGES_DIR)){
-                        mkdir(IMAGES_DIR);
-                    }
-                    $image->save(IMAGES_DIR . $imageName);
+            error_log('Alertas en editar: ' . json_encode($alertas));
+            if (isset($_POST['categories']) && !empty($_POST['categories'])) {
+                CategoryXProduct::deleteByProduct($producto->id);
+                $categoriasSeleccionadas = $_POST['categories'];
+                foreach ($categoriasSeleccionadas as $categoriaId) {
+                    $categoriaProducto = new CategoryXProduct([
+                        'productID' => $producto->id,
+                        'categoryID' => $categoriaId
+                    ]);
+    
+                    $categoriaProducto->guardar();
                 }
+
             }
             
+            $producto->sincronizar($_POST);
             $alertas = $producto->validate();
-            $alertas = array_merge($alertas, $producto->validateCant());
             if(empty($alertas)){
                 $producto->guardar();
-                header('Location: /admin?result=2');
+                Product::setAlerta('success', 'Producto Editada');
+                header('Location: /admin/productos/editar');
             }
         }
-
-        $router->render('admin/actualizar', [
-            'producto' => $producto,
+        $router->render('ProductsSpects/editProduct', [
             'alertas' => $alertas,
-            'categorias' => $categorias
-        ]);
-    }
-
-    public static function eliminar(Router $router){
-        isAdmin();
-        if($_SERVER['REQUEST_METHOD'] === 'POST'){
-            //debuguear($_POST['id']);
-            $id = $_POST['id'];
-            $producto = Producto::find($id); 
-            $valid = true;
-
-            $productosCart = productsxcart::all();
-            foreach($productosCart as $prod){
-                if($prod->productID == $id){
-                    $valid = false;
-                }
-            }
-
-            $productsSale = productsxsale::all();
-            foreach($productsSale as $prod){
-                if($prod->productID == $id){
-                    $valid = false;
-                }
-            }
-            if($valid){
-                $producto->eliminar();
-                header('Location: /admin?result=3');
-            }else{
-                header('Location: /admin?error=1');
-            }
-        }
-    }
-
-    public static function asignar(Router $router){
-        isAdmin();
-        $result = $_GET['result'] ?? null;
-
-        $current = $_SESSION['userId'];
-        $usuarios = Usuario::all();
-        $router->render('admin/asignar', [
-            'usuarios' => $usuarios,
-            'current' => $current,
-            'result' => $result
-        ]);
-    }
-
-    public static function asignarAdmin(Router $router){
-        isAdmin();
-        if($_SERVER['REQUEST_METHOD'] === 'POST'){
-            $id = $_POST['id'];
-            $usuario = Usuario::find($id); 
-            $usuario->sincronizar($_POST);
-            $usuario->guardar();
-        }
-        header('Location: /admin/asignar?result=4');
-    }
-
-    public static function reporte(Router $router){
-        isAdmin();
-        $sales = Sale::all();
-        $products = Producto::all();
-        $users = Usuario::all();
-
-        $diferencia = Sale::getDifference();
-
-        $data = Sale::getMonthSales();
-
-
-        $router->render('admin/reporte', [
-            'sales' => $sales,
-            'products' => $products,
-            'users' => $users,
-            'diferencia' => $diferencia,
-            'data' => $data
+            'name' => $producto->name,
+            'descripcion' => $producto->description,
+            'producto'=> $producto,
+            'categorias'=>$categorias,
+            'categoriasP'=>$categoriasP
         ]);
     }
 }

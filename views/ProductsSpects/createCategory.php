@@ -8,7 +8,7 @@
             <input type="text" name="nombre" id="name" class="create-category__form__input" required>
         </div>
         <div class="create-category__form__field">
-            <label for="description" class="create-plan__form__label">Descripción</label>
+            <label for="description" class="create-category__form__label">Descripción</label>
             <textarea name="descripcion" id="description" class="create-category__form__textarea" required></textarea>
         </div>
 

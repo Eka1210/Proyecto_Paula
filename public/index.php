@@ -22,6 +22,15 @@ $router->post('/admin/categorias/editar', [CategoryController::class, 'ver']);
 $router->get('/editar/categoria', [CategoryController::class, 'editar']);
 $router->post('/editar/categoria', [CategoryController::class, 'editar']);
 
+// Rutas Productos
+$router->get('/admin/productos', [ProductController::class, 'admin']);
+$router->post('/admin/productos', [ProductController::class, 'admin']);
+$router->get('/admin/productos/crear', [ProductController::class, 'crear']);
+$router->post('/admin/productos/crear', [ProductController::class, 'crear']);
+$router->get('/admin/productos/editar', [ProductController::class, 'ver']);
+$router->post('/admin/productos/editar', [ProductController::class, 'ver']);
+$router->get('/editar/producto', [ProductController::class, 'editar']);
+$router->post('/editar/producto', [ProductController::class, 'editar']);
 
 
 // Comprueba y valida las rutas, que existan y les asigna las funciones del Controlador

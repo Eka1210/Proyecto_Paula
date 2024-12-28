@@ -121,7 +121,11 @@ class ActiveRecord {
         $result = self::$db->query($query);
         return ( $result ) ;
     }
-
+    public static function find3($nombre) {
+        $query = "SELECT id FROM " . static::$tabla  ." WHERE name = '$nombre'";
+        $result = self::$db->query($query);
+        return ( $result ) ;
+    }
     // Obtener Registros con cierta cantidad
     public static function get($limite) {
         $query = "SELECT * FROM " . static::$tabla . " LIMIT " . $limite;
@@ -176,6 +180,19 @@ class ActiveRecord {
     // Eliminar un Registro por su ID
     public function eliminar() {
         $query = "DELETE FROM "  . static::$tabla . " WHERE id = " . self::$db->escape_string($this->id) . " LIMIT 1";
+        $resultado = self::$db->query($query);
+        return $resultado;
+    }
+
+    public function eliminar2() {
+        $query = "DELETE FROM "  . static::$tabla . " WHERE productID = " . self::$db->escape_string($this->productID) . " LIMIT 1";
+        $resultado = self::$db->query($query);
+        return $resultado;
+    }
+
+    public static function deleteByProduct($productId) {
+        // Eliminar todas las relaciones de categorías con el producto especificado
+        $query = "DELETE FROM categoriesXProduct WHERE productID = $productId";
         $resultado = self::$db->query($query);
         return $resultado;
     }

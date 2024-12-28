@@ -1,0 +1,52 @@
+<?php 
+namespace Model;
+
+class Product extends ActiveRecord{
+    protected static $tabla = 'products';
+    protected static $columnasDB = ['id', 'name', 'description', 'price', 'cantidad', 'imagen', 'encargo', 'promotion'];
+
+    public $id;
+    public $name;
+    public $description;
+    public $price;
+    public $cantidad;
+    public $imagen;
+    public $encargo;
+    public $promotion;
+
+    public function __construct($args = []){
+        $this->id = $args['id'] ?? null;
+        $this->name = $args['name'] ?? '';
+        $this->description = $args['description'] ?? '';
+        $this->price = $args['price'] ?? '';
+        $this->cantidad = $args['cantidad'] ?? NULL;
+        $this->imagen = $args['imagen'] ?? '';
+        $this->encargo = $args['encargo'] ?? 0;
+        $this->promotion = $args['promotion'] ?? 0;
+    }
+
+    public function validate(){
+        if(!$this->name){
+            self::setAlerta('error', 'El nombre es obligatorio');
+        }
+        if(!$this->description){
+            self::setAlerta('error', 'La descripcion es obligatoria');
+        }
+        if(!$this->price){
+            self::setAlerta('error', 'El precio es obligatorio');
+        }
+        return self::$alertas;
+    }
+
+    public function validateCant(){
+        if ($this->encargo == 0){
+            if(!$this->cantidad){
+                self::setAlerta('error', 'La cantidad es obligatoria');
+            }
+            if($this->cantidad && $this->cantidad <= 0){
+                self::setAlerta('error', 'La cantidad debe ser mayor a 0');
+            }
+        }
+        return self::$alertas;
+    }
+}

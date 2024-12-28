@@ -1,7 +1,7 @@
 @use 'base/mixins' as m;
 @use 'base/variables' as v;
 
-.create-category{
+.create-product{
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -10,12 +10,12 @@
     &__title{
         color: v.$dorado;
         font-size: 4rem;
-        margin: 0;
+        margin-bottom: 0rem;
     }
     &__description{
         color: lighten(v.$negro, 20%);
         font-size: 2rem;
-        margin: 1rem 0;
+        margin: 0rem 0rem;
     }
     &__form{
         @include m.sm-container;
@@ -29,9 +29,8 @@
         &__label{
             margin-bottom: 1rem;
             font-size: 2rem;
-            color: (v.$vino);
+            color: v.$vino;
             font-weight: v.$bold;
-
         }
         &__input,
         &__textarea{
@@ -49,6 +48,7 @@
             resize: none;
         }
         &__submit{
+            margin-top: 2rem;
             @include m.boton(v.$vino, v.$blanco, 5rem);
         }
     }
