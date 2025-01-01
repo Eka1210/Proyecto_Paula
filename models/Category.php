@@ -14,6 +14,7 @@ class Category extends ActiveRecord{
         $this->nombre = $args['nombre'] ?? '';
         $this->descripcion = $args['descripcion'] ?? '';
     }
+    
     public function validate(){
         if(!$this->nombre){
             self::setAlerta('error', 'El nombre es obligatorio');
