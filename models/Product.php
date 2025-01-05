@@ -47,4 +47,5 @@ class Product extends ActiveRecord{
         }
         return self::$alertas;
     }
+
 }

@@ -228,4 +228,13 @@ class ActiveRecord {
             unlink(IMAGES_DIR . $this->imagen);
         }
     }
+
+    public static function categoria($id){
+        $query = "SELECT * FROM " . static::$tabla  ." WHERE categoryID = " . $id . " LIMIT 1";
+        $resultado = self::consultarSQL($query);
+        if (!empty($resultado)) {
+            return false;
+        }
+        return true;
+    }
 }

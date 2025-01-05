@@ -6,7 +6,7 @@
             <br>
             <a href="categorias/editar" class="admins_actions__type1">Editar Categoria</a>
             <br>
-            <a href="categorias/editar" class="admins_actions__type1">Eliminar Categoria</a>
+            <a href="categorias/eliminar" class="admins_actions__type1">Eliminar Categoria</a>
             <br>
         <?php } ?>
 

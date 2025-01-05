@@ -12,7 +12,7 @@ class PaymentMethod extends ActiveRecord{
 
     public function __construct($args = []) {
         $this->id = $args['id'] ?? null;
-        $this->create_time = $args['create_time'] ?? ''); // Fecha y hora actual por defecto
+        $this->create_time = $args['create_time'] ?? ''; // Fecha y hora actual por defecto
         $this->name = $args['name'] ?? '';
         $this->description = $args['description'] ?? '';
     }

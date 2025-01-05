@@ -4,7 +4,7 @@ namespace Model;
 
 class User extends ActiveRecord{
     protected static $tabla = 'users';
-    protected static $columnasDB = ['id', 'create_time', 'username', 'email', 'password', 'admin', 'verified', 'token']
+    protected static $columnasDB = ['id', 'create_time', 'username', 'email', 'password', 'admin', 'verified', 'token'];
     
     public $id;
     public $create_time;

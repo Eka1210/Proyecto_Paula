@@ -3,6 +3,7 @@
 namespace Controllers;
 use MVC\Router;
 use Model\Category;
+use Model\CategoryXProduct;
 
 class CategoryController {
     public static function index(Router $router){
@@ -91,6 +92,38 @@ class CategoryController {
             'alertas' => $alertas,
             'nombre' => $nombre,
             'descripcion' => $descripcion
+        ]);
+    }
+
+    public static function eliminar(Router $router){
+        $alertas = [];
+        $categorias = Category::all();
+
+        foreach ($categorias as $categoria) {
+            $categoria->nombre = $categoria->nombre;
+            $categoria->id = $categoria->id;
+            $categoria->descripcion = $categoria->descripcion;
+        }
+        if($_SERVER['REQUEST_METHOD'] === 'POST'){
+            $id = $_POST['id'];
+            $categoria = Category::find($id); 
+            $valid = CategoryXProduct::categoria($id);
+
+
+            if ($valid === true){
+                $categoria->eliminar();
+                header('Location: /admin/categorias/eliminar');
+                exit;
+            }
+            else{
+                Category::setAlerta('error', 'Esta Categoria está en uso, no se puede eliminar');
+
+            }
+        }
+        $alertas = Category::getAlertas();
+        $router->render('ProductsSpects/deleteCategory', [
+            'alertas' => $alertas,
+            'categorias' => $categorias
         ]);
     }
 }

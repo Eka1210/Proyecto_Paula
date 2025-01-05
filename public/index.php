@@ -21,6 +21,8 @@ $router->get('/admin/categorias/editar', [CategoryController::class, 'ver']);
 $router->post('/admin/categorias/editar', [CategoryController::class, 'ver']);
 $router->get('/editar/categoria', [CategoryController::class, 'editar']);
 $router->post('/editar/categoria', [CategoryController::class, 'editar']);
+$router->get('/admin/categorias/eliminar', [CategoryController::class, 'eliminar']);
+$router->post('/admin/categorias/eliminar', [CategoryController::class, 'eliminar']);
 
 // Rutas Productos
 $router->get('/admin/productos', [ProductController::class, 'admin']);
