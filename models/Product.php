@@ -48,4 +48,14 @@ class Product extends ActiveRecord{
         return self::$alertas;
     }
 
+    public function updateImage($imagePath) {
+        $query = "UPDATE $tabla SET imagen = '" . self::escapeString($imagePath) . "' WHERE id = " . intval($this->id);
+        return self::ejecutarSQL($query);
+    }
+
+    private static function escapeString($string) {
+        // Escapa caracteres especiales para evitar SQL Injection
+        return htmlspecialchars(mysqli_real_escape_string(self::getConnection(), $string));
+    }
+
 }

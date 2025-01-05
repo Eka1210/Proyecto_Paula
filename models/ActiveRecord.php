@@ -222,12 +222,30 @@ class ActiveRecord {
         }
     }
 
-    public function deleteImage(){
-        $fileExists = file_exists(IMAGES_DIR . $this->imagen);
-        if($fileExists){
-            unlink(IMAGES_DIR . $this->imagen);
+    public function deleteImage() {
+        if (!empty($this->imagen)) {
+            $filePath = IMAGES_DIR . $this->imagen;
+    
+            if (file_exists($filePath) && is_file($filePath)) {
+                unlink($filePath);
+            } else {
+                error_log("El archivo no existe o no es un archivo válido: $filePath");
+            }
+        } else {
+            error_log("El campo 'imagen' está vacío para el objeto con ID: $this->id");
         }
     }
+    public function deleteImage2() {
+        if (!empty($this->imagen)) {
+            $filePath =__DIR__ . '/../public' . $this->imagen;
+            unlink($filePath);
+            $this->imagen = '';
+            
+        } else {
+            error_log("El campo 'imagen' está vacío para el objeto con ID: $this->id");
+        }
+    }
+    
 
     public static function categoria($id){
         $query = "SELECT * FROM " . static::$tabla  ." WHERE categoryID = " . $id . " LIMIT 1";

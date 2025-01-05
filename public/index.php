@@ -6,6 +6,7 @@ use MVC\Router;
 use Controllers\PagesController;
 use Controllers\CategoryController;
 use Controllers\ProductController;
+use Controllers\ImageController;
 
 $router = new Router();
 
@@ -35,6 +36,12 @@ $router->get('/editar/producto', [ProductController::class, 'editar']);
 $router->post('/editar/producto', [ProductController::class, 'editar']);
 $router->get('/admin/productos/eliminar', [ProductController::class, 'eliminar']);
 $router->post('/admin/productos/eliminar', [ProductController::class, 'eliminar']);
+
+// Rutas Imágenes
+$router->get('/admin/imagenes', [ProductController::class, 'imagenes']);
+$router->post('/admin/imagenes', [ProductController::class, 'imagenes']);
+$router->post('/admin/imagenes/subir', [ProductController::class, 'subirImagen']);
+$router->post('/admin/imagenes/eliminar', [ProductController::class, 'eliminarImagen']);
 
 
 // Comprueba y valida las rutas, que existan y les asigna las funciones del Controlador
