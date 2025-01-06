@@ -49,7 +49,7 @@ img {
 }
 
 .orange-btn {
-    @include m.boton(v.$naranja, v.$blanco, 0);
+    @include m.boton(v.$vinoC, v.$blanco, 0);
     margin: 1rem 0;
 }
 

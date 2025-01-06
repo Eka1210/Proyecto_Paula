@@ -2,7 +2,7 @@
 
 namespace Model;
 
-class User extends ActiveRecord{
+class Usuario extends ActiveRecord{
     protected static $tabla = 'users';
     protected static $columnasDB = ['id', 'create_time', 'username', 'email', 'password', 'admin', 'verified', 'token'];
     
