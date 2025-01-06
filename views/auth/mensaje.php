@@ -1,0 +1,1 @@
+<h1>Confirma tu cuenta</h1>

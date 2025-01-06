@@ -7,8 +7,26 @@ use Controllers\PagesController;
 use Controllers\CategoryController;
 use Controllers\ProductController;
 use Controllers\ImageController;
+use Controllers\LoginController;
 
 $router = new Router();
+
+// Rutas Auth
+$router->get('/login', [LoginController::class, 'index']);
+$router->post('/login', [LoginController::class, 'index']);
+$router->get('/logout', [LoginController::class, 'logout']);
+$router->get('/mensaje', [LoginController::class, 'mensaje']);
+$router->get('/verificar', [LoginController::class, 'verificar']);
+$router->get('/register', [LoginController::class, 'register']);
+$router->post('/register', [LoginController::class, 'register']);
+$router->get('/forgot', [LoginController::class, 'forgot']);
+$router->post('/forgot', [LoginController::class, 'forgot']);
+$router->get('/reset', [LoginController::class, 'reset']);
+$router->post('/reset', [LoginController::class, 'reset']);
+$router->get('/cuenta', [LoginController::class, 'cuenta']);
+$router->get('/cuenta/actualizar', [LoginController::class, 'actualizarCuenta']);
+$router->post('/cuenta/actualizar', [LoginController::class, 'actualizarCuenta']);
+$router->get('/cuenta/eliminar', [LoginController::class, 'eliminarCuenta']);
 
 // Rutas Define
 $router->get('/', [PagesController::class, 'index']);
