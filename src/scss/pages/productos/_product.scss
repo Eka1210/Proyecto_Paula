@@ -1,0 +1,43 @@
+@use 'base/variables' as v;
+@use 'base/mixins' as m;
+
+.products-list{
+    margin-bottom: auto;
+    @include m.tablet{
+        @include m.grid(3, 2rem);
+    }
+    @include m.desktop{
+        @include m.grid(5, 2rem);
+    }
+
+    .product{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: space-between;
+        padding: 1rem;
+        &-image{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border: 2px solid v.$gris;
+        }
+        img{
+            max-width: 100%;
+            max-height: 100%;
+        }
+        margin: 2rem;
+        p{
+            text-align: center;
+            &.precio{
+                color: v.$vino;
+                font-weight: v.$bold;
+                margin-top: auto;
+            }
+        }
+    }
+    .cart-button {
+        @include m.boton(v.$vinoC, v.$blanco, 5rem);
+        margin-top: auto;
+    }
+}

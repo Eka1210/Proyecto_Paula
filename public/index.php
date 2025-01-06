@@ -36,6 +36,7 @@ $router->get('/editar/producto', [ProductController::class, 'editar']);
 $router->post('/editar/producto', [ProductController::class, 'editar']);
 $router->get('/admin/productos/eliminar', [ProductController::class, 'eliminar']);
 $router->post('/admin/productos/eliminar', [ProductController::class, 'eliminar']);
+$router->get('/productos', [PagesController::class, 'productos']);
 
 // Rutas Imágenes
 $router->get('/admin/imagenes', [ProductController::class, 'imagenes']);
