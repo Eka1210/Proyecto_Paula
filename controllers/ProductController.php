@@ -5,6 +5,9 @@ use MVC\Router;
 use Model\Product;
 use Model\Category;
 use Model\CategoryXProduct;
+use Model\Option;
+use Model\ProductDecorator;
+use Model\OptionsXProduct;
 
 class ProductController {
     public static function admin(Router $router)
@@ -269,6 +272,52 @@ class ProductController {
     
         echo json_encode($response);
         exit;
+    }
+
+    
+    public static function personalizar(Router $router) {
+        $productId = $_GET['id'] ?? null;
+
+        $producto = Product::find($productId);
+        $opciones = Option::all();
+        $opcionesXP = OptionsXProduct::all();
+        $opcionesProducto = [];
+        foreach($opcionesXP as $opcion){
+            if($opcion->productID == $producto->id ){
+                $opcionP = Option::find($opcion->optionID);
+                $opcionesProducto[] = $opcionP; 
+            }
+        }
+
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            
+
+            header("Location: /personalizacion/producto?id={$productId}");
+            exit;
+        }
+
+        $router->render('ProductsSpects/gestionPersonalizacion', [
+            'producto' => $producto,
+            'opciones' => $opciones,
+            'opcionesProducto' => $opcionesProducto
+        ]);
+    }
+
+    public static function crearOpcion(Router $router)
+    {
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $productId = $_GET['id'] ?? '';
+            $optionData = $_POST['nombre']; 
+            $values = $_POST['values'] ?? [];
+
+            // Usamos el ProductDecorator para crear la opción
+            ProductDecorator::addOptionToProduct($productId, $optionData, $values);
+    
+            header("Location: /personalizacion/producto?id={$productId}");
+            exit;
+        }
+
+        $router->render('ProductsSpects/createOption');
     }
 
     

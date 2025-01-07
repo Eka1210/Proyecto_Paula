@@ -3,16 +3,14 @@ namespace Model;
 
 class Option extends ActiveRecord{
     protected static $tabla = 'options';
-    protected static $columnasDB = ['id', 'create_time', 'name'];
+    protected static $columnasDB = ['id', 'name'];
 
     public $id;
-    public $create_time;
     public $name;
 
     public function __construct($args = []){
         $this->id = $args['id'] ?? null;
-        $this->create_time = $args['nombre'] ?? '';
-        $this->name = $args['descripcion'] ?? '';
+        $this->name = $args['name'] ?? '';
     }
 
     public function validate(){

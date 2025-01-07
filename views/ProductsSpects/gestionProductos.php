@@ -28,9 +28,16 @@
                                 <?php echo $producto->name; ?>
                             </td>
                             <td class="table__td">
+                                <?php if($producto->encargo == 1) { ?>
+                                    <a href="/personalizacion/producto?id=<?php echo $producto->id;?>" class="categoryCard__view">
+                                        <i class="fa-solid fa-cogs"></i> 
+                                        Gestión de Personalización
+                                <?php } else { echo '&nbsp;'; } ?>
+                            </td>
+                            <td class="table__td">
                                 <a href="/editar/producto?id=<?php echo $producto->name;?>" class="categoryCard__view">
                                     <i class="fa-solid fa-pen-to-square"></i>
-                                    Editar Producto
+                                    Editar
                                 </a>
                             </td>
                             <td class="table__td">
@@ -38,7 +45,7 @@
                                     <input type="hidden" name="id" value="<?php echo $producto->id; ?>">
                                     <button type="submit" class="categoryCard__view">
                                         <i class="fa-solid fa-trash"></i>
-                                        Eliminar Producto
+                                        Eliminar
                                     </button>
                                 </form>
                             </td>
