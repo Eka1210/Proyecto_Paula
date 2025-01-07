@@ -51,6 +51,12 @@ $router->post('/editar/producto', [ProductController::class, 'editar']);
 $router->get('/admin/productos/eliminar', [ProductController::class, 'eliminar']);
 $router->post('/admin/productos/eliminar', [ProductController::class, 'eliminar']);
 $router->get('/productos', [PagesController::class, 'productos']);
+$router->get('/personalizacion/producto', [ProductController::class, 'personalizar']);
+$router->post('/personalizacion/producto', [ProductController::class, 'personalizar']);
+$router->get('/admin/opcion/crear', [ProductController::class, 'crearOpcion']);
+$router->post('/admin/opcion/crear', [ProductController::class, 'crearOpcion']);
+
+
 
 // Rutas Imágenes
 $router->get('/admin/imagenes', [ProductController::class, 'imagenes']);

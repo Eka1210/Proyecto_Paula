@@ -144,10 +144,9 @@ DROP TABLE IF EXISTS `options`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `options` (
   `id` int NOT NULL AUTO_INCREMENT COMMENT 'Primary Key',
-  `create_time` datetime DEFAULT NULL COMMENT 'Create Time',
   `name` varchar(255) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -158,9 +157,9 @@ DROP TABLE IF EXISTS `optionsxproduct`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `optionsxproduct` (
-  `create_time` datetime DEFAULT NULL COMMENT 'Create Time',
   `optionID` int NOT NULL,
   `productID` int NOT NULL,
+  `value` json NOT NULL,
   KEY `optionID` (`optionID`),
   KEY `productID` (`productID`),
   CONSTRAINT `optionsxproduct_ibfk_1` FOREIGN KEY (`optionID`) REFERENCES `options` (`id`),
@@ -201,7 +200,7 @@ CREATE TABLE `products` (
   `encargo` tinyint(3) unsigned zerofill NOT NULL DEFAULT '000',
   PRIMARY KEY (`id`),
   UNIQUE KEY `productID_UNIQUE` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -357,4 +356,4 @@ CREATE TABLE `wishList` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-12-27 20:43:06
+-- Dump completed on 2025-01-07 16:47:15
