@@ -37,6 +37,7 @@ class Email {
         $content .= "<p> Si no has creado una cuenta, ignora este mensaje</p>";
         $content .= "</html>";
 
+        
         $mail->Body = $content;
         $mail->send();
     }

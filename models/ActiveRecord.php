@@ -204,6 +204,13 @@ class ActiveRecord {
         return array_shift($result); // Get the first element of the array
     }
 
+    public static function findToken($column, $value){
+        $query = "SELECT * FROM users WHERE token LIKE '%$value%'";
+        // debuguear($query);
+        $result = self::consultarSQL($query);
+        return array_shift($result); // Get the first element of the array
+    }
+
     public static function whereAll($column, $value){
         $query = "SELECT * FROM " . static::$tabla . " WHERE $column = '$value'";
         // debuguear($query);

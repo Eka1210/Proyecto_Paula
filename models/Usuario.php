@@ -16,8 +16,8 @@ class Usuario extends ActiveRecord{
     public $token;
 
     public function __construct($args = []){
-        $this->id = $args['userId'] ?? null;
-        $this->create_time = $args['create_time'] ?? '';
+        $this->id = $args['id'] ?? null;
+        $this->create_time = $args['create_time'] ?? date('Y-m-d H:i:s');
         $this->username = $args['username'] ?? '';
         $this->email = $args['email'] ?? '';
         $this->password = $args['password'] ?? '';

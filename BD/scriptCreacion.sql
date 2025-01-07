@@ -318,7 +318,7 @@ CREATE TABLE `users` (
   `create_time` datetime DEFAULT NULL COMMENT 'Create Time',
   `username` varchar(255) NOT NULL,
   `email` varchar(45) NOT NULL,
-  `password` varchar(45) NOT NULL,
+  `password` varchar(200) NOT NULL,
   `admin` tinyint NOT NULL DEFAULT '0',
   `verified` tinyint NOT NULL DEFAULT '0',
   `token` varchar(15) NOT NULL,

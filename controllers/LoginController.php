@@ -67,8 +67,8 @@ class LoginController {
                 } else{
                     $user->hashPassword();
                     $user->generateToken();
-                    
-                    $email = new Email($user->email, $user->name, $user->token);
+
+                    $email = new Email($user->email, $user->username, $user->token);
                     $email->sendConfirmation();
 
                     $result = $user->guardar();
@@ -97,7 +97,7 @@ class LoginController {
                     $user->generateToken();
                     $user->guardar();
 
-                    $mail = new Email($user->email, $user->name, $user->token);
+                    $mail = new Email($user->email, $user->username, $user->token);
                     $mail->sendRecover();
 
                     Usuario::setAlerta('success', 'Revisa tu correo para recuperar tu contraseña');
@@ -150,10 +150,10 @@ class LoginController {
     public static function verificar(Router $router){
         $alertas = [];
         $token= s($_GET['token'] ?? null);
+        $user = Usuario::findToken('token', $token);
 
-        $user = Usuario::where('token', $token);
-        if(empty($user)){
-            Usuario::setAlerta('error', 'El token no es válido');
+        if(!$user){
+           Usuario::setAlerta('error', 'El token no es válido');
         } else{
             $user->verified = 1;
             $user->token = '';
