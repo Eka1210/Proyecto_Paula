@@ -1,6 +1,6 @@
 
-<div style="display: flex; justify-content: space-between; align-items: center; margin: 0 15px;">
-    <a href="/admin/categorias/crear" class="form__submit--orange">
+<div style="text-align: right; margin-right: 20px;">
+    <a href="/admin/categorias/crear" class="form__submit--orange" style="display: inline-block;">
         Crear Categoria
     </a>
 </div>

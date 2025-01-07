@@ -1,11 +1,12 @@
 
-<div style="display: flex; justify-content: space-between; align-items: center; margin: 0 15px;">
+<div style="display: flex; justify-content: space-between; align-items: center; margin: 0 20px;">
+    <a href="/admin/imagenes" class="form__submit--orange">
+        Gestión Imágenes
+    </a>    
     <a href="/admin/productos/crear" class="form__submit--orange">
         Crear Producto
     </a>
-    <a href="/admin/imagenes" class="form__submit--orange">
-        Gestión Imágenes
-    </a>
+    
 </div>
 
 <div class="detalle">   
