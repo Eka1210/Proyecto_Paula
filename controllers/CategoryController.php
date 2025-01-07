@@ -59,7 +59,7 @@ class CategoryController {
             $categoria->descripcion = $categoria->descripcion;
         }
         $alertas = Category::getAlertas();
-        $router->render('ProductsSpects/viewCategory', [
+        $router->render('ProductsSpects/gestionCategorias', [
             'alertas' => $alertas,
             'categorias' => $categorias
         ]);
