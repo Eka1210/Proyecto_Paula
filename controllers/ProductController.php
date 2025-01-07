@@ -68,7 +68,7 @@ class ProductController {
             $producto->encargo = $producto->encargo;
         }
         $alertas = Category::getAlertas();
-        $router->render('ProductsSpects/viewProduct', [
+        $router->render('ProductsSpects/gestionProductos', [
             'alertas' => $alertas,
             'productos' => $productos
         ]);
