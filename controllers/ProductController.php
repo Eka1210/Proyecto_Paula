@@ -347,6 +347,37 @@ class ProductController {
         ]);
     }
 
+    public static function personalizarP(Router $router) {
+        $productId = $_GET['id'] ?? null;
+    
+        $product = Product::find($productId);
+        $options = OptionsXProduct::all2($productId);
+    
+        foreach ($options as &$option) {
+            $option->decodedValues = json_decode($option->value, true);
+            $optionC = Option::find($option->optionID);
+            $option->name = $optionC->name;
+        }
 
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $selectedOptions = $_POST['options'] ?? [];
+            $quantity = $_POST['quantity'] ?? 1;
+    
+            // Lógica para procesar las opciones seleccionadas
+            // Por ejemplo, añadir al carrito
+    
+            // Redirigir a la página de resumen
+            header("Location: ");
+            exit;
+        }
+    
+        // Renderizar la vista
+        $router->render('profile/personalizar', [
+            'product' => $product,
+            'options' => $options,
+            'productId' => $productId
+        ]);
+    }
+    
     
 }

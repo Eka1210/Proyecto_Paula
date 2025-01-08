@@ -108,6 +108,11 @@ class ActiveRecord {
         $resultado = self::consultarSQL($query);
         return $resultado;
     }
+    public static function all2($id) {
+        $query = "SELECT * FROM " . static::$tabla . " WHERE productID = " . $id;
+        $resultado = self::consultarSQL($query);
+        return $resultado;
+    }
 
     // Busca un registro por su id
     public static function find($id) {

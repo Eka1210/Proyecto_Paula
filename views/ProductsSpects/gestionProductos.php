@@ -29,13 +29,13 @@
                             </td>
                             <td class="table__td">
                                 <?php if($producto->encargo == 1) { ?>
-                                    <a href="/personalizacion/producto?id=<?php echo $producto->id;?>" class="categoryCard__view">
+                                    <a href="/admin/personalizacion/producto?id=<?php echo $producto->id;?>" class="categoryCard__view">
                                         <i class="fa-solid fa-cogs"></i> 
                                         Gestión de Personalización
                                 <?php } else { echo '&nbsp;'; } ?>
                             </td>
                             <td class="table__td">
-                                <a href="/editar/producto?id=<?php echo $producto->name;?>" class="categoryCard__view">
+                                <a href="/admin/editar/producto?id=<?php echo $producto->name;?>" class="categoryCard__view">
                                     <i class="fa-solid fa-pen-to-square"></i>
                                     Editar
                                 </a>

@@ -1,0 +1,96 @@
+/* Colores de la paleta */
+:root {
+    --vinoC: #693334;
+    --vino: #390708;
+    --dorado: #f6b229;
+    --gris-oscuro1: #6b6d7a;
+    --hueso: #efebe2;
+}
+
+/* Contenedor principal */
+.product-customization {
+    display: flex;
+    gap: 20px;
+    align-items: flex-start;
+    margin: 20px 200px 20px 200px;
+    padding: 20px 100px 20px 100px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Imagen del producto */
+.product-image img {
+    max-width: 350px;
+    border-radius: 5px;
+    margin-top: 4rem;
+    margin-right: 4rem;
+    
+}
+
+/* Opciones de personalización */
+.customization-options {
+    flex: 1;
+}
+
+.customization-options h1 {
+    font-size: 24px;
+    margin-bottom: 20px;
+    color: var(--vino);
+}
+
+.customization-option {
+    margin-bottom: 15px;
+}
+
+.customization-option h2 {
+    font-size: 18px;
+    margin-bottom: 5px;
+    color: var(--vinoC);
+}
+
+.customization-option select {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid var(--vinoC);
+    border-radius: 4px;
+}
+
+.quantity-selection {
+    margin-top: 15px;
+
+    h2 {
+        font-size: 18px;
+        margin-bottom: 5px;
+        color: var(--vinoC);
+    }
+
+    input {
+        width: 100px;
+        padding: 5px;
+        border: 1px solid var(--vinoC);
+        border-radius: 4px;
+    }
+}
+
+.customization-form__submit {
+    margin-top: 20px;
+    padding: 10px 20px;
+    background-color: var(--vinoC);
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+
+    &:hover {
+        background-color: var(--vino);
+    }
+}
+
+.personalizar {
+    font-size: 24px;
+    margin-bottom: 5px;
+    color:  var(--dorado);
+    font-weight: bold;
+}
