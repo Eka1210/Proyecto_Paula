@@ -27,9 +27,6 @@ class LoginController {
                             $cart = new Cart(['userId' => $user->id]);
                             $cart->guardar();
                         }
-
-
-
                         $_SESSION['userId'] = $user->id;
                         $_SESSION['username'] = $user->username;
                         $_SESSION['email'] = $user->email;
