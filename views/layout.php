@@ -46,14 +46,28 @@
     }
     ?>
     <nav class="navegacion">
-        <a <?php if ($page == 'inicio') { echo 'class="active"'; } ?> href="/">
-        Inicio</a>
-        <a <?php if ($page == 'productos') { echo 'class="active"'; } ?> href="/productos">
-        Productos</a>
-        <a <?php if ($page == 'categorias') { echo 'class="active"'; } ?> href="/categorias">
-        Categorías</a>
-        <a <?php if ($page == 'contacto') { echo 'class="active"'; } ?> href="/contacto">
-        Contacto</a>
+        <?php if(isset($_SESSION['admin'])){ ?>
+            <a <?php if ($page == 'inicio') { echo 'class="active"'; } ?> href="/admin">
+            Inicio</a>
+        <?php } else {?>
+            <a <?php if ($page == 'inicio') { echo 'class="active"'; } ?> href="/">
+            Inicio</a>
+        <?php } ?>
+
+        <?php if(isset($_SESSION['admin'])){ ?>
+            <a <?php if ($page == 'productos') { echo 'class="active"'; } ?> href="/admin/productos">
+            Productos</a>
+        <?php } else {?>
+            <a <?php if ($page == 'productos') { echo 'class="active"'; } ?> href="/productos">
+            Productos</a>
+        <?php } ?>
+
+        <?php if(isset($_SESSION['admin'])){ ?>
+            <a <?php if ($page == 'categorias') { echo 'class="active"'; } ?> href="/admin/categorias">
+            Categorías</a>
+        <?php } else {?>
+        <?php } ?>
+        
         <?php if(isset($_SESSION['admin'])) { ?>
             <a <?php if ($page == 'admin') { echo 'class="active"'; } ?> href="/admin">
             Admin</a>

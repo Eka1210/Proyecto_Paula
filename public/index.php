@@ -30,6 +30,7 @@ $router->get('/cuenta/eliminar', [LoginController::class, 'eliminarCuenta']);
 
 // Rutas Define
 $router->get('/', [PagesController::class, 'index']);
+$router->get('/admin', [PagesController::class, 'index']);
 
 // Rutas Categorías
 $router->get('/admin/categorias', [CategoryController::class, 'ver']);
