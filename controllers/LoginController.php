@@ -17,6 +17,7 @@ class LoginController {
             $auth->sincronizar($_POST);
             $alertas = $auth->validateLogin();
 
+
             if(empty($alertas['error'])){
                 $user = Usuario::where('email', $auth->email);
                 if($user){
@@ -25,7 +26,7 @@ class LoginController {
                         $cart = Cart::where('userID', $user->id);
                         if(!$cart){
                             $cart = new Cart(['userId' => $user->id]);
-                            $cart->guardar();
+                            $cart->crearC();
                         }
                         $_SESSION['userId'] = $user->id;
                         $_SESSION['username'] = $user->username;
@@ -53,8 +54,10 @@ class LoginController {
 
     public static function register(Router $router){
         $user = new Usuario();
+        $alertas = [];
         
         if($_SERVER['REQUEST_METHOD'] === 'POST'){
+            echo $_POST['password'];
             $user->sincronizar($_POST);
             $alertas = $user->validateRegister();
             if(empty($alertas['error'])){

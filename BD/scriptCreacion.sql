@@ -26,22 +26,19 @@ CREATE TABLE `cart` (
   `id` int NOT NULL AUTO_INCREMENT,
   `userId` int NOT NULL,
   `active` tinyint NOT NULL,
-  `promotionID` int DEFAULT NULL,
   `paymentID` int DEFAULT NULL,
   `deliveryID` int DEFAULT NULL,
-  `status` varchar(255) NOT NULL DEFAULT 'vacio',
+  `status` varchar(255) NOT NULL DEFAULT 'Pendiente',
   `deliveryD` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `cartID_UNIQUE` (`id`),
   KEY `fk_cart_users1_idx` (`userId`),
-  KEY `fk_cart_promotions1_idx` (`promotionID`),
   KEY `paymentID` (`paymentID`),
   KEY `deliveryID` (`deliveryID`),
   CONSTRAINT `cart_ibfk_1` FOREIGN KEY (`userId`) REFERENCES `users` (`id`),
-  CONSTRAINT `cart_ibfk_2` FOREIGN KEY (`paymentID`) REFERENCES `paymentMethods` (`id`),
   CONSTRAINT `cart_ibfk_3` FOREIGN KEY (`deliveryID`) REFERENCES `deliveryMethods` (`id`),
-  CONSTRAINT `fk_cart_promotions1` FOREIGN KEY (`promotionID`) REFERENCES `promotions` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  CONSTRAINT `cart_ibfk_4` FOREIGN KEY (`paymentID`) REFERENCES `paymentMethods` (`id`) ON DELETE SET NULL
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -146,7 +143,7 @@ CREATE TABLE `options` (
   `id` int NOT NULL AUTO_INCREMENT COMMENT 'Primary Key',
   `name` varchar(255) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -317,12 +314,12 @@ CREATE TABLE `users` (
   `create_time` datetime DEFAULT NULL COMMENT 'Create Time',
   `username` varchar(255) NOT NULL,
   `email` varchar(45) NOT NULL,
-  `password` varchar(200) NOT NULL,
+  `password` varchar(255) NOT NULL,
   `admin` tinyint NOT NULL DEFAULT '0',
   `verified` tinyint NOT NULL DEFAULT '0',
   `token` varchar(15) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -356,4 +353,4 @@ CREATE TABLE `wishList` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-01-07 16:47:15
+-- Dump completed on 2025-01-08 12:29:22
