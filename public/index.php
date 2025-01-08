@@ -55,6 +55,10 @@ $router->get('/personalizacion/producto', [ProductController::class, 'personaliz
 $router->post('/personalizacion/producto', [ProductController::class, 'personalizar']);
 $router->get('/admin/opcion/crear', [ProductController::class, 'crearOpcion']);
 $router->post('/admin/opcion/crear', [ProductController::class, 'crearOpcion']);
+$router->get('/admin/editar/option', [ProductController::class, 'editarOpcion']);
+$router->post('/admin/editar/option', [ProductController::class, 'editarOpcion']);
+
+
 
 
 

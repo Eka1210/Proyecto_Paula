@@ -35,8 +35,6 @@ class ProductController {
                     $productoId = $datos['id'];
 
                     foreach ($categoriasSeleccionadas as $categoriaId) {
-                        echo $productoId;
-                        echo $categoriaId;
                         $categoriaProducto = new CategoryXProduct([
                             'productID' => $productoId,
                             'categoryID' => $categoriaId
@@ -319,6 +317,36 @@ class ProductController {
 
         $router->render('ProductsSpects/createOption');
     }
+
+    public static function editarOpcion(Router $router)
+    {
+        $optionID = $_GET['id'] ?? null;
+
+        $option = Option::find($optionID);
+        $valuesJson = OptionsXProduct::findValues($optionID);
+
+        // Decodificar el JSON para obtener un array
+        $values = json_decode($valuesJson->value, true);
+        
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $nombre = $_POST['nombre'] ?? '';
+            $valuesJson = $_POST['values'] ?? [];
+
+            ProductDecorator::updateOption($optionID, $nombre, $valuesJson);
+            $productId = OptionsXProduct::findProduct($optionID);
+
+            // Redirigir después de la edición
+            header("Location: /personalizacion/producto?id={$productId}");
+            exit;
+        }
+
+        // Renderizar la vista de edición con los datos de la opción
+        $router->render('ProductsSpects/editOption', [
+            'option' => $option,
+            'values' => $values
+        ]);
+    }
+
 
     
 }

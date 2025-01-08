@@ -23,7 +23,7 @@
                                 <?php echo $opciones->name; ?>
                             </td>
                             <td class="table__td">
-                                <a href="/editar/option?id=<?php echo $opciones->id;?>" class="categoryCard__view">
+                                <a href="/admin/editar/option?id=<?php echo $opciones->id;?>" class="categoryCard__view">
                                     <i class="fa-solid fa-pen-to-square"></i>
                                     Editar
                                 </a>
