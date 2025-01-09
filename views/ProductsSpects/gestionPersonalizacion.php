@@ -29,7 +29,7 @@
                                 </a>
                             </td>
                             <td class="table__td">
-                                <form action="/eliminar/option" method="POST" onsubmit="return confirm('Está seguro que quiere eliminar el producto?')">
+                                <form action="/admin/eliminar/option" method="POST" onsubmit="return confirm('Está seguro que quiere eliminar el producto?')">
                                     <input type="hidden" name="id" value="<?php echo $opciones->id; ?>">
                                     <button type="submit" class="categoryCard__view">
                                         <i class="fa-solid fa-trash"></i>

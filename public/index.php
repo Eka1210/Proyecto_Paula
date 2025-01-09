@@ -32,14 +32,15 @@ $router->get('/cuenta/eliminar', [LoginController::class, 'eliminarCuenta']);
 
 // Rutas Define
 $router->get('/', [PagesController::class, 'index']);
+$router->get('/admin', [PagesController::class, 'index']);
 
 // Rutas Categorías
 $router->get('/admin/categorias', [CategoryController::class, 'ver']);
 $router->post('/admin/categorias', [CategoryController::class, 'admin']);
 $router->get('/admin/categorias/crear', [CategoryController::class, 'crear']);
 $router->post('/admin/categorias/crear', [CategoryController::class, 'crear']);
-$router->get('/editar/categoria', [CategoryController::class, 'editar']);
-$router->post('/editar/categoria', [CategoryController::class, 'editar']);
+$router->get('/admin/editar/categoria', [CategoryController::class, 'editar']);
+$router->post('/admin/editar/categoria', [CategoryController::class, 'editar']);
 $router->get('/admin/categorias/eliminar', [CategoryController::class, 'eliminar']);
 $router->post('/admin/categorias/eliminar', [CategoryController::class, 'eliminar']);
 
@@ -48,17 +49,19 @@ $router->get('/admin/productos', [ProductController::class, 'ver']);
 $router->post('/admin/productos', [ProductController::class, 'admin']);
 $router->get('/admin/productos/crear', [ProductController::class, 'crear']);
 $router->post('/admin/productos/crear', [ProductController::class, 'crear']);
-$router->get('/editar/producto', [ProductController::class, 'editar']);
-$router->post('/editar/producto', [ProductController::class, 'editar']);
+$router->get('/admin/editar/producto', [ProductController::class, 'editar']);
+$router->post('/admin/editar/producto', [ProductController::class, 'editar']);
 $router->get('/admin/productos/eliminar', [ProductController::class, 'eliminar']);
 $router->post('/admin/productos/eliminar', [ProductController::class, 'eliminar']);
 $router->get('/productos', [PagesController::class, 'productos']);
-$router->get('/personalizacion/producto', [ProductController::class, 'personalizar']);
-$router->post('/personalizacion/producto', [ProductController::class, 'personalizar']);
+$router->get('/admin/personalizacion/producto', [ProductController::class, 'personalizar']);
+$router->post('/admin/personalizacion/producto', [ProductController::class, 'personalizar']);
 $router->get('/admin/opcion/crear', [ProductController::class, 'crearOpcion']);
 $router->post('/admin/opcion/crear', [ProductController::class, 'crearOpcion']);
 $router->get('/admin/editar/option', [ProductController::class, 'editarOpcion']);
 $router->post('/admin/editar/option', [ProductController::class, 'editarOpcion']);
+$router->get('/personalizar/producto', [ProductController::class, 'personalizarP']);
+$router->post('/personalizar/producto', [ProductController::class, 'personalizarP']);
 
 
 

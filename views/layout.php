@@ -1,3 +1,28 @@
+<?php
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
+// Función para verificar acceso a las rutas de administrador
+function verificarAccesoAdmin() {
+    $uri = $_SERVER['REQUEST_URI'];
+
+    // Verifica si la ruta es de administrador
+    $isAdminRoute = strpos($uri, '/admin') === 0;
+
+    // Si es una ruta de administrador, verifica autenticación y permisos
+    if ($isAdminRoute) {
+        if (!isset($_SESSION['login']) || !isset($_SESSION['admin']) || !$_SESSION['admin']) {
+            header('Location: /'); // Redirige al inicio si no tiene acceso
+            exit;
+        }
+    }
+}
+
+// Llamar a la función para verificar acceso solo en rutas de administrador
+verificarAccesoAdmin();
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -8,14 +33,15 @@
     <link rel="stylesheet" href="/build/css/app.css">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700;900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css" integrity="sha512-1sCRPdkRXhBV2PBLUdRb4tMg1w2YPf37qatUFeS7zlBy7jJI8Lf4VHwWfZZfpXtYSLy85pkm9GaYVYMfw5BC1A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css" integrity="sha512-1sCRPdkRXhB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="/build/css/app.css">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-     integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
-     crossorigin=""/>
+        integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+        crossorigin="" />
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
-     integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
-     crossorigin=""></script>
+        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+        crossorigin=""></script>
 </head>
 <body>
     <header class="header section">
@@ -39,26 +65,37 @@
             <?php } ?>
         </div>
     </header>
-
     <?php
     {
         $page = $page ??"";
     }
     ?>
     <nav class="navegacion">
-        <a <?php if ($page == 'inicio') { echo 'class="active"'; } ?> href="/">
-        Inicio</a>
-        <a <?php if ($page == 'productos') { echo 'class="active"'; } ?> href="/productos">
-        Productos</a>
-        <a <?php if ($page == 'categorias') { echo 'class="active"'; } ?> href="/categorias">
-        Categorías</a>
-        <a <?php if ($page == 'contacto') { echo 'class="active"'; } ?> href="/contacto">
-        Contacto</a>
+        <?php if(isset($_SESSION['admin'])){ ?>
+            <a <?php if ($page == 'inicio') { echo 'class="active"'; } ?> href="/admin">
+            Inicio</a>
+        <?php } else {?>
+            <a <?php if ($page == 'inicio') { echo 'class="active"'; } ?> href="/">
+            Inicio</a>
+        <?php } ?>
+
+        <?php if(isset($_SESSION['admin'])){ ?>
+            <a <?php if ($page == 'productos') { echo 'class="active"'; } ?> href="/admin/productos">
+            Productos</a>
+        <?php } else {?>
+            <a <?php if ($page == 'productos') { echo 'class="active"'; } ?> href="/productos">
+            Productos</a>
+        <?php } ?>
+
+        <?php if(isset($_SESSION['admin'])){ ?>
+            <a <?php if ($page == 'categorias') { echo 'class="active"'; } ?> href="/admin/categorias">
+            Categorías</a>
+        <?php } ?>
+
         <?php if(isset($_SESSION['admin'])) { ?>
             <a <?php if ($page == 'admin') { echo 'class="active"'; } ?> href="/admin">
             Admin</a>
         <?php } ?>
-        <!-- Hacer icono de admin cuando esta logueado con admin -->
     </nav>
 
     <?php echo $contenido; ?>

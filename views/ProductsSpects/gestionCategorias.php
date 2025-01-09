@@ -24,7 +24,7 @@
                                 <?php echo $categoria->nombre; ?>
                             </td>
                             <td class="table__td">
-                                <a href="/editar/categoria?id=<?php echo $categoria->nombre;?>" class="categoryCard__view">
+                                <a href="/admin/editar/categoria?id=<?php echo $categoria->nombre;?>" class="categoryCard__view">
                                     <i class="fa-solid fa-pen-to-square"></i>
                                     Editar Categoria
                                 </a>

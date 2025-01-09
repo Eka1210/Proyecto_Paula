@@ -12,6 +12,13 @@ class PagesController {
         ]);
     }
 
+    public static function admin(Router $router){
+        $router->render('MainMenu/index', [
+            'page' => 'inicio'
+        ]);
+    }
+
+
     public static function productos(Router $router){
         $productos = Product::all();
         if($_SERVER['REQUEST_METHOD'] === 'POST'){

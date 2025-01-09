@@ -8,12 +8,17 @@ class OptionsXProduct extends ActiveRecord {
     public $productID;
     public $optionID;
     public $value;
+    public $decodedValues;
+    public $name;
 
     public function __construct($args = []) {
         $this->productID = $args['productID'] ?? null;
         $this->optionID = $args['optionID'] ?? null;
         $this->value = $args['value'] ?? '';
+        $this->decodedValues = [];
+        $this->name = [];
     }
+
 
     public static function findProduct($id) {
         $query = "SELECT productID FROM " . static::$tabla  ." WHERE optionID = $id";
