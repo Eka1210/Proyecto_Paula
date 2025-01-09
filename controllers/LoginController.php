@@ -228,26 +228,28 @@ class LoginController {
 
     public static function actualizarCuenta(Router $router){
         isAuth();
+        $alertas = [];
         $id = $_SESSION['userId'];
         $user = Usuario::find($id);
-        $client = Usuario::findClient($id);
-        echo 'eeeee';
-        echo $client->name;
+        $client = Client::findClient($id);
         
-
         if($_SERVER['REQUEST_METHOD'] === 'POST'){
             $user->sincronizar($_POST);
             $alertas = $user->validateUpdate();
-            $alertas = $client->validateUpdate();
+            //$alertas = $user->validateEmail();
+            //$alertas = $client->validate();
+            
             if(empty($alertas['error'])){
+                echo 'hola';
                 $user->guardar();
-                //$client->guardar();
+                $client->guardar();
                 header('Location: /cuenta?result=2');
+                echo 'hola';
             }
         }
-
         $router->render('cuenta/actualizarCuenta', [
             'user' => $user,
+            'client' => $client
         ]);
     }
 

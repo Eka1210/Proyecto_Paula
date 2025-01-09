@@ -60,7 +60,6 @@ class Usuario extends ActiveRecord{
         if(!$this->username){
             self::setAlerta('error', 'El nombre de usuario es obligatorio');
         }
-
         return self::$alertas;
     }
 
