@@ -21,6 +21,8 @@ $router->get('/register', [LoginController::class, 'register']);
 $router->post('/register', [LoginController::class, 'register']);
 $router->get('/forgot', [LoginController::class, 'forgot']);
 $router->post('/forgot', [LoginController::class, 'forgot']);
+$router->get('/change', [LoginController::class, 'changePassword']);
+$router->post('/change', [LoginController::class, 'changePassword']);
 $router->get('/reset', [LoginController::class, 'reset']);
 $router->post('/reset', [LoginController::class, 'reset']);
 $router->get('/cuenta', [LoginController::class, 'cuenta']);

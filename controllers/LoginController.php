@@ -7,6 +7,7 @@ use Model\Cart;
 use Classes\Email;
 use Model\Productsxcart;
 use Model\Sale;
+use Model\Client;
 
 class LoginController {
     public static function index(Router $router){
@@ -114,6 +115,35 @@ class LoginController {
         ]);
     }
 
+    public static function changePassword(Router $router){
+        $alertas = [];
+        if($_SERVER['REQUEST_METHOD'] === 'POST'){
+            $auth = new Usuario($_POST);
+            $alertas = $auth->validateEmail();
+
+            if(empty($alertas)){
+                $user = Usuario::where('email', $auth->email);
+                if($user && $user->verified === "1"){
+                    $user->generateToken();
+                    $user->guardar();
+
+                    $mail = new Email($user->email, $user->username, $user->token);
+                    $mail->sendRecover();
+
+                    Usuario::setAlerta('success', 'Revisa tu correo para recuperar tu contraseña');
+                } else{
+                    Usuario::setAlerta('error', 'El usuario no existe o no está verificado');
+                }
+            }
+
+        }
+
+        $alertas = Usuario::getAlertas();
+        $router->render('auth/change', [
+            'alertas' => $alertas
+        ]);
+    }
+
     public static function reset(Router $router){
         $error = false;
         $alertas = [];
@@ -159,6 +189,8 @@ class LoginController {
             $user->token = '';
             $user->guardar();
             Usuario::setAlerta('success', 'El usuario se verificó correctamente');
+            $client = new Client(['userID' => $user->id, 'marketing' => 0]);
+            $client->guardar();
         }
 
         $alertas = Usuario::getAlertas();
@@ -184,9 +216,11 @@ class LoginController {
 
         $id = $_SESSION['userId'];
         $user = Usuario::find($id);
+        $client = Usuario::findClient($id);
 
-        $router->render('pages/cuenta', [
+        $router->render('cuenta/cuenta', [
             'user' => $user,
+            'client' =>$client,
             'result' => $result
         ]);
     }
@@ -195,17 +229,20 @@ class LoginController {
         isAuth();
         $id = $_SESSION['userId'];
         $user = Usuario::find($id);
+        $client = Usuario::findClient( $id);
 
         if($_SERVER['REQUEST_METHOD'] === 'POST'){
             $user->sincronizar($_POST);
             $alertas = $user->validateUpdate();
+            $alertas = $client->validateUpdate();
             if(empty($alertas['error'])){
                 $user->guardar();
+                //$client->guardar();
                 header('Location: /cuenta?result=2');
             }
         }
 
-        $router->render('pages/actualizarCuenta', [
+        $router->render('cuenta/actualizarCuenta', [
             'user' => $user,
         ]);
     }
