@@ -216,7 +216,8 @@ class LoginController {
 
         $id = $_SESSION['userId'];
         $user = Usuario::find($id);
-        $client = Usuario::findClient($id);
+        $client = Client::findClient($id);
+        echo $client->name;
 
         $router->render('cuenta/cuenta', [
             'user' => $user,
@@ -229,7 +230,10 @@ class LoginController {
         isAuth();
         $id = $_SESSION['userId'];
         $user = Usuario::find($id);
-        $client = Usuario::findClient( $id);
+        $client = Usuario::findClient($id);
+        echo 'eeeee';
+        echo $client->name;
+        
 
         if($_SERVER['REQUEST_METHOD'] === 'POST'){
             $user->sincronizar($_POST);
