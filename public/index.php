@@ -8,6 +8,7 @@ use Controllers\CategoryController;
 use Controllers\ProductController;
 use Controllers\ImageController;
 use Controllers\LoginController;
+use Controllers\AdminController;
 
 $router = new Router();
 
@@ -63,7 +64,9 @@ $router->post('/admin/editar/option', [ProductController::class, 'editarOpcion']
 $router->get('/personalizar/producto', [ProductController::class, 'personalizarP']);
 $router->post('/personalizar/producto', [ProductController::class, 'personalizarP']);
 
-
+//Rutas permisos de admin
+$router->get('/admin/permisos', [AdminController::class, 'ver']);
+$router->post('/admin/permisos', [AdminController::class, 'permisos']);
 
 
 

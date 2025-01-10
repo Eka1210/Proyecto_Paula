@@ -93,7 +93,7 @@ verificarAccesoAdmin();
         <?php } ?>
 
         <?php if(isset($_SESSION['admin'])) { ?>
-            <a <?php if ($page == 'admin') { echo 'class="active"'; } ?> href="/admin">
+            <a <?php if ($page == 'admin') { echo 'class="active"'; } ?> href="/admin/permisos">
             Admin</a>
         <?php } ?>
     </nav>
