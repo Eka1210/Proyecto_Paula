@@ -7,7 +7,7 @@ class Sale extends ActiveRecord{
 
     public $id;
     public $description;
-    public $monto
+    public $monto;
     public $fecha;
     public $discount;
     public $userId;

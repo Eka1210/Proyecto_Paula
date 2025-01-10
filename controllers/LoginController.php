@@ -217,7 +217,6 @@ class LoginController {
         $id = $_SESSION['userId'];
         $user = Usuario::find($id);
         $client = Client::findClient($id);
-        echo $client->name;
 
         $router->render('cuenta/cuenta', [
             'user' => $user,
@@ -229,33 +228,45 @@ class LoginController {
     public static function actualizarCuenta(Router $router){
         isAuth();
         $alertas = [];
+        $alertasC = [];
         $id = $_SESSION['userId'];
         $user = Usuario::find($id);
         $client = Client::findClient($id);
+
         
         if($_SERVER['REQUEST_METHOD'] === 'POST'){
             $user->sincronizar($_POST);
             $alertas = $user->validateUpdate();
-            //$alertas = $user->validateEmail();
-            //$alertas = $client->validate();
-            
-            if(empty($alertas['error'])){
-                echo 'hola';
-                $user->guardar();
-                $client->guardar();
-                header('Location: /cuenta?result=2');
-                echo 'hola';
+            if(empty($alertas['error']) ){
+                $result = $user->exists2($id);
+                if($result){
+                    $alertas = Usuario::getAlertas();
+                } else{
+                    $client->sincronizar($_POST);
+                    $alertas = $client->validate();
+                    if(empty($alertas['error'])){
+                        $user->guardar();
+                        $client->guardar();
+                        header('Location: /cuenta?result=2');
+                    }
+                    else{
+                        $alertas = Client::getAlertas();
+                    }
+                }
             }
         }
         $router->render('cuenta/actualizarCuenta', [
             'user' => $user,
-            'client' => $client
+            'client' => $client,
+            'alertas' =>$alertas
         ]);
-    }
+        
+}
 
     public static function eliminarCuenta(Router $router){
         $id = $_SESSION['userId'];
         $user = Usuario::find($id);
+        $client = Client::findClient($id);
 
         $cart = Cart::where('userId', $id);
         $products = Productsxcart::whereAll('cartID', $cart->id);
@@ -268,6 +279,7 @@ class LoginController {
         foreach($sales as $sale){
             $sale->removeUser();
         }
+        $client->eliminar();
         $user->eliminar();
 
         session_start();

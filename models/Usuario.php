@@ -57,9 +57,13 @@ class Usuario extends ActiveRecord{
     }
 
     public function validateUpdate(){
+        if(!$this->email){
+            self::setAlerta('error', 'El email es obligatorio');
+        }
         if(!$this->username){
             self::setAlerta('error', 'El nombre de usuario es obligatorio');
         }
+        
         return self::$alertas;
     }
 
@@ -90,6 +94,37 @@ class Usuario extends ActiveRecord{
 
         return $result;
     }
+
+    public function exists2($currentId) {
+        $exists = false;
+    
+        // Verificar si el email ya existe y pertenece a otro usuario
+        $stmt = self::$db->prepare("SELECT id FROM " . self::$tabla . " WHERE email = ? AND id != ? LIMIT 1");
+        $stmt->bind_param('si', $this->email, $currentId);
+        $stmt->execute();
+        $stmt->store_result();
+    
+        if ($stmt->num_rows > 0) {
+            $exists = true;
+            self::setAlerta('error', 'El email ya está registrado por otro usuario');
+        }
+        $stmt->close();
+    
+        // Verificar si el nombre de usuario ya existe y pertenece a otro usuario
+        $stmt = self::$db->prepare("SELECT id FROM " . self::$tabla . " WHERE username = ? AND id != ? LIMIT 1");
+        $stmt->bind_param('si', $this->username, $currentId);
+        $stmt->execute();
+        $stmt->store_result();
+    
+        if ($stmt->num_rows > 0) {
+            $exists = true;
+            self::setAlerta('error', 'El nombre de usuario ya está registrado por otro usuario');
+        }
+        $stmt->close();
+    
+        return $exists;
+    }
+
 
     public function hashPassword() {
         $this->password = password_hash($this->password, PASSWORD_BCRYPT);

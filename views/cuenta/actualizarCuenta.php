@@ -1,3 +1,7 @@
+<?php 
+    include_once __DIR__ . "/../templates/alerts.php";
+?>
+
 <h1>Actualizar Cuenta</h1>
 <div class="actualizar-cuenta">
     <a class="orange-btn" href="/cuenta">Volver al Panel</a>

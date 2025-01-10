@@ -6,13 +6,18 @@
         <?php }
     }
 ?>
+
 <div class="info-cuenta">
     <div class="imagen-cuenta"></div>
     <div class="form-cuenta">
         <form class="form">
             <div class="form__field">
-                <label for="name" class="form__label">Nombre Completo</label>
-                <input disabled class="form__input" type="text" placeholder="Nombre completo" id="name" name="name" value="<?php echo $client->name . ' ' . $client->surname; ?>">
+                <label for="name" class="form__label">Nombre</label>
+                <input disabled class="form__input" type="text" placeholder="Nombre" id="name" name="name" value="<?php echo $client->name; ?>">
+            </div> <!-- /form__field -->  
+            <div class="form__field">
+                <label for="name" class="form__label">Apellidos</label>
+                <input disabled class="form__input" type="text" placeholder="Apellidos" id="surname" name="surname" value="<?php echo $client->surname; ?>">
             </div> <!-- /form__field -->  
             <div class="form__field">
                 <label for="username" class="form__label">Nombre de Usuario</label>
