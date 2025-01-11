@@ -131,6 +131,7 @@ class ActiveRecord {
         $result = self::$db->query($query);
         return ( $result ) ;
     }
+    
     // Obtener Registros con cierta cantidad
     public static function get($limite) {
         $query = "SELECT * FROM " . static::$tabla . " LIMIT " . $limite;

@@ -34,7 +34,7 @@ class Database {
     // Prevenir instanciación y clonación
     private function __construct() {}
     private function __clone() {}
-    private function __wakeup() {}
+    public function __wakeup() {}
 }
 
 $dotenv = Dotenv\Dotenv::createImmutable(__DIR__);

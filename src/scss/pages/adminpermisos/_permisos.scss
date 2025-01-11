@@ -1,0 +1,57 @@
+@use 'base/mixins' as m;
+@use 'base/variables' as v;
+
+.permisos{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    flex-grow: 1;
+    &__title{
+        color: v.$dorado;
+        font-size: 4rem;
+        margin: 0;
+    }
+    &__description{
+        color: lighten(v.$negro, 20%);
+        font-size: 2rem;
+        margin: 1rem 0;
+        
+    }
+    &__form{
+        @include m.sm-container;
+        display: flex;
+        flex-direction: column;
+        padding: 3rem 5rem;
+        &__field{
+            display: flex;
+            flex-direction: column;
+        }
+        &__label{
+            margin-bottom: 1rem;
+            font-size: 2rem;
+            color: (v.$vino);
+            font-weight: v.$bold;
+
+        }
+        &__input,
+        &__textarea{
+            margin-bottom: 2rem;
+            border: none;
+            border-bottom: 2px solid v.$vino;
+            font-size: 2rem;
+            &:focus{
+                outline: none;
+            }
+        }
+        &__textarea{
+            height: 15rem;
+            border: 2px solid v.$vino;
+            resize: none;
+        }
+        &__submit{
+            @include m.boton(v.$vino, v.$blanco, 5rem);
+        }
+    }
+
+}
