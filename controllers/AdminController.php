@@ -2,18 +2,34 @@
 
 namespace Controllers;
 use MVC\Router;
+use Model\Usuario;
 
 class AdminController {
     public static function permisos(Router $router){
         isAdmin();
         $result = $_GET['result'] ?? null;
         $error = $_GET['error'] ?? null;
+        $flag = false;
 
+        $alertas = [];
+        if($_SERVER['REQUEST_METHOD'] === 'POST'){
+            $usuario = $_POST['usuario'] ;
+            if(!Usuario::where('username', $usuario) == null){
+                $flag = true;
+            }
+            elseif(!Usuario::where('email', $usuario) == null){
+                $flag = true;
+            }
+            else{
+                Usuario::setAlerta('error', 'El usuario no existe');
+            }
 
-        $router->render('admin/permisos', [
-            'result' => $result,
+        }
+        $alertas = Usuario::getAlertas();
+        $router->render('permisos/permisos', [
             'error' => $error,
-            'page' => 'admin'
+            'page' => 'admin',
+            'alertas' =>$alertas
         ]);
     }
 
