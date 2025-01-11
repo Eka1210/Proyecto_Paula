@@ -77,5 +77,10 @@ $router->post('/admin/imagenes/subir', [ProductController::class, 'subirImagen']
 $router->post('/admin/imagenes/eliminar', [ProductController::class, 'eliminarImagen']);
 
 
+// Rutas Carrito
+$router->get('/cart', [CartController::class, 'ver']);
+$router->post('/cart/AddToCart', [CartController::class, 'AddToCart']);
+
+
 // Comprueba y valida las rutas, que existan y les asigna las funciones del Controlador
 $router->comprobarRutas();

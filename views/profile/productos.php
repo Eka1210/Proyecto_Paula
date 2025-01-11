@@ -19,7 +19,7 @@
                     <button class="personalizar" type="submit">Personalizar</button>
                 </form>
             <?php } else { ?>
-                <form method="post" style="margin-bottom: 10px;">
+                <form action = "/AddToCart" method="post" style="margin-bottom: 10px;">
                     <input type="hidden" value="<?php echo htmlspecialchars($producto->id); ?>" id="producto" name="producto">
                     <button class="cart-button" type="submit" id="addToCartButton" data-product="<?php echo htmlspecialchars($producto->id); ?>">Agregar al Carrito</button>
                 </form>
