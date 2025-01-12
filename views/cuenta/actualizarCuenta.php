@@ -1,5 +1,8 @@
 <?php 
     include_once __DIR__ . "/../templates/alerts.php";
+    use Model\Usuario;
+    $id = $_SESSION['userId'];
+    $userActual = Usuario::find($id);
 ?>
 
 <h1>Actualizar Cuenta</h1>
@@ -16,9 +19,21 @@
             <input class="form__input" type="text" placeholder="Tu Apellido" id="surname" name="surname" value="<?php echo $client->surname; ?>">
         </div> <!-- /form__field -->
 
+        <?php if ($userActual->username !== 'master') { ?>
+            <div class="form__field">
+                <label for="username" class="form__label">Nombre de Usuario</label>
+                <input class="form__input" type="text" placeholder="Tu nombre de usuario" id="username" name="username" value="<?php echo $user->username; ?>">
+            </div> <!-- /form__field -->
+        <?php } ?>
+
         <div class="form__field">
             <label for="phone" class="form__label">Teléfono</label>
             <input class="form__input" type="tel" placeholder="Tu Teléfono" id="phone" name="phone" value="<?php echo $client->phone; ?>">
+        </div> <!-- /form__field -->
+
+        <div class="form__field">
+            <label for="email" class="form__label">Correo Electrónico</label>
+            <input class="form__input" type="email" placeholder="Tu correo electrónico" id="email" name="email" value="<?php echo $user->email; ?>">
         </div> <!-- /form__field -->
 
         <div class="form__field">
@@ -47,15 +62,6 @@
                 <?php echo $client->marketing ? 'checked' : ''; ?>>
         </div> <!-- /form__field -->
 
-        <div class="form__field">
-            <label for="username" class="form__label">Nombre de Usuario</label>
-            <input class="form__input" type="text" placeholder="Tu nombre de usuario" id="username" name="username" value="<?php echo $user->username; ?>">
-        </div> <!-- /form__field -->
-
-        <div class="form__field">
-            <label for="email" class="form__label">Correo Electrónico</label>
-            <input class="form__input" type="email" placeholder="Tu correo electrónico" id="email" name="email" value="<?php echo $user->email; ?>">
-        </div> <!-- /form__field -->
 
         <input type="submit" class="orange-btn" value="Actualizar">
     </form>
