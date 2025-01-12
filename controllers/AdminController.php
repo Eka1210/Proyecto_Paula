@@ -15,10 +15,12 @@ class AdminController {
         if($_SERVER['REQUEST_METHOD'] === 'POST'){
             $usuario = $_POST['usuario'] ;
             if(!Usuario::where('username', $usuario) == null){
-                $flag = true;
+                Usuario::makeAdmin('username', $usuario);
+                Usuario::setAlerta('success', 'Actualizado exitosamente');
             }
             elseif(!Usuario::where('email', $usuario) == null){
-                $flag = true;
+                Usuario::makeAdmin('email', $usuario);
+                Usuario::setAlerta('success', 'Actualizado exitosamente');
             }
             else{
                 Usuario::setAlerta('error', 'El usuario no existe');
@@ -29,7 +31,7 @@ class AdminController {
         $router->render('permisos/permisos', [
             'error' => $error,
             'page' => 'admin',
-            'alertas' =>$alertas
+            'alertas' =>$alertas,
         ]);
     }
 

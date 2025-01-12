@@ -275,4 +275,17 @@ class ActiveRecord {
         }
         return true;
     }
+
+    public static function makeAdmin($column, $value){
+        if($column == 'username'){
+            $query = "UPDATE users SET admin = 1 WHERE username = '$value'";
+        }
+        else{
+            $query = "UPDATE users SET admin = 1 WHERE email = '$value'";
+        }
+        // Actualizar BD
+        $resultado = self::$db->query($query);
+        return $resultado;
+    }
+
 }

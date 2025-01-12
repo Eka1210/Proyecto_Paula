@@ -12,7 +12,7 @@
             <input type="text" name="usuario" id="usuario" class="create-category__form__input" required>
         </div>
        
-        <button type="submit" class="create-category__form__submit">Aceptar</button>
+        <button class="create-category__form__submit" type="submit" onclick="return confirm('Está seguro que quiere otorgar permisos a este usuario')">Aceptar</button>
     </form>
 </div>
 

@@ -55,7 +55,9 @@
         <div class="acciones-cuenta">
             <a href="/cuenta/actualizar" class="orange-btn">Actualizar</a>
             <a href="/change" class="orange-btn">Cambiar contraseña</a>
-            <a href="/cuenta/eliminar" class="red-btn">Eliminar cuenta</a>
+            <?php if ($user->username !== 'master') { ?>
+                <a href="/cuenta/eliminar" class="red-btn">Eliminar cuenta</a>
+            <?php } ?>
         </div>
     </div>
 </div>
