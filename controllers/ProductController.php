@@ -379,5 +379,10 @@ class ProductController {
         ]);
     }
     
+    public static function inventario(Router $router)
+    {
+
+        $router->render('/inventario/inventario');
+    }
     
 }

@@ -23,10 +23,13 @@
 
     .actions{
         display: flex;
-        justify-content: space-around;
+        justify-content: flex-end;
         align-items: center;
         padding: 0;
         width: 30%;
+        gap: 1rem;
+
+        
         .login{
             background-color: v.$vino;
             border-radius: 5rem;
@@ -47,6 +50,33 @@
             background-repeat: no-repeat;
             background-position: center;
         }
+
+        .carrito{
+            background-color: v.$vino;
+            border-radius: 5rem;
+            height: 5rem;
+            width: 12rem;
+            color: v.$blanco;
+            background-image: url('../img/cart.png');
+            background-size: 40%;
+            background-repeat: no-repeat;
+            background-position: center;
+        }
+
+        .wishlist{
+            background-color: v.$vino;
+            border-radius: 5rem;
+            height: 5rem;
+            width: 12rem;
+            color: v.$blanco;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Cpath fill='%23ffffff' d='M12 21.35L10.55 20c-1.1-.3-2.1-1.2-2.55-2.3L4 9c-1.1-1.1-1.1-2.9 0-4l9.45-9.45c1.1-1.1 2.9-1.1 4 0l9.45 9.45c1.1 1.1 1.1 2.9 0 4l-7.45 7.45c-.4.4-1 .7-1.55.9L12 21.35zm-2-9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2z'/%3E%3C/svg%3E");
+            background-size: 40%;
+            background-repeat: no-repeat;
+            background-position: center;
+        }
+
+
+
     }
 }
 
