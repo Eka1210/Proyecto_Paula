@@ -1,14 +1,16 @@
 <?php 
     include_once __DIR__ . "/../templates/alerts.php";
+
+    //Encontrar usuario actual
     use Model\Usuario;
     $id = $_SESSION['userId'];
     $userActual = Usuario::find($id);
 ?>
 
-<h1>Actualizar Cuenta</h1>
-<div class="actualizar-cuenta">
+<div class="consultar-cuenta">
     <a class="orange-btn" href="/cuenta">Volver al Panel</a>
-    <form method="POST" class="form">
+    <form method="POST" class="consultar-cuenta__form">
+        <h1>Actualizar tu Cuenta</h1>
         <div class="form__field">
             <label for="name" class="form__label">Nombre</label>
             <input class="form__input" type="text" placeholder="Tu Nombre" id="name" name="name" value="<?php echo $client->name; ?>">

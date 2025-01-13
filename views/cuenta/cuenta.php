@@ -14,6 +14,8 @@
     <div class="imagen-cuenta"></div>
     <div class="consultar-cuenta__form">
         <form class="form">
+            <h1 class="consultar-cuenta__title">Información Personal</h1>
+
             <div class="form__field">
                 <label for="name" class="form__label">Nombre</label>
                 <input disabled class="form__input" type="text" placeholder="Nombre" id="name" name="name" value="<?php echo $client->name; ?>">
@@ -60,7 +62,7 @@
             </div><!-- /form__field -->        
         </form>
         <div class="acciones-cuenta">
-            <a href="/cuenta/actualizar" class="orange-btn">Actualizar</a>
+            <a href="/cuenta/actualizar" class="orange-btn">Actualizar Información Personal</a>
             <a href="/change" class="orange-btn">Cambiar contraseña</a>
             <?php if ($userActual->username !== 'master') { ?>
                 <a href="/cuenta/eliminar" class="red-btn" onclick="return confirm('Está seguro que quiere eliminar su cuenta')">Eliminar</a>

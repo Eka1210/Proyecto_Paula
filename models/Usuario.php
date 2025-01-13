@@ -32,6 +32,8 @@ class Usuario extends ActiveRecord{
         }
         if(!$this->username){
             self::setAlerta('error', 'El nombre de usuario es obligatorio');
+        }elseif(preg_match('/\s/', $this->username)) { // Verifica si hay espacios
+            self::setAlerta('error', 'El nombre de usuario no puede contener espacios');
         }
         if(!$this->password){
             self::setAlerta('error', 'La contraseña es obligatoria');
@@ -62,6 +64,8 @@ class Usuario extends ActiveRecord{
         }
         if(!$this->username){
             self::setAlerta('error', 'El nombre de usuario es obligatorio');
+        }elseif(preg_match('/\s/', $this->username)) { // Verifica si hay espacios
+            self::setAlerta('error', 'El nombre de usuario no puede contener espacios');
         }
         
         return self::$alertas;

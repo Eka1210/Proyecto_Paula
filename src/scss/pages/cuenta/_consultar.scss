@@ -1,7 +1,7 @@
 @use 'base/mixins' as m;
 @use 'base/variables' as v;
 
-.permisos{
+.consultar-cuenta{
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -16,13 +16,14 @@
         color: lighten(v.$negro, 20%);
         font-size: 2rem;
         margin: 1rem 0;
-        
     }
     &__form{
         @include m.sm-container;
         display: flex;
         flex-direction: column;
-        padding: 3rem 5rem;
+        padding: 3rem 2px;
+        max-width: 600px; // Limita el ancho del formulario
+        margin: 0 auto;   // Centra el formulario horizontalmente
         &__field{
             display: flex;
             flex-direction: column;
@@ -52,6 +53,6 @@
         &__submit{
             @include m.boton(v.$vino, v.$blanco, 5rem);
         }
+        
     }
-
 }

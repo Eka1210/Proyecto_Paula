@@ -145,6 +145,7 @@ class LoginController {
     }
 
     public static function changePassword(Router $router){
+        isAuth();
         $alertas = [];
         if($_SERVER['REQUEST_METHOD'] === 'POST'){
             $auth = new Usuario($_POST);
@@ -307,6 +308,7 @@ class LoginController {
 }
 
     public static function eliminarCuenta(Router $router){
+        isAuth();
         $id = $_SESSION['userId'];
         $user = Usuario::find($id);
         $client = Client::findClient($id);
