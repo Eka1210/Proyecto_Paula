@@ -1,3 +1,6 @@
+<?php 
+    include_once __DIR__ . "/../templates/alerts.php";
+?>
 <head>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css" integrity="sha512-1sCRPdkRXhB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
@@ -19,8 +22,9 @@
                     <button class="personalizar" type="submit">Personalizar</button>
                 </form>
             <?php } else { ?>
-                <form action = "/AddToCart" method="post" style="margin-bottom: 10px;">
+                <form action = "cart/AddToCart" method="post" style="margin-bottom: 10px;">
                     <input type="hidden" value="<?php echo htmlspecialchars($producto->id); ?>" id="producto" name="producto">
+                    <input type="hidden" value="<?php echo htmlspecialchars($producto->price); ?>" id="price" name="price">
                     <button class="cart-button" type="submit" id="addToCartButton" data-product="<?php echo htmlspecialchars($producto->id); ?>">Agregar al Carrito</button>
                 </form>
             <?php } ?>

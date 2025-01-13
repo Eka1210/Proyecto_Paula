@@ -9,6 +9,7 @@ use Controllers\ProductController;
 use Controllers\ImageController;
 use Controllers\LoginController;
 use Controllers\AdminController;
+use Controllers\CartController;
 
 $router = new Router();
 

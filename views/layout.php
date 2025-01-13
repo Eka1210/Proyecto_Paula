@@ -61,7 +61,7 @@ verificarAccesoAdmin();
                 <?php } else { ?>
                     <a class="login" href="/logout">Cerrar Sesión</a>
                     <a class="login" href="/cuenta">Mi Cuenta</a>
-                    <a class="carrito" href="/carrito"> </a>
+                    <a class="carrito" href="/cart"> </a>
             <?php } ?>
         </div>
     </header>

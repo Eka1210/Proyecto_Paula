@@ -131,7 +131,7 @@ class ActiveRecord {
         $result = self::$db->query($query);
         return ( $result ) ;
     }
-    
+
     // Obtener Registros con cierta cantidad
     public static function get($limite) {
         $query = "SELECT * FROM " . static::$tabla . " LIMIT " . $limite;
@@ -275,4 +275,62 @@ class ActiveRecord {
         }
         return true;
     }
+
+    // Funciones Carrito
+    public static function findProductInCar( $productId, $cartId) {
+
+        // Crear la consulta
+        $query = "SELECT * FROM " . static::$tabla . " WHERE cartID = " . $cartId . " AND productID = " . $productId;
+
+        // Ejecutar la consulta
+        $result = self::$db->query($query);
+
+        // Verificar si la consulta fue exitosa y si devuelve resultados
+        if (!is_null($result) && $result->num_rows > 0) {
+            // Obtener el primer resultado de la consulta
+            $row = $result->fetch_assoc();
+            
+            // Devolver una instancia de Productsxcart con los datos obtenidos
+            return new self($row); 
+        }
+        
+        // Si no se encuentra ningún registro, devolver null
+        return null;
+    }
+
+    public function actualizarProductInCart() {
+        // Sanitizar los datos
+        $atributos = $this->sanitizarAtributos();
+
+        // Iterar para agregar cada campo y valor
+        $valores = [];
+        foreach ($atributos as $key => $value) {
+            $valores[] = "{$key}='{$value}'";
+        }
+
+        // Validar que existan valores para actualizar
+        if (empty($valores)) {
+            throw new \Exception("No hay valores para actualizar el registro.");
+        }
+
+        // Validar que cartID y productID estén configurados
+        if (empty($this->cartID) || empty($this->productID)) {
+            throw new \Exception("cartID o productID no están configurados.");
+        }
+
+        // Construir la consulta SQL
+        $query = "UPDATE " . static::$tabla . " SET " . join(', ', $valores) .
+                    " WHERE cartID = '" . self::$db->escape_string($this->cartID) . "'" .
+                    " AND productID = '" . self::$db->escape_string($this->productID) . "'" .
+                    " LIMIT 1";
+
+        // Ejecutar la consulta
+        $resultado = self::$db->query($query);
+
+        // Retornar el resultado
+        return $resultado;
+    }
+
+
+
 }
