@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 require_once __DIR__ . '/../includes/app.php';
 
@@ -10,6 +10,9 @@ use Controllers\ImageController;
 use Controllers\LoginController;
 use Controllers\AdminController;
 use Controllers\CartController;
+use Controllers\PromotionController;
+use Controllers\ReportController;
+use Controllers\WishListController;
 
 $router = new Router();
 
@@ -82,6 +85,24 @@ $router->post('/admin/imagenes/eliminar', [ProductController::class, 'eliminarIm
 $router->get('/cart', [CartController::class, 'ver']);
 $router->post('/cart/AddToCart', [CartController::class, 'AddToCart']);
 
+
+//Rutas de descuento
+$router->get('/admin/promocion', [PromotionController::class, 'ver']);
+$router->post('/admin/promocion', [PromotionController::class, 'promotion']);
+$router->get('/admin/promocion/crear', [PromotionController::class, 'crear']);
+$router->post('/admin/promocion/crear', [PromotionController::class, 'crear']);
+
+//Reporte de ventas 
+$router->get('/admin/reporte', [ReportController::class, 'reporte']);
+
+
+//Rutas de inventario
+$router->get('/admin/inventario', [ProductController::class, 'inventario']);
+$router->post('/admin/inventario', [ProductController::class, 'inventario']);
+
+//Rutas de WishList
+$router->get('/wishlist', [WishListController::class, 'list']);
+$router->post('/wishlist', [WishListController::class, 'list']);
 
 // Comprueba y valida las rutas, que existan y les asigna las funciones del Controlador
 $router->comprobarRutas();

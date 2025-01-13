@@ -4,6 +4,7 @@ namespace Controllers;
 use MVC\Router;
 use Model\Usuario;
 use Model\Cart;
+use Classes\Subject;
 use Classes\Email;
 use Model\Productsxcart;
 use Model\Sale;
@@ -69,8 +70,22 @@ class LoginController {
                     $user->hashPassword();
                     $user->generateToken();
 
-                    $email = new Email($user->email, $user->username, $user->token);
-                    $email->sendConfirmation();
+                    // Crear el sujeto
+                    $subject = new Subject();
+
+                    // Agregar observadores
+                    $emailNotifier = new Email();
+
+                    $subject->attach($emailNotifier);
+
+                    // Simular un evento de registro de usuario
+                    $userData = [
+                        'email' => $user->email,
+                        'name' => $user->username,
+                        'token' => $user->token,
+                    ];
+
+                    $subject->notifyObservers('user_registered', $userData);
 
                     $result = $user->guardar();
                     if($result){
@@ -98,8 +113,22 @@ class LoginController {
                     $user->generateToken();
                     $user->guardar();
 
-                    $mail = new Email($user->email, $user->username, $user->token);
-                    $mail->sendRecover();
+                    // Crear el sujeto
+                    $subject = new Subject();
+
+                    // Agregar observadores
+                    $emailNotifier = new Email();
+
+                    $subject->attach($emailNotifier);
+
+                    // Simular un evento de registro de usuario
+                    $userData = [
+                        'email' => $user->email,
+                        'name' => $user->username,
+                        'token' => $user->token,
+                    ];
+
+                    $subject->notifyObservers('password_reset', $userData);
 
                     Usuario::setAlerta('success', 'Revisa tu correo para recuperar tu contraseña');
                 } else{
@@ -116,6 +145,7 @@ class LoginController {
     }
 
     public static function changePassword(Router $router){
+        isAuth();
         $alertas = [];
         if($_SERVER['REQUEST_METHOD'] === 'POST'){
             $auth = new Usuario($_POST);
@@ -127,8 +157,22 @@ class LoginController {
                     $user->generateToken();
                     $user->guardar();
 
-                    $mail = new Email($user->email, $user->username, $user->token);
-                    $mail->sendRecover();
+                    // Crear el sujeto
+                    $subject = new Subject();
+
+                    // Agregar observadores
+                    $emailNotifier = new Email();
+
+                    $subject->attach($emailNotifier);
+
+                    // Simular un evento de registro de usuario
+                    $userData = [
+                        'email' => $user->email,
+                        'name' => $user->username,
+                        'token' => $user->token,
+                    ];
+
+                    $subject->notifyObservers('password_reset', $userData);
 
                     Usuario::setAlerta('success', 'Revisa tu correo para recuperar tu contraseña');
                 } else{
@@ -264,6 +308,7 @@ class LoginController {
 }
 
     public static function eliminarCuenta(Router $router){
+        isAuth();
         $id = $_SESSION['userId'];
         $user = Usuario::find($id);
         $client = Client::findClient($id);
