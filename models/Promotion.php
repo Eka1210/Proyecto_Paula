@@ -1,7 +1,9 @@
-<?php 
+<?php
+
 namespace Model;
 
-class Promotion extends ActiveRecord{
+class Promotion extends ActiveRecord
+{
     protected static $tabla = 'promotions';
     protected static $columnasDB = ['id', 'description', 'percentage', 'active', 'productID'];
 
@@ -11,11 +13,12 @@ class Promotion extends ActiveRecord{
     public $active;
     public $productID;
 
-    public function __construct($args = []) {
+    public function __construct($args = [])
+    {
         $this->id = $args['id'] ?? null;
         $this->description = $args['description'] ?? '';
-        $this->percentage = $args['percentage'] ?? null; 
-        $this->active = $args['active'] ?? null; 
+        $this->percentage = $args['percentage'] ?? null;
+        $this->active = $args['active'] ?? null;
         $this->productID = $args['productID'] ?? null;
     }
 

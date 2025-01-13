@@ -3,7 +3,7 @@
         'name' => 'eka/pj-solutions',
         'pretty_version' => 'dev-main',
         'version' => 'dev-main',
-        'reference' => 'd59c94a39cbe7f4ae4126039465539556fff45d5',
+        'reference' => '0c7dd32dce1db1c600e848732d15bb2a75f6d90a',
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -13,7 +13,7 @@
         'eka/pj-solutions' => array(
             'pretty_version' => 'dev-main',
             'version' => 'dev-main',
-            'reference' => 'd59c94a39cbe7f4ae4126039465539556fff45d5',
+            'reference' => '0c7dd32dce1db1c600e848732d15bb2a75f6d90a',
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
