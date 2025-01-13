@@ -30,6 +30,9 @@ class CartController {
                 if ($carrito) {
                     // Verificar si el producto ya está en el carrito
                     $existingItem = Productsxcart::findProductInCar($productoId, $carrito->id);
+                    echo '<pre>';
+                    print_r($existingItem); // Muestra de forma legible las propiedades del objeto
+                    echo '</pre>';
                     if (!is_null($existingItem )) {
                         // Si el producto ya está en el carrito, actualizar cantidad y precio
                         $existingItem->quantity += 1;
@@ -45,6 +48,7 @@ class CartController {
                         ]);
                         $resultado = $cartItem->guardar();
                     }
+                    
 
                     if ($resultado['resultado']) {
                         echo "<script>alert('¡Producto añadido al carrito exitosamente!');</script>";

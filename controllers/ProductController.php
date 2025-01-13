@@ -120,7 +120,7 @@ class ProductController {
             if(empty($alertas)){
                 $producto->guardar();
                 Product::setAlerta('success', 'Producto Editada');
-                header('Location: /admin/productos/editar');
+                header('Location: /admin/productos');
             }
         }
         $router->render('ProductsSpects/editProduct', [

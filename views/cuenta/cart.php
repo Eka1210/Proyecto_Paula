@@ -1,6 +1,4 @@
-<?php
-    include_once __DIR__ . "/../templates/alerts.php";
-?>
+
 
 <h1>Carrito</h1>
 

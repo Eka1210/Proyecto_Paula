@@ -278,24 +278,10 @@ class ActiveRecord {
 
     // Funciones Carrito
     public static function findProductInCar( $productId, $cartId) {
-
         // Crear la consulta
         $query = "SELECT * FROM " . static::$tabla . " WHERE cartID = " . $cartId . " AND productID = " . $productId;
-
-        // Ejecutar la consulta
-        $result = self::$db->query($query);
-
-        // Verificar si la consulta fue exitosa y si devuelve resultados
-        if (!is_null($result) && $result->num_rows > 0) {
-            // Obtener el primer resultado de la consulta
-            $row = $result->fetch_assoc();
-            
-            // Devolver una instancia de Productsxcart con los datos obtenidos
-            return new self($row); 
-        }
-        
-        // Si no se encuentra ningún registro, devolver null
-        return null;
+        $resultado = self::consultarSQL($query);
+        return array_shift( $resultado ) ;
     }
 
     public function actualizarProductInCart() {
