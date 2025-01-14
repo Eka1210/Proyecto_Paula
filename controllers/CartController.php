@@ -168,11 +168,11 @@ class CartController {
 
                 if (!is_null($carrito)) {
                     // Buscar el producto en el carrito
-                    $productoEnCarrito = Productsxcart::findProductInCart($productId, $carrito);
+                    $productoEnCarrito = Productsxcart::findProductInCart($productId, $carrito->id);
                     
                     if ($productoEnCarrito) {
                         // Eliminar el producto del carrito
-                        $resultado = $productoEnCarrito->deleteFromCart($productId, $carrito);
+                        $resultado = $productoEnCarrito->deleteFromCart($productId, $carrito->id);
                         if ($resultado) {
                             echo "<script>alert('¡Producto eliminado del carrito!');</script>";
                         } else {

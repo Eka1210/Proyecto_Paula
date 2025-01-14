@@ -1,4 +1,4 @@
-<h1>Carrito</h1>
+<h1 style="text-align: center;">Carrito</h1>
 
 <table class="products cart">
     <thead>
@@ -28,7 +28,7 @@
             <tr>
                 <td><?php echo htmlspecialchars($producto->name); ?></td>
                 <td>
-                    <img src="/images/<?php echo htmlspecialchars($producto->imagen); ?>" 
+                    <img src="<?php echo htmlspecialchars($producto->imagen); ?>" 
                          alt="Imagen de <?php echo htmlspecialchars($producto->name); ?>" 
                          class="table-image">
                 </td>
@@ -46,7 +46,7 @@
                 </td>
                 <td>
                     <form method="POST" action="/cart/removeFromCart" class="w-100">
-                        <input type="hidden" name="productID" value="<?php echo htmlspecialchars($producto->productID); ?>">
+                        <input type="hidden" name="productID" value="<?php echo $producto->id?>">
                         <button type="submit" class="icon-delete" title="Eliminar del carrito">&#128465;</button>
                     </form>
                 </td>

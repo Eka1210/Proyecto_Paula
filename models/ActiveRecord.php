@@ -202,6 +202,12 @@ class ActiveRecord {
         $resultado = self::$db->query($query);
         return $resultado;
     }
+
+    public static function deleteFromCart($productId, $cartId) {
+        $query = "DELETE FROM productsxcart WHERE productID = $productId AND cartID = $cartId";
+        $resultado = self::$db->query($query);
+        return  $resultado;
+    }
     
     public static function where($column, $value){
         $query = "SELECT * FROM " . static::$tabla . " WHERE $column = '$value'";
@@ -290,11 +296,7 @@ class ActiveRecord {
 
     // Funciones Carrito
 
-    public static function deleteFromCart($productId, $cartId) {
-        $query = "DELETE FROM productsxcart WHERE productID =" . $productId . "AND cartID = " . $cartId;
-        $resultado = self::consultarSQL($query);
-        return  $resultado;
-    }
+    
 
     public static function allCart($cartId) {
         $query = "SELECT * FROM " . static::$tabla . " WHERE cartID = " . $cartId;
@@ -305,6 +307,7 @@ class ActiveRecord {
     public static function findProductInCart( $productId, $cartId) {
         $query = "SELECT * FROM " . static::$tabla . " WHERE cartID = " . $cartId . " AND productID = " . $productId;
         $resultado = self::consultarSQL($query);
+        
         return array_shift( $resultado ) ;
     }
 
