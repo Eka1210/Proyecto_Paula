@@ -8,6 +8,7 @@ use Model\CategoryXProduct;
 use Model\Option;
 use Model\ProductDecorator;
 use Model\OptionsXProduct;
+use Controllers\CartController;
 
 class ProductController {
     public static function admin(Router $router)
@@ -289,8 +290,6 @@ class ProductController {
         }
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            
-
             header("Location: /personalizacion/producto?id={$productId}");
             exit;
         }
@@ -363,12 +362,19 @@ class ProductController {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $selectedOptions = $_POST['options'] ?? [];
             $quantity = $_POST['quantity'] ?? 1;
-    
-            // Lógica para procesar las opciones seleccionadas
-            // Por ejemplo, añadir al carrito
+            $userId = $_SESSION['userId'] ?? null;
+
+            if (!$userId) {
+                echo "<script>alert('No se encontró un usuario en la sesión.');</script>";
+                header('Location: /personalizacion/producto?id=' . $productId);
+                exit;
+            }
+
+            // Lógica para añadir al carrito
+            $resultado = CartController::processAddToCart($productId, $quantity, $product->price, $userId);
     
             // Redirigir a la página de resumen
-            header("Location: ");
+            header("Location: /productos ");
             exit;
         }
     

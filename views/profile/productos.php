@@ -23,6 +23,7 @@
                 <form action = "cart/AddToCart" method="post" style="margin-bottom: 10px;">
                     <input type="hidden" value="<?php echo htmlspecialchars($producto->id); ?>" id="producto" name="producto">
                     <input type="hidden" value="<?php echo htmlspecialchars($producto->price); ?>" id="price" name="price">
+                    <input type="hidden" value="<?php echo htmlspecialchars(1); ?>" id="quantity" name="quantity">
                     <button class="cart-button" type="submit" id="addToCartButton" data-product="<?php echo htmlspecialchars($producto->id); ?>">Agregar al Carrito</button>
                 </form>
             <?php } ?>
