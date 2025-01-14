@@ -51,12 +51,7 @@ verificarAccesoAdmin();
         <a href="/" class="logo">
             <img src="/images/logo.png">
         </a>
-        <form class="search-bar">
-            <div class="buscador">
-                <input type="text" name="search" placeholder="Buscar Producto">
-                <button class="search-button" type="submit"></button>
-            </div>
-        </form>
+        
 
         <div class="actions">
             <?php if (!isset($_SESSION['login'])) { ?>
@@ -102,6 +97,11 @@ verificarAccesoAdmin();
             <a <?php if ($page == 'categorias') {
                     echo 'class="active"';
                 } ?> href="/admin/categorias">
+                Categorías</a>
+        <?php } else { ?>
+            <a <?php if ($page == 'categorias') {
+                    echo 'class="active"';
+                } ?> href="/categorias">
                 Categorías</a>
         <?php } ?>
 

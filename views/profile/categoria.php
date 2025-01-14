@@ -3,7 +3,7 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css" integrity="sha512-1sCRPdkRXhB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 
-<h1 style="text-align: center;">Productos</h1>
+<h1 style="text-align: center;">Productos de Categoría: <?php echo $categoria->nombre;?></h1>
 <div class="products-list">
 <?php if(!empty($productos)){ ?>
     <?php foreach($productos as $producto) { ?>
@@ -34,4 +34,5 @@
     <?php } else { ?>
         <p class="admins__empty">No hay Productos</p>
     <?php } ?>
+    
 </div>

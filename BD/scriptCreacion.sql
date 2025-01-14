@@ -1,411 +1,397 @@
--- MySQL Workbench Forward Engineering
+-- MySQL dump 10.13  Distrib 8.1.0, for macos13 (arm64)
+--
+-- Host: 127.0.0.1    Database: ventas_paula
+-- ------------------------------------------------------
+-- Server version	8.1.0
 
-SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
-SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
-SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION';
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!50503 SET NAMES utf8mb4 */;
+/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
+/*!40103 SET TIME_ZONE='+00:00' */;
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
--- -----------------------------------------------------
--- Schema mydb
--- -----------------------------------------------------
--- -----------------------------------------------------
--- Schema ventas_paula
--- -----------------------------------------------------
+--
+-- Table structure for table `cart`
+--
 
--- -----------------------------------------------------
--- Table `products`
--- -----------------------------------------------------
-DROP TABLE IF EXISTS `products` ;
-
-CREATE TABLE IF NOT EXISTS `products` (
-  `id` INT NOT NULL AUTO_INCREMENT,
-  `name` VARCHAR(45) NOT NULL,
-  `description` VARCHAR(45) NOT NULL,
-  `price` DECIMAL(10,2) NOT NULL,
-  `cantidad` INT NULL DEFAULT NULL,
-  `imagen` VARCHAR(255) NULL DEFAULT NULL,
-  `encargo` TINYINT(3) UNSIGNED ZEROFILL NOT NULL DEFAULT '000',
+DROP TABLE IF EXISTS `cart`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `cart` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `userId` int NOT NULL,
+  `active` tinyint NOT NULL,
+  `paymentID` int DEFAULT NULL,
+  `deliveryID` int DEFAULT NULL,
+  `status` varchar(255) NOT NULL DEFAULT 'Pendiente',
+  `deliveryD` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE INDEX `productID_UNIQUE` (`id` ASC) VISIBLE)
-ENGINE = InnoDB
-AUTO_INCREMENT = 18
-DEFAULT CHARACTER SET = utf8mb4
-COLLATE = utf8mb4_0900_ai_ci;
+  UNIQUE KEY `cartID_UNIQUE` (`id`),
+  KEY `fk_cart_users1_idx` (`userId`),
+  KEY `paymentID` (`paymentID`),
+  KEY `deliveryID` (`deliveryID`),
+  CONSTRAINT `cart_ibfk_1` FOREIGN KEY (`userId`) REFERENCES `users` (`id`),
+  CONSTRAINT `cart_ibfk_3` FOREIGN KEY (`deliveryID`) REFERENCES `deliverymethods` (`id`),
+  CONSTRAINT `cart_ibfk_4` FOREIGN KEY (`paymentID`) REFERENCES `paymentmethods` (`id`) ON DELETE SET NULL
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
+--
+-- Table structure for table `categories`
+--
 
--- -----------------------------------------------------
--- Table `promotions`
--- -----------------------------------------------------
-DROP TABLE IF EXISTS `promotions` ;
-
-CREATE TABLE IF NOT EXISTS `promotions` (
-  `id` INT NOT NULL AUTO_INCREMENT,
-  `description` VARCHAR(50) NOT NULL,
-  `percentage` DECIMAL(10,2) NOT NULL,
-  `active` TINYINT NOT NULL,
-  `start_time` DATETIME NOT NULL,
-  `end_time` DATETIME NOT NULL,
-  `name` VARCHAR(45) NOT NULL,
+DROP TABLE IF EXISTS `categories`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `categories` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `nombre` varchar(45) NOT NULL,
+  `descripcion` varchar(255) NOT NULL,
+  `imagen` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE INDEX `promotionID_UNIQUE` (`id` ASC) VISIBLE)
-ENGINE = InnoDB
-AUTO_INCREMENT = 2
-DEFAULT CHARACTER SET = utf8mb4
-COLLATE = utf8mb4_0900_ai_ci;
+  UNIQUE KEY `id_UNIQUE` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
+--
+-- Table structure for table `categoriesxproduct`
+--
 
--- -----------------------------------------------------
--- Table `productXpromotion`
--- -----------------------------------------------------
-DROP TABLE IF EXISTS `productXpromotion` ;
+DROP TABLE IF EXISTS `categoriesxproduct`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `categoriesxproduct` (
+  `categoryID` int NOT NULL,
+  `productID` int NOT NULL,
+  KEY `categoryID` (`categoryID`),
+  KEY `productID` (`productID`),
+  CONSTRAINT `categoriesxproduct_ibfk_1` FOREIGN KEY (`categoryID`) REFERENCES `categories` (`id`),
+  CONSTRAINT `categoriesxproduct_ibfk_2` FOREIGN KEY (`productID`) REFERENCES `products` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
-CREATE TABLE IF NOT EXISTS `productXpromotion` (
-  `id` INT NOT NULL AUTO_INCREMENT,
-  `productID` INT NOT NULL,
-  `promotionID` INT NOT NULL,
+--
+-- Table structure for table `clients`
+--
+
+DROP TABLE IF EXISTS `clients`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `clients` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `name` varchar(30) NOT NULL,
+  `surname` varchar(30) NOT NULL,
+  `birthday` varchar(10) DEFAULT NULL,
+  `phone` varchar(50) NOT NULL,
+  `zipCode` varchar(10) DEFAULT NULL,
+  `address` varchar(155) DEFAULT NULL,
+  `marketing` tinyint NOT NULL,
+  `userID` int NOT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE INDEX `id_UNIQUE` (`id` ASC) VISIBLE,
-  INDEX `fk_productXpromotion_products_idx` (`productID` ASC) VISIBLE,
-  INDEX `fk_productXpromotion_promotions1_idx` (`promotionID` ASC) VISIBLE,
-  CONSTRAINT `fk_productXpromotion_products`
-    FOREIGN KEY (`productID`)
-    REFERENCES `ventas_paula`.`products` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT `fk_productXpromotion_promotions1`
-    FOREIGN KEY (`promotionID`)
-    REFERENCES `ventas_paula`.`promotions` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB;
+  UNIQUE KEY `userID_UNIQUE` (`id`),
+  KEY `userID` (`userID`),
+  CONSTRAINT `clients_ibfk_1` FOREIGN KEY (`userID`) REFERENCES `users` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
+--
+-- Table structure for table `deliverymethods`
+--
 
--- -----------------------------------------------------
--- Table `inventorylog`
--- -----------------------------------------------------
-DROP TABLE IF EXISTS `inventorylog` ;
+DROP TABLE IF EXISTS `deliverymethods`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `deliverymethods` (
+  `id` int NOT NULL AUTO_INCREMENT COMMENT 'Primary Key',
+  `create_time` datetime DEFAULT NULL COMMENT 'Create Time',
+  `name` varchar(255) NOT NULL,
+  `description` varchar(255) NOT NULL,
+  `cost` int NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
-CREATE TABLE IF NOT EXISTS `inventorylog` (
-  `id` INT NOT NULL AUTO_INCREMENT,
-  `action` VARCHAR(45) NOT NULL,
-  `quantity` INT NOT NULL,
-  `old_value` INT NOT NULL,
-  `new_value` INT NOT NULL,
-  `date` DATETIME NOT NULL,
-  `productID` INT NOT NULL,
+--
+-- Table structure for table `directionsxclient`
+--
+
+DROP TABLE IF EXISTS `directionsxclient`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `directionsxclient` (
+  `provincia` varchar(255) DEFAULT NULL,
+  `canton` varchar(255) DEFAULT NULL,
+  `distrito` varchar(255) DEFAULT NULL,
+  `direccion` varchar(255) DEFAULT NULL,
+  `clientID` int NOT NULL,
+  KEY `clientID` (`clientID`),
+  CONSTRAINT `directionsxclient_ibfk_1` FOREIGN KEY (`clientID`) REFERENCES `clients` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `inventorylog`
+--
+
+DROP TABLE IF EXISTS `inventorylog`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `inventorylog` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `action` varchar(45) NOT NULL,
+  `quantity` int NOT NULL,
+  `old_value` int NOT NULL,
+  `new_value` int NOT NULL,
+  `date` datetime NOT NULL,
+  `productID` int NOT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE INDEX `id_UNIQUE` (`id` ASC) VISIBLE,
-  INDEX `fk_inventorylog_products1_idx` (`productID` ASC) VISIBLE,
-  CONSTRAINT `fk_inventorylog_products1`
-    FOREIGN KEY (`productID`)
-    REFERENCES `ventas_paula`.`products` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB;
+  UNIQUE KEY `id_UNIQUE` (`id`),
+  KEY `fk_inventorylog_products1_idx` (`productID`),
+  CONSTRAINT `fk_inventorylog_products1` FOREIGN KEY (`productID`) REFERENCES `products` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
+--
+-- Table structure for table `options`
+--
 
--- -----------------------------------------------------
--- Table `users`
--- -----------------------------------------------------
-DROP TABLE IF EXISTS `users` ;
+DROP TABLE IF EXISTS `options`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `options` (
+  `id` int NOT NULL AUTO_INCREMENT COMMENT 'Primary Key',
+  `name` varchar(255) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
-CREATE TABLE IF NOT EXISTS `users` (
-  `id` INT NOT NULL AUTO_INCREMENT COMMENT 'Primary Key',
-  `create_time` DATETIME NULL DEFAULT NULL COMMENT 'Create Time',
-  `username` VARCHAR(255) NOT NULL,
-  `email` VARCHAR(45) NOT NULL,
-  `password` VARCHAR(255) NOT NULL,
-  `admin` TINYINT NOT NULL DEFAULT '0',
-  `verified` TINYINT NOT NULL DEFAULT '0',
-  `token` VARCHAR(15) NOT NULL,
-  PRIMARY KEY (`id`))
-ENGINE = InnoDB
-AUTO_INCREMENT = 4
-DEFAULT CHARACTER SET = utf8mb4
-COLLATE = utf8mb4_0900_ai_ci;
+--
+-- Table structure for table `optionsxproduct`
+--
 
+DROP TABLE IF EXISTS `optionsxproduct`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `optionsxproduct` (
+  `optionID` int NOT NULL,
+  `productID` int NOT NULL,
+  `value` json NOT NULL,
+  KEY `optionID` (`optionID`),
+  KEY `productID` (`productID`),
+  CONSTRAINT `optionsxproduct_ibfk_1` FOREIGN KEY (`optionID`) REFERENCES `options` (`id`),
+  CONSTRAINT `optionsxproduct_ibfk_2` FOREIGN KEY (`productID`) REFERENCES `products` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- -----------------------------------------------------
--- Table `deliverymethods`
--- -----------------------------------------------------
-DROP TABLE IF EXISTS `deliverymethods` ;
+--
+-- Table structure for table `paymentmethods`
+--
 
-CREATE TABLE IF NOT EXISTS `deliverymethods` (
-  `id` INT NOT NULL AUTO_INCREMENT COMMENT 'Primary Key',
-  `create_time` DATETIME NULL DEFAULT NULL COMMENT 'Create Time',
-  `name` VARCHAR(255) NOT NULL,
-  `description` VARCHAR(255) NOT NULL,
-  `cost` INT NOT NULL,
-  PRIMARY KEY (`id`))
-ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8mb4
-COLLATE = utf8mb4_0900_ai_ci;
+DROP TABLE IF EXISTS `paymentmethods`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `paymentmethods` (
+  `id` int NOT NULL AUTO_INCREMENT COMMENT 'Primary Key',
+  `create_time` datetime DEFAULT NULL COMMENT 'Create Time',
+  `name` varchar(255) NOT NULL,
+  `description` varchar(255) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
+--
+-- Table structure for table `products`
+--
 
--- -----------------------------------------------------
--- Table `paymentmethods`
--- -----------------------------------------------------
-DROP TABLE IF EXISTS `paymentmethods` ;
-
-CREATE TABLE IF NOT EXISTS `paymentmethods` (
-  `id` INT NOT NULL AUTO_INCREMENT COMMENT 'Primary Key',
-  `create_time` DATETIME NULL DEFAULT NULL COMMENT 'Create Time',
-  `name` VARCHAR(255) NOT NULL,
-  `description` VARCHAR(255) NOT NULL,
-  PRIMARY KEY (`id`))
-ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8mb4
-COLLATE = utf8mb4_0900_ai_ci;
-
-
--- -----------------------------------------------------
--- Table `cart`
--- -----------------------------------------------------
-DROP TABLE IF EXISTS `cart` ;
-
-CREATE TABLE IF NOT EXISTS `cart` (
-  `id` INT NOT NULL AUTO_INCREMENT,
-  `userId` INT NOT NULL,
-  `active` TINYINT NOT NULL,
-  `paymentID` INT NULL DEFAULT NULL,
-  `deliveryID` INT NULL DEFAULT NULL,
-  `status` VARCHAR(255) NOT NULL DEFAULT 'Pendiente',
-  `deliveryD` VARCHAR(255) NULL DEFAULT NULL,
+DROP TABLE IF EXISTS `products`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `products` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `name` varchar(45) NOT NULL,
+  `description` varchar(45) NOT NULL,
+  `price` decimal(10,2) NOT NULL,
+  `cantidad` int DEFAULT NULL,
+  `imagen` varchar(255) DEFAULT NULL,
+  `encargo` tinyint(3) unsigned zerofill NOT NULL DEFAULT '000',
   PRIMARY KEY (`id`),
-  UNIQUE INDEX `cartID_UNIQUE` (`id` ASC) VISIBLE,
-  INDEX `fk_cart_users1_idx` (`userId` ASC) VISIBLE,
-  INDEX `paymentID` (`paymentID` ASC) VISIBLE,
-  INDEX `deliveryID` (`deliveryID` ASC) VISIBLE,
-  CONSTRAINT `cart_ibfk_1`
-    FOREIGN KEY (`userId`)
-    REFERENCES `users` (`id`),
-  CONSTRAINT `cart_ibfk_3`
-    FOREIGN KEY (`deliveryID`)
-    REFERENCES `deliverymethods` (`id`),
-  CONSTRAINT `cart_ibfk_4`
-    FOREIGN KEY (`paymentID`)
-    REFERENCES `paymentmethods` (`id`)
-    ON DELETE SET NULL)
-ENGINE = InnoDB
-AUTO_INCREMENT = 4
-DEFAULT CHARACTER SET = utf8mb4
-COLLATE = utf8mb4_0900_ai_ci;
+  UNIQUE KEY `productID_UNIQUE` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
+--
+-- Table structure for table `productsxcart`
+--
 
--- -----------------------------------------------------
--- Table `categories`
--- -----------------------------------------------------
-DROP TABLE IF EXISTS `categories` ;
+DROP TABLE IF EXISTS `productsxcart`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `productsxcart` (
+  `cartID` int NOT NULL,
+  `productID` int NOT NULL,
+  `quantity` int NOT NULL,
+  `price` decimal(10,2) NOT NULL,
+  KEY `fk_cart_has_products_products1_idx` (`productID`),
+  KEY `fk_cart_has_products_cart1_idx` (`cartID`),
+  CONSTRAINT `fk_cart_has_products_cart1` FOREIGN KEY (`cartID`) REFERENCES `cart` (`id`),
+  CONSTRAINT `fk_cart_has_products_products1` FOREIGN KEY (`productID`) REFERENCES `products` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
-CREATE TABLE IF NOT EXISTS `categories` (
-  `id` INT NOT NULL AUTO_INCREMENT,
-  `nombre` VARCHAR(45) NOT NULL,
-  `descripcion` VARCHAR(255) NOT NULL,
+--
+-- Table structure for table `productsxsale`
+--
+
+DROP TABLE IF EXISTS `productsxsale`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `productsxsale` (
+  `salesID` int NOT NULL,
+  `productID` int NOT NULL,
+  `quantity` int NOT NULL,
+  `price` decimal(10,2) NOT NULL,
+  PRIMARY KEY (`salesID`,`productID`),
+  KEY `fk_sales_has_products_products1_idx` (`productID`),
+  KEY `fk_sales_has_products_sales1_idx` (`salesID`),
+  CONSTRAINT `fk_sales_has_products_products1` FOREIGN KEY (`productID`) REFERENCES `products` (`id`),
+  CONSTRAINT `fk_sales_has_products_sales1` FOREIGN KEY (`salesID`) REFERENCES `sales` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `productXpromotion`
+--
+
+DROP TABLE IF EXISTS `productXpromotion`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `productXpromotion` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `productID` int NOT NULL,
+  `promotionID` int NOT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE INDEX `id_UNIQUE` (`id` ASC) VISIBLE)
-ENGINE = InnoDB
-AUTO_INCREMENT = 4
-DEFAULT CHARACTER SET = utf8mb4
-COLLATE = utf8mb4_0900_ai_ci;
+  UNIQUE KEY `id_UNIQUE` (`id`),
+  KEY `fk_productXpromotion_products_idx` (`productID`),
+  KEY `fk_productXpromotion_promotions1_idx` (`promotionID`),
+  CONSTRAINT `fk_productXpromotion_products` FOREIGN KEY (`productID`) REFERENCES `products` (`id`),
+  CONSTRAINT `fk_productXpromotion_promotions1` FOREIGN KEY (`promotionID`) REFERENCES `promotions` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
+--
+-- Table structure for table `promotions`
+--
 
--- -----------------------------------------------------
--- Table `categoriesxproduct`
--- -----------------------------------------------------
-DROP TABLE IF EXISTS `categoriesxproduct` ;
-
-CREATE TABLE IF NOT EXISTS `categoriesxproduct` (
-  `categoryID` INT NOT NULL,
-  `productID` INT NOT NULL,
-  INDEX `categoryID` (`categoryID` ASC) VISIBLE,
-  INDEX `productID` (`productID` ASC) VISIBLE,
-  CONSTRAINT `categoriesxproduct_ibfk_1`
-    FOREIGN KEY (`categoryID`)
-    REFERENCES `categories` (`id`),
-  CONSTRAINT `categoriesxproduct_ibfk_2`
-    FOREIGN KEY (`productID`)
-    REFERENCES `products` (`id`))
-ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8mb4
-COLLATE = utf8mb4_0900_ai_ci;
-
-
--- -----------------------------------------------------
--- Table `clients`
--- -----------------------------------------------------
-DROP TABLE IF EXISTS `clients` ;
-
-CREATE TABLE IF NOT EXISTS `clients` (
-  `id` INT NOT NULL AUTO_INCREMENT,
-  `name` VARCHAR(30) NOT NULL,
-  `surname` VARCHAR(30) NOT NULL,
-  `birthday` VARCHAR(10) NULL DEFAULT NULL,
-  `phone` VARCHAR(50) NOT NULL,
-  `zipCode` VARCHAR(10) NULL DEFAULT NULL,
-  `address` VARCHAR(155) NULL DEFAULT NULL,
-  `marketing` TINYINT NOT NULL,
-  `userID` INT NOT NULL,
+DROP TABLE IF EXISTS `promotions`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `promotions` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `description` varchar(50) NOT NULL,
+  `percentage` decimal(10,2) NOT NULL,
+  `active` tinyint NOT NULL,
+  `start_time` datetime NOT NULL,
+  `end_time` datetime NOT NULL,
+  `name` varchar(45) NOT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE INDEX `userID_UNIQUE` (`id` ASC) VISIBLE,
-  INDEX `userID` (`userID` ASC) VISIBLE,
-  CONSTRAINT `clients_ibfk_1`
-    FOREIGN KEY (`userID`)
-    REFERENCES `users` (`id`))
-ENGINE = InnoDB
-AUTO_INCREMENT = 14
-DEFAULT CHARACTER SET = utf8mb4
-COLLATE = utf8mb4_0900_ai_ci;
+  UNIQUE KEY `promotionID_UNIQUE` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
+--
+-- Table structure for table `review`
+--
 
--- -----------------------------------------------------
--- Table `options`
--- -----------------------------------------------------
-DROP TABLE IF EXISTS `options` ;
-
-CREATE TABLE IF NOT EXISTS `options` (
-  `id` INT NOT NULL AUTO_INCREMENT COMMENT 'Primary Key',
-  `name` VARCHAR(255) NOT NULL,
-  PRIMARY KEY (`id`))
-ENGINE = InnoDB
-AUTO_INCREMENT = 19
-DEFAULT CHARACTER SET = utf8mb4
-COLLATE = utf8mb4_0900_ai_ci;
-
-
--- -----------------------------------------------------
--- Table `optionsxproduct`
--- -----------------------------------------------------
-DROP TABLE IF EXISTS `optionsxproduct` ;
-
-CREATE TABLE IF NOT EXISTS `optionsxproduct` (
-  `optionID` INT NOT NULL,
-  `productID` INT NOT NULL,
-  `value` JSON NOT NULL,
-  INDEX `optionID` (`optionID` ASC) VISIBLE,
-  INDEX `productID` (`productID` ASC) VISIBLE,
-  CONSTRAINT `optionsxproduct_ibfk_1`
-    FOREIGN KEY (`optionID`)
-    REFERENCES `options` (`id`),
-  CONSTRAINT `optionsxproduct_ibfk_2`
-    FOREIGN KEY (`productID`)
-    REFERENCES `products` (`id`))
-ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8mb4
-COLLATE = utf8mb4_0900_ai_ci;
-
-
--- -----------------------------------------------------
--- Table `productsxcart`
--- -----------------------------------------------------
-DROP TABLE IF EXISTS `productsxcart` ;
-
-CREATE TABLE IF NOT EXISTS `productsxcart` (
-  `cartID` INT NOT NULL,
-  `productID` INT NOT NULL,
-  `quantity` INT NOT NULL,
-  `price` DECIMAL(10,2) NOT NULL,
-  INDEX `fk_cart_has_products_products1_idx` (`productID` ASC) VISIBLE,
-  INDEX `fk_cart_has_products_cart1_idx` (`cartID` ASC) VISIBLE,
-  CONSTRAINT `fk_cart_has_products_cart1`
-    FOREIGN KEY (`cartID`)
-    REFERENCES `cart` (`id`),
-  CONSTRAINT `fk_cart_has_products_products1`
-    FOREIGN KEY (`productID`)
-    REFERENCES `products` (`id`))
-ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8mb4
-COLLATE = utf8mb4_0900_ai_ci;
-
-
--- -----------------------------------------------------
--- Table `sales`
--- -----------------------------------------------------
-DROP TABLE IF EXISTS `sales` ;
-
-CREATE TABLE IF NOT EXISTS `sales` (
-  `id` INT NOT NULL AUTO_INCREMENT,
-  `descripcion` VARCHAR(100) NOT NULL,
-  `monto` DECIMAL(10,2) NOT NULL,
-  `fecha` DATETIME NOT NULL,
-  `discount` DECIMAL(10,2) NULL DEFAULT NULL,
-  `userId` INT NULL DEFAULT NULL,
+DROP TABLE IF EXISTS `review`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `review` (
+  `id` int NOT NULL AUTO_INCREMENT COMMENT 'Primary Key',
+  `create_time` datetime DEFAULT NULL COMMENT 'Create Time',
+  `review` varchar(255) NOT NULL,
+  `productID` int NOT NULL,
+  `rating` float NOT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE INDEX `ventasID_UNIQUE` (`id` ASC) VISIBLE,
-  INDEX `fk_sales_users1_idx` (`userId` ASC) VISIBLE,
-  CONSTRAINT `fk_sales_users1`
-    FOREIGN KEY (`userId`)
-    REFERENCES `clients` (`id`))
-ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8mb4
-COLLATE = utf8mb4_0900_ai_ci;
+  KEY `productID` (`productID`),
+  CONSTRAINT `review_ibfk_1` FOREIGN KEY (`productID`) REFERENCES `products` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
+--
+-- Table structure for table `sales`
+--
 
--- -----------------------------------------------------
--- Table `productsxsale`
--- -----------------------------------------------------
-DROP TABLE IF EXISTS `productsxsale` ;
-
-CREATE TABLE IF NOT EXISTS `productsxsale` (
-  `salesID` INT NOT NULL,
-  `productID` INT NOT NULL,
-  `quantity` INT NOT NULL,
-  `price` DECIMAL(10,2) NOT NULL,
-  PRIMARY KEY (`salesID`, `productID`),
-  INDEX `fk_sales_has_products_products1_idx` (`productID` ASC) VISIBLE,
-  INDEX `fk_sales_has_products_sales1_idx` (`salesID` ASC) VISIBLE,
-  CONSTRAINT `fk_sales_has_products_products1`
-    FOREIGN KEY (`productID`)
-    REFERENCES `products` (`id`),
-  CONSTRAINT `fk_sales_has_products_sales1`
-    FOREIGN KEY (`salesID`)
-    REFERENCES `sales` (`id`))
-ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8mb4
-COLLATE = utf8mb4_0900_ai_ci;
-
-
--- -----------------------------------------------------
--- Table `review`
--- -----------------------------------------------------
-DROP TABLE IF EXISTS `review` ;
-
-CREATE TABLE IF NOT EXISTS `review` (
-  `id` INT NOT NULL AUTO_INCREMENT COMMENT 'Primary Key',
-  `create_time` DATETIME NULL DEFAULT NULL COMMENT 'Create Time',
-  `review` VARCHAR(255) NOT NULL,
-  `productID` INT NOT NULL,
-  `rating` FLOAT NOT NULL,
+DROP TABLE IF EXISTS `sales`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `sales` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `descripcion` varchar(100) NOT NULL,
+  `monto` decimal(10,2) NOT NULL,
+  `fecha` datetime NOT NULL,
+  `discount` decimal(10,2) DEFAULT NULL,
+  `userId` int DEFAULT NULL,
   PRIMARY KEY (`id`),
-  INDEX `productID` (`productID` ASC) VISIBLE,
-  CONSTRAINT `review_ibfk_1`
-    FOREIGN KEY (`productID`)
-    REFERENCES `products` (`id`))
-ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8mb4
-COLLATE = utf8mb4_0900_ai_ci;
+  UNIQUE KEY `ventasID_UNIQUE` (`id`),
+  KEY `fk_sales_users1_idx` (`userId`),
+  CONSTRAINT `fk_sales_users1` FOREIGN KEY (`userId`) REFERENCES `clients` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
+--
+-- Table structure for table `users`
+--
 
--- -----------------------------------------------------
--- Table `wishlist`
--- -----------------------------------------------------
-DROP TABLE IF EXISTS `wishlist` ;
+DROP TABLE IF EXISTS `users`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `users` (
+  `id` int NOT NULL AUTO_INCREMENT COMMENT 'Primary Key',
+  `create_time` datetime DEFAULT NULL COMMENT 'Create Time',
+  `username` varchar(255) NOT NULL,
+  `email` varchar(45) NOT NULL,
+  `password` varchar(255) NOT NULL,
+  `admin` tinyint NOT NULL DEFAULT '0',
+  `verified` tinyint NOT NULL DEFAULT '0',
+  `token` varchar(15) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
-CREATE TABLE IF NOT EXISTS `wishlist` (
-  `create_time` DATETIME NULL DEFAULT NULL COMMENT 'Create Time',
-  `userID` INT NOT NULL,
-  `productID` INT NOT NULL,
-  INDEX `userID` (`userID` ASC) VISIBLE,
-  INDEX `productID` (`productID` ASC) VISIBLE,
-  CONSTRAINT `wishlist_ibfk_1`
-    FOREIGN KEY (`userID`)
-    REFERENCES `users` (`id`),
-  CONSTRAINT `wishlist_ibfk_2`
-    FOREIGN KEY (`productID`)
-    REFERENCES `products` (`id`))
-ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8mb4
-COLLATE = utf8mb4_0900_ai_ci;
+--
+-- Table structure for table `wishlist`
+--
 
+DROP TABLE IF EXISTS `wishlist`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `wishlist` (
+  `create_time` datetime DEFAULT NULL COMMENT 'Create Time',
+  `userID` int NOT NULL,
+  `productID` int NOT NULL,
+  KEY `userID` (`userID`),
+  KEY `productID` (`productID`),
+  CONSTRAINT `wishlist_ibfk_1` FOREIGN KEY (`userID`) REFERENCES `users` (`id`),
+  CONSTRAINT `wishlist_ibfk_2` FOREIGN KEY (`productID`) REFERENCES `products` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
-SET SQL_MODE=@OLD_SQL_MODE;
-SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
-SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
+--
+-- Dumping routines for database 'ventas_paula'
+--
+/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
+
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+
+-- Dump completed on 2025-01-14 10:35:53

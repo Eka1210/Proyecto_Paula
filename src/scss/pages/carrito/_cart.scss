@@ -1,0 +1,96 @@
+@use 'base/variables' as v;
+@use 'base/mixins' as m;
+
+.cart{
+    border-collapse: collapse;
+    tbody{
+        tr{
+            border-bottom: 1px solid v.$gris-oscuro;
+        }
+    }
+}
+
+.info-carrito{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    margin: 2rem 3rem 2rem 0;
+    p{
+        margin: 1rem;
+        color: v.$vino;
+        font-weight: v.$bold;
+        font-size: 2rem;
+        span{
+            color: v.$dorado;
+        }
+    }
+    .total{
+        font-size: 3rem;
+    }
+    .send-cart{
+        @include m.boton(v.$vino, v.$blanco, 5rem);
+    }
+}
+
+.actions {
+    display: flex;
+    justify-content: space-between;
+    padding: 1rem 2rem;
+}
+
+.products{
+    margin: 1rem 0 auto 0;
+    width: 100%;
+    border-spacing: 0;
+    thead{
+        background-color: v.$dorado;
+        th{
+            color: v.$blanco;
+            padding: 2rem;
+        }
+    }
+    tbody {
+        td{
+            margin: 2rem;
+            text-align: center;
+            font-weight: v.$bold;
+            color: v.$vino;
+            img{
+                display: block;
+                margin: 0 auto;
+            }
+        }
+    }
+    .table-image {
+        width: 10rem;
+    }
+}
+
+.create-form{
+    width: min(95%, 80rem);
+    margin: auto auto 5rem auto;
+    .form__field{
+        input, select, textarea{
+            color:v.$vino;
+            font-weight: v.$bold;
+        }
+    }
+}
+
+.icon-delete {
+    @include m.boton(v.$blanco, v.$rojo, 0);
+    @include m.tablet {
+        width: 100%;
+    }
+    margin: 1rem 0;
+    font-size: 2.5rem;
+}
+
+.icon-update {
+    @include m.boton(v.$blanco, v.$vino, 0);
+    @include m.tablet {
+        width: 100%;
+    }
+    margin: 1rem 0;
+    font-size: 2.5rem;
+}

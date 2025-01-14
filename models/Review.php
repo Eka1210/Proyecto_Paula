@@ -1,9 +1,11 @@
-<?php 
+<?php
+
 namespace Model;
 
-class Review extends ActiveRecord{
+class Review extends ActiveRecord
+{
     protected static $tabla = 'review';
-    protected static $columnasDB = ['id','create_time', 'review', 'productID', 'rating'];
+    protected static $columnasDB = ['id', 'create_time', 'review', 'productID', 'rating'];
 
     public $id;
     public $create_time;
@@ -11,12 +13,12 @@ class Review extends ActiveRecord{
     public $productID;
     public $rating;
 
-    public function __construct($args = []) {
+    public function __construct($args = [])
+    {
         $this->id = $args['id'] ?? null;
-        $this->create_time = $args['create_time'] ?? ''; 
+        $this->create_time = $args['create_time'] ?? '';
         $this->review = $args['review'] ?? '';
         $this->productID = $args['productID'] ?? null;
-        $this->rating = $args['rating'] ?? null; 
+        $this->rating = $args['rating'] ?? null;
     }
-
 }

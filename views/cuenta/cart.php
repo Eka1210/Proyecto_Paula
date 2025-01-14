@@ -1,69 +1,71 @@
-
-
-<h1>Carrito</h1>
+<h1 style="text-align: center;">Carrito</h1>
 
 <table class="products cart">
     <thead>
         <tr>
             <th>Nombre</th>
             <th>Imagen</th>
-            <th>Precio</th>
+            <th>Precio Unitario</th>
             <th>Cantidad</th>
-            <th>Categoría</th>
+            <th>Subtotal</th>
+            <th>Categorías</th>
             <th>Acciones</th>
         </tr>
     </thead>
 
     <tbody>
-        <?php foreach ($productos as $producto){?>
+        <?php 
+        // Variables para total de productos y monto total
+        $totalProductos = 0;
+        $totalMonto = 0;
+
+        foreach ($productos as $producto) {
+            // Calcular subtotal por producto
+            $subtotal = $producto->price * $producto->quantity;
+            $totalProductos += $producto->quantity;
+            $totalMonto += $subtotal;
+        ?>
             <tr>
-                <td><?php echo $producto->name ?></td>
-                <td><img src="/images/<?php echo $producto->imagen ?>" alt="Table Image" class="table-image"></td>
-                <td>₡<?php echo $producto->price ?></td>
-                <td> <?php echo $producto->cantidad ?> </td>
+                <td><?php echo htmlspecialchars($producto->name); ?></td>
                 <td>
-                    <?php foreach($categorias as $categoria){
-                        if($producto->categoryID === $categoria->id){
-                            echo $categoria->tipo;
+                    <img src="<?php echo htmlspecialchars($producto->imagen); ?>" 
+                         alt="Imagen de <?php echo htmlspecialchars($producto->name); ?>" 
+                         class="table-image">
+                </td>
+                <td>₡<?php echo number_format($producto->price, 2); ?></td>
+                <td><?php echo htmlspecialchars($producto->quantity); ?></td>
+                <td>₡<?php echo number_format($subtotal, 2); ?></td>
+                <td>
+                    <?php 
+                    if (!empty($producto->categories)) {
+                        foreach ($producto->categories as $categoria) {
+                            echo htmlspecialchars($categoria->nombre) . "<br>";
                         }
-                    } ?>
+                    }
+                    ?>
                 </td>
                 <td>
-                    <form method="POST" class="w-100" action="carrito">
-                        <input type="hidden" name="id" value="<?php echo $producto->id ?>">
-                        <input type="hidden" name="type" value="quitar">
-                        <input type="submit" class="icon-delete" value="&#128465;">
+                    <form method="POST" action="/cart/AddToCart" class="w-100">
+                            <input type="hidden" value="<?php echo $producto->id; ?>" id="producto" name="producto">
+                            <input type="hidden" value="<?php echo $producto->price; ?>" id="price" name="price">
+                            <input type="hidden" value="<?php echo 1; ?>" id="quantity" name="quantity">
+                        <button type="submit" class="icon-delete" title="Añadir al carrito">+</button>
+                    </form>
+                    <form method="POST" action="/cart/removeFromCart" class="w-100">
+                        <input type="hidden" name="productID" value="<?php echo htmlspecialchars($producto->id); ?>">
+                        <button type="submit" class="icon-delete" title="Eliminar del carrito">-</button>
                     </form>
                 </td>
             </tr>
-
         <?php } ?>
     </tbody>
 </table>
 
 <div class="info-carrito">
-    <p>Cantidad de productos: <span>
-        <?php 
-            $cantidad = 0;
-            foreach($productos as $producto){
-                $cantidad += $producto->cantidad;
-            }
-            echo $cantidad;
-        ?>
-    </span></p>
-    <p class="total">Total: <span>
-        <?php 
-            $total = 0;
-            foreach($productos as $producto){
-                $total += $producto->price;
-            }
-            echo '₡' . $total;
-        ?>
-    </span></p>
+    <p>Cantidad de productos: <span><?php echo $totalProductos; ?></span></p>
+    <p class="total">Total: <span>₡<?php echo number_format($totalMonto, 2); ?></span></p>
 
-    <form method="POST">
-        <input type="hidden" name="type" value="enviar">
-        <input type="submit" class="send-cart" value="Enviar Pedido">
+    <form method="POST" action="/cart/checkout">
+        <input type="submit" class="send-cart" value="Proceder al Pago">
     </form>
-
 </div>

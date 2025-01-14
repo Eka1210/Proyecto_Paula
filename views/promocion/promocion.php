@@ -21,7 +21,7 @@
                 <?php foreach ($promociones as $promocion) { ?>
                     <tr class="table__tr">
                         <td class="table__td">
-                            <?php echo $promocion->description; ?>
+                            <?php echo $promocion->name; ?>
                         </td>
                         <td class="table__td">
                             <a href="/admin/editar/categoria?id=<?php echo $promocion->id; ?>" class="categoryCard__view">
