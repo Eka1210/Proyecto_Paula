@@ -84,7 +84,7 @@ $router->post('/admin/imagenes/eliminar', [ProductController::class, 'eliminarIm
 // Rutas Carrito
 $router->get('/cart', [CartController::class, 'ver']);
 $router->post('/cart/AddToCart', [CartController::class, 'AddToCart']);
-
+$router->post('/cart/removeFromCart', [CartController::class, 'removeFromCart']);
 
 //Rutas de descuento
 $router->get('/admin/promocion', [PromotionController::class, 'ver']);

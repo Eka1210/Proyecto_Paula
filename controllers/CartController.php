@@ -6,11 +6,50 @@ use Model\cart;
 use Model\Product;
 use Model\Productsxcart;
 use Model\Usuario;
+use Model\Category;
+use Model\CategoryXProduct;
 
 class CartController {
 
     public static function ver(Router $router) {
-        $router->render('cuenta/cart', []);
+        $userId = $_SESSION['userId'] ?? null;
+    
+        if ($userId) {
+            $carrito = Cart::where('userId', $userId);
+            $productosEnCarrito = [];
+    
+            if ($carrito) {
+                $productosxCart = Productsxcart::allCart($carrito->id);
+    
+                foreach ($productosxCart as $productoEnCarrito) {
+                    $producto = Product::find($productoEnCarrito->productID);
+
+                    if ($producto) {
+                        $producto->quantity = $productoEnCarrito->quantity;
+                        
+                        // Obtener las categorías del producto
+                        $categoryIDs = CategoryxProduct::all2($producto->id);
+                        $categorias = [];
+                        foreach ($categoryIDs as $categoryID) {
+                            $categoria = Category::find($categoryID->categoryID);
+                            if ($categoria) {
+                                $categorias[] = $categoria;
+                            }
+                        }
+    
+                        // Almacenamos las categorías en el producto
+                        $producto->categories = $categorias;
+                        $productosEnCarrito[] = $producto;
+                    }
+                }
+            }
+            $router->render('cuenta/cart', [
+                'productos' => $productosEnCarrito,
+            ]);
+        } else {
+            header('Location: /login');
+            exit;
+        }
     }
 
     public static function AddToCart(Router $router) {
@@ -86,7 +125,7 @@ class CartController {
         }
     
         // Verificar si el producto ya está en el carrito
-        $existingItem = Productsxcart::findProductInCar($productoId, $carrito->id);
+        $existingItem = Productsxcart::findProductInCart($productoId, $carrito->id);
         if (!is_null($existingItem)) {
             // Actualizar cantidad y precio si ya existe
             $existingItem->quantity += $quantity;
@@ -112,6 +151,49 @@ class CartController {
                 'success' => false,
                 'message' => 'Hubo un error al procesar el producto en el carrito.',
             ];
+        }
+    }
+
+    public static function removeFromCart(Router $router) {
+        // Verificamos que el usuario esté autenticado
+        $userId = $_SESSION['userId'] ?? null;
+    
+        if ($userId) {
+            // Obtener el productID que se quiere eliminar
+            $productId = $_POST['productID'] ?? null;
+    
+            if (!is_null($productId)) {
+                // Buscar el carrito del usuario
+                $carrito = Cart::where('userId', $userId);
+
+                if (!is_null($carrito)) {
+                    // Buscar el producto en el carrito
+                    $productoEnCarrito = Productsxcart::findProductInCart($productId, $carrito);
+                    
+                    if ($productoEnCarrito) {
+                        // Eliminar el producto del carrito
+                        $resultado = $productoEnCarrito->deleteFromCart($productId, $carrito);
+                        if ($resultado) {
+                            echo "<script>alert('¡Producto eliminado del carrito!');</script>";
+                        } else {
+                            echo "<script>alert('Hubo un error al eliminar el producto.');</script>";
+                        }
+                    } else {
+                        echo "<script>alert('El producto no está en el carrito.');</script>";
+                    }
+                } else {
+                    echo "<script>alert('No se encontró el carrito del usuario.');</script>";
+                }
+            } else {
+                echo "<script>alert('No se especificó el producto a eliminar.');</script>";
+            }
+    
+            // Redirigir a la página del carrito
+            header('Location: /cart');
+            exit;
+        } else {
+            header('Location: /login');
+            exit;
         }
     }
     

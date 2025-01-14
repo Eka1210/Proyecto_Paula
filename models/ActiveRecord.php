@@ -288,4 +288,51 @@ class ActiveRecord {
         return $resultado;
     }
 
+    // Funciones Carrito
+
+    public static function deleteFromCart($productId, $cartId) {
+        $query = "DELETE FROM productsxcart WHERE productID =" . $productId . "AND cartID = " . $cartId;
+        $resultado = self::consultarSQL($query);
+        return  $resultado;
+    }
+
+    public static function allCart($cartId) {
+        $query = "SELECT * FROM " . static::$tabla . " WHERE cartID = " . $cartId;
+        $resultado = self::consultarSQL($query);
+        return  $resultado;
+    }
+
+    public static function findProductInCart( $productId, $cartId) {
+        $query = "SELECT * FROM " . static::$tabla . " WHERE cartID = " . $cartId . " AND productID = " . $productId;
+        $resultado = self::consultarSQL($query);
+        return array_shift( $resultado ) ;
+    }
+
+    public function actualizarProductInCart() {
+        // Sanitizar los datos
+        $atributos = $this->sanitizarAtributos();
+        // Iterar para agregar cada campo y valor
+        $valores = [];
+        foreach ($atributos as $key => $value) {
+            $valores[] = "{$key}='{$value}'";
+        }
+        // Validar que existan valores para actualizar
+        if (empty($valores)) {
+            throw new \Exception("No hay valores para actualizar el registro.");
+        }
+        // Validar que cartID y productID estén configurados
+        if (empty($this->cartID) || empty($this->productID)) {
+            throw new \Exception("cartID o productID no están configurados.");
+        }
+        // Construir la consulta SQL
+        $query = "UPDATE " . static::$tabla . " SET " . join(', ', $valores) .
+                    " WHERE cartID = '" . self::$db->escape_string($this->cartID) . "'" .
+                    " AND productID = '" . self::$db->escape_string($this->productID) . "'" .
+                    " LIMIT 1";
+        // Ejecutar la consulta
+        $resultado = self::$db->query($query);
+        // Retornar el resultado
+        return $resultado;
+    }
+
 }
