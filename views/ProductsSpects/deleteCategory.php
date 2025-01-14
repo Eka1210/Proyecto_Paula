@@ -19,7 +19,7 @@
                                 <?php echo $categoria->nombre; ?>
                             </td>
                             <td class="table__td">
-                                <form action="/admin/categorias/eliminar" method="POST" onsubmit="return confirm('Está seguro que quiere eliminar la categoría?')">
+                                <form action="/admin/categorias" method="POST" onsubmit="return confirm('Está seguro que quiere eliminar la categoría?')">
                                     <input type="hidden" name="id" value="<?php echo $categoria->id; ?>">
                                     <button type="submit" class="categoryCard__view">
                                         <i class="fa-solid fa-trash"></i>

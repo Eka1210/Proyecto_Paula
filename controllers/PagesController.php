@@ -7,7 +7,9 @@ use Model\Product;
 
 class PagesController {
     public static function index(Router $router){
+        $productos = Product::get(3);
         $router->render('MainMenu/index', [
+            'productos' => $productos,
             'page' => 'inicio'
         ]);
     }

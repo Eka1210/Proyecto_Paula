@@ -1,4 +1,8 @@
 
+<?php
+    include_once __DIR__ . "/../templates/alerts.php";
+?>
+
 <div style="text-align: right; margin-right: 20px;">
     <a href="/admin/categorias/crear" class="form__submit--orange" style="display: inline-block;">
         Crear Categoria

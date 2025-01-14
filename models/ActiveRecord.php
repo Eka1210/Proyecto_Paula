@@ -202,7 +202,12 @@ class ActiveRecord {
         $resultado = self::$db->query($query);
         return $resultado;
     }
-    
+    public static function deleteByProduct2($productId) {
+        // Eliminar todas las relaciones de categorías con el producto especificado
+        $query = "DELETE FROM optionsxproduct WHERE productID = $productId";
+        $resultado = self::$db->query($query);
+        return $resultado;
+    }
     public static function where($column, $value){
         $query = "SELECT * FROM " . static::$tabla . " WHERE $column = '$value'";
         // debuguear($query);

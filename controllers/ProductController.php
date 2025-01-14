@@ -162,16 +162,17 @@ class ProductController {
                 }
             }
             CategoryXProduct::deleteByProduct($producto->id);
+            OptionsXProduct::deleteByProduct2($producto->id);
                 
             if($valid){
                 $producto->eliminar();
-                header('Location: /admin/productos/eliminar');
+                header('Location: /admin/productos');
             }else{
                 header('Location: /admin?error=1');
             }
         }
         $alertas = Category::getAlertas();
-        $router->render('ProductsSpects/deleteProduct', [
+        $router->render('ProductsSpects/gestionProductos', [
             'alertas' => $alertas,
             'productos' => $productos
         ]);

@@ -31,7 +31,7 @@
                                 <?php if($producto->encargo ==1) {echo 'No Aplica';} else{echo $producto->cantidad;};?>
                             </td>
                             <td class="table__td">
-                                <form action="/admin/productos/eliminar" method="POST" onsubmit="return confirm('Está seguro que quiere eliminar el producto?')">
+                                <form action="/admin/productos" method="POST" onsubmit="return confirm('Está seguro que quiere eliminar el producto?')">
                                     <input type="hidden" name="id" value="<?php echo $producto->id; ?>">
                                     <button type="submit" class="categoryCard__view">
                                         <i class="fa-solid fa-trash"></i>

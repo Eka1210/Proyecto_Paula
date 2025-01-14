@@ -84,7 +84,7 @@ class CategoryController {
                 $categoria->guardar();
                 Category::setAlerta('success', 'Categoría Editada');
                 
-                header('Location: /admin/categorias/editar');
+                header('Location: /admin/categorias');
             }
         }
         $alertas = Category::getAlertas();
@@ -112,7 +112,7 @@ class CategoryController {
 
             if ($valid === true){
                 $categoria->eliminar();
-                header('Location: /admin/categorias/eliminar');
+                header('Location: /admin/categorias');
                 exit;
             }
             else{
@@ -121,7 +121,7 @@ class CategoryController {
             }
         }
         $alertas = Category::getAlertas();
-        $router->render('ProductsSpects/deleteCategory', [
+        $router->render('ProductsSpects/gestionCategorias', [
             'alertas' => $alertas,
             'categorias' => $categorias
         ]);

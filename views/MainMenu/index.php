@@ -7,13 +7,13 @@
 
 
 
-<h1>Productos Destacados</h1>
+<h1 style="text-align: center;">Productos Destacados</h1>
 <div class="container-info">
-    <div class="contenedor-anuncios">
+    <div class="products-list">
         <?php foreach($productos as $producto) { ?>
-            <div class="anuncio">
-                <div class="imagen-anuncio">
-                    <img src="/images/<?php echo $producto->imagen?>" alt="Imagen del Anuncio">
+            <div class="product">
+                <div class="product-image">
+                    <img src="<?php echo htmlspecialchars($producto->imagen); ?>" alt="Imagen del Anuncio"  style="display: block; margin: 0 auto;">
                 </div>
                 <div class="contenido-anuncio">
                     <p> <?php echo $producto->name; ?> </p>

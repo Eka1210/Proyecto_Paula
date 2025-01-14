@@ -11,7 +11,6 @@ class AdminController {
         $error = $_GET['error'] ?? null;
         $flag = false;
 
-        $alertas = [];
         if($_SERVER['REQUEST_METHOD'] === 'POST'){
             $usuario = $_POST['usuario'] ;
             if(!Usuario::where('username', $usuario) == null){
@@ -36,9 +35,9 @@ class AdminController {
     }
 
     public static function ver(Router $router){
-        
+        $alertas = [];
         $router->render('permisos/permisos', [
-            
+            'alertas' =>$alertas
         ]);
     }
 }
