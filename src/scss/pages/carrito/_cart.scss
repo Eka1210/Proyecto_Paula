@@ -88,6 +88,9 @@
 
 .icon-update {
     @include m.boton(v.$blanco, v.$vino, 0);
+    @include m.tablet {
+        width: 100%;
+    }
     margin: 1rem 0;
     font-size: 2.5rem;
 }

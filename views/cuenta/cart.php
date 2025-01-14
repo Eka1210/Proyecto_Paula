@@ -45,9 +45,15 @@
                     ?>
                 </td>
                 <td>
+                    <form method="POST" action="/cart/AddToCart" class="w-100">
+                            <input type="hidden" value="<?php echo $producto->id; ?>" id="producto" name="producto">
+                            <input type="hidden" value="<?php echo $producto->price; ?>" id="price" name="price">
+                            <input type="hidden" value="<?php echo 1; ?>" id="quantity" name="quantity">
+                        <button type="submit" class="icon-delete" title="Añadir al carrito">+</button>
+                    </form>
                     <form method="POST" action="/cart/removeFromCart" class="w-100">
-                        <input type="hidden" name="productID" value="<?php echo $producto->id?>">
-                        <button type="submit" class="icon-delete" title="Eliminar del carrito">&#128465;</button>
+                        <input type="hidden" name="productID" value="<?php echo htmlspecialchars($producto->id); ?>">
+                        <button type="submit" class="icon-delete" title="Eliminar del carrito">-</button>
                     </form>
                 </td>
             </tr>

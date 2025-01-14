@@ -128,9 +128,21 @@ class CartController {
         $existingItem = Productsxcart::findProductInCart($productoId, $carrito->id);
         if (!is_null($existingItem)) {
             // Actualizar cantidad y precio si ya existe
-            $existingItem->quantity += $quantity;
-            $existingItem->price = $price * $existingItem->quantity;
-            $resultado = $existingItem->actualizarProductInCart();
+            if ($isEncargo){
+                $existingItem->quantity += $quantity;
+                $existingItem->price = $price * $existingItem->quantity;
+                $resultado = $existingItem->actualizarProductInCart();
+            }elseif ($producto->cantidad >= ($existingItem->quantity + $quantity)){
+                $existingItem->quantity += $quantity;
+                $existingItem->price = $price * $existingItem->quantity;
+                $resultado = $existingItem->actualizarProductInCart();
+            }else{
+                return [
+                    'success' => false,
+                    'message' => 'Cantidad no disponible',
+                ];
+            }
+
         } else {
             // Agregar un nuevo registro si no existe
             $cartItem = new Productsxcart([
@@ -172,11 +184,12 @@ class CartController {
                     
                     if ($productoEnCarrito) {
                         // Eliminar el producto del carrito
-                        $resultado = $productoEnCarrito->deleteFromCart($productId, $carrito->id);
-                        if ($resultado) {
-                            echo "<script>alert('¡Producto eliminado del carrito!');</script>";
-                        } else {
-                            echo "<script>alert('Hubo un error al eliminar el producto.');</script>";
+                        if($productoEnCarrito->quantity > 1){
+                            $productoEnCarrito->quantity -= 1;
+                            $productoEnCarrito->price = $price * $productoEnCarrito->quantity;
+                            $productoEnCarrito->actualizarProductInCart();
+                        }else{
+                            $productoEnCarrito->deleteFromCart($productId, $carrito->id);
                         }
                     } else {
                         echo "<script>alert('El producto no está en el carrito.');</script>";
