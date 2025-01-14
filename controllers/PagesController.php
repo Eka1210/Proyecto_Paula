@@ -3,6 +3,8 @@ namespace Controllers;
 
 use MVC\Router;
 use Model\Product;
+use Model\Category;
+use Model\CategoryXProduct;
 
 
 class PagesController {
@@ -29,6 +31,33 @@ class PagesController {
         $router->render('profile/productos', [
             'productos' => $productos,
             'page' => 'productos'
+        ]);
+    }
+
+    public static function categorias(Router $router){
+        $categorias = Category::all();
+        $productos = Product::all();
+        $router->render('profile/categorias', [
+            'categorias' => $categorias,
+            'productos' => $productos,
+            'page' => 'categorias'
+        ]);
+    }
+
+    public static function ver(Router $router){
+        $categoryID = $_GET['id'] ?? null;
+        $categoria = Category::find($categoryID);
+        $productosC = CategoryXProduct::findProducts($categoryID);
+        $productos = [];
+
+        foreach ($productosC as $producto) {
+            $productos [] = Product::find($producto->productID);
+        }
+        
+        $router->render('profile/categoria', [
+            'categoria' => $categoria,
+            'productos' => $productos,
+            'page' => 'categoria'
         ]);
     }
 

@@ -48,6 +48,8 @@ $router->get('/admin/editar/categoria', [CategoryController::class, 'editar']);
 $router->post('/admin/editar/categoria', [CategoryController::class, 'editar']);
 $router->get('/admin/categorias/eliminar', [CategoryController::class, 'eliminar']);
 $router->post('/admin/categorias/eliminar', [CategoryController::class, 'eliminar']);
+$router->get('/categorias', [PagesController::class, 'categorias']);
+$router->get('/categoria', [PagesController::class, 'ver']);
 
 // Rutas Productos
 $router->get('/admin/productos', [ProductController::class, 'ver']);

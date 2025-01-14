@@ -102,7 +102,7 @@ verificarAccesoAdmin();
             <a <?php if ($page == 'categorias') {
                     echo 'class="active"';
                 } ?> href="/categorias">
-                Productos</a>
+                Categorías</a>
         <?php } ?>
 
         <?php if (isset($_SESSION['admin'])) { ?>

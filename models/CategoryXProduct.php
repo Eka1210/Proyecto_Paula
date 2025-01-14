@@ -12,4 +12,10 @@ class CategoryXProduct extends ActiveRecord{
         $this->categoryID = $args['categoryID'] ?? null;
         $this->productID = $args['productID'] ?? null;
     }
+
+    public static function findProducts($id) {
+        $query = "SELECT productID FROM " . static::$tabla  ." WHERE categoryID = $id";
+        $resultado = self::consultarSQL($query);
+        return $resultado;
+    }
 }

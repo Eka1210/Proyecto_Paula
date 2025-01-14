@@ -2,29 +2,46 @@
 @use 'base/mixins' as m;
 
 
+.categorias-wrapper {
+    display: flex; /* Usamos flexbox para alinear el contenido */
+    justify-content: center; /* Centra el contenido horizontalmente */
+    overflow-x: auto; /* Permite hacer scroll si el contenido excede el ancho */
+    white-space: nowrap; /* Evita que el contenido se rompa en varias líneas */
+    margin-bottom: 20px;
+    background-color: v.$vinoC;
+    padding: 10px 0;
+    position: relative; /* Para manejar el centro y desplazamiento */
+    width: 100%; /* Aseguramos que ocupe el 100% del ancho disponible */
+    align-items: center;
+}
 
+.categorias {
+    display: inline-flex;
+    gap: 20px; /* Espacio entre las categorías */
+}
 
-.categorias{
-    display: flex;
-    justify-content: space-between;
-    background-color: v.$vino;
+.categoria {
+    display: inline-block;
+    text-align: center;
+    width: 150px;
+}
 
-    .categoria{
-        display: flex;
-        flex-direction: column;
-        p{
-            color: v.$hueso;
-            text-align: center;
-        }
+.categoria-imagen {
+    background-image: url('imagenes/categoria1.jpg');
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-color: v.$hueso;  /* Este es el color naranja de la variable */
+    border-radius: 10rem;
+    width: 15rem;
+    height: 15rem;
+    background-size: 65%;
+    padding: 0;
+    cursor: pointer; /* Añadir cursor pointer para indicar que es clickeable */
+}
 
-        padding: 3rem 3rem 1rem 3rem;
-
-    }
-    .escuela{
-        @include m.circulo('../img/cuidado-personal.png')
-
-    }
-
-    height: auto;
-
+.categoria p {
+    margin-top: 10px;
+    font-size: 16px;
+    font-weight: bold;
+    color: v.$hueso;
 }
