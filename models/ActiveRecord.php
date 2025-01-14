@@ -131,7 +131,7 @@ class ActiveRecord {
         $result = self::$db->query($query);
         return ( $result ) ;
     }
-
+    
     // Obtener Registros con cierta cantidad
     public static function get($limite) {
         $query = "SELECT * FROM " . static::$tabla . " LIMIT " . $limite;
@@ -202,12 +202,7 @@ class ActiveRecord {
         $resultado = self::$db->query($query);
         return $resultado;
     }
-    public static function deleteByProduct2($productId) {
-        // Eliminar todas las relaciones de categorías con el producto especificado
-        $query = "DELETE FROM optionsxproduct WHERE productID = $productId";
-        $resultado = self::$db->query($query);
-        return $resultado;
-    }
+    
     public static function where($column, $value){
         $query = "SELECT * FROM " . static::$tabla . " WHERE $column = '$value'";
         // debuguear($query);
@@ -280,49 +275,6 @@ class ActiveRecord {
         }
         return true;
     }
-
-    // Funciones Carrito
-    public static function findProductInCar( $productId, $cartId) {
-        // Crear la consulta
-        $query = "SELECT * FROM " . static::$tabla . " WHERE cartID = " . $cartId . " AND productID = " . $productId;
-        $resultado = self::consultarSQL($query);
-        return array_shift( $resultado ) ;
-    }
-
-    public function actualizarProductInCart() {
-        // Sanitizar los datos
-        $atributos = $this->sanitizarAtributos();
-
-        // Iterar para agregar cada campo y valor
-        $valores = [];
-        foreach ($atributos as $key => $value) {
-            $valores[] = "{$key}='{$value}'";
-        }
-
-        // Validar que existan valores para actualizar
-        if (empty($valores)) {
-            throw new \Exception("No hay valores para actualizar el registro.");
-        }
-
-        // Validar que cartID y productID estén configurados
-        if (empty($this->cartID) || empty($this->productID)) {
-            throw new \Exception("cartID o productID no están configurados.");
-        }
-
-        // Construir la consulta SQL
-        $query = "UPDATE " . static::$tabla . " SET " . join(', ', $valores) .
-                    " WHERE cartID = '" . self::$db->escape_string($this->cartID) . "'" .
-                    " AND productID = '" . self::$db->escape_string($this->productID) . "'" .
-                    " LIMIT 1";
-
-        // Ejecutar la consulta
-        $resultado = self::$db->query($query);
-
-        // Retornar el resultado
-        return $resultado;
-    }
-
-
 
     public static function makeAdmin($column, $value){
         if($column == 'username'){

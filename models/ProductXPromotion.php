@@ -2,7 +2,7 @@
 
 namespace Model;
 
-class ProductsxPromotion extends ActiveRecord
+class ProductxPromotion extends ActiveRecord
 {
     protected static $tabla = 'productXpromotion';
     protected static $columnasDB = ['id', 'productID', 'promotionID'];
