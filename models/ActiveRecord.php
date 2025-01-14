@@ -248,6 +248,17 @@ class ActiveRecord {
         }
     }
 
+    public function setImage2($image){
+        // Delete the previous image
+        if(!is_null($this->id)){
+            $this->deleteImage2();
+        }
+
+        if($image){
+            $this->imagen = $image;
+        }
+    }
+
     public function deleteImage() {
         if (!empty($this->imagen)) {
             $filePath = IMAGES_DIR . $this->imagen;
@@ -263,6 +274,7 @@ class ActiveRecord {
     }
     public function deleteImage2() {
         if (!empty($this->imagen)) {
+            error_log( $this->imagen);
             $filePath =__DIR__ . '/../public' . $this->imagen;
             unlink($filePath);
             $this->imagen = '';

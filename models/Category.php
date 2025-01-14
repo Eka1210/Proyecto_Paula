@@ -3,16 +3,18 @@ namespace Model;
 
 class Category extends ActiveRecord{
     protected static $tabla = 'categories';
-    protected static $columnasDB = ['id', 'nombre', 'descripcion'];
+    protected static $columnasDB = ['id', 'nombre', 'descripcion', 'imagen'];
 
     public $id;
     public $nombre;
     public $descripcion;
+    public $imagen;
 
     public function __construct($args = []){
         $this->id = $args['id'] ?? null;
         $this->nombre = $args['nombre'] ?? '';
         $this->descripcion = $args['descripcion'] ?? '';
+        $this->imagen = $args['imagen'] ?? '';
     }
     
     public function validate(){
@@ -24,5 +26,10 @@ class Category extends ActiveRecord{
         }
     
         return self::$alertas;
+    }
+
+    public function updateImage($imagePath) {
+        $query = "UPDATE $tabla SET imagen = '" . self::escapeString($imagePath) . "' WHERE id = " . intval($this->id);
+        return self::ejecutarSQL($query);
     }
 }

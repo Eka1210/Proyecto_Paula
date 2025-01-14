@@ -79,6 +79,10 @@ $router->get('/admin/imagenes', [ProductController::class, 'imagenes']);
 $router->post('/admin/imagenes', [ProductController::class, 'imagenes']);
 $router->post('/admin/imagenes/subir', [ProductController::class, 'subirImagen']);
 $router->post('/admin/imagenes/eliminar', [ProductController::class, 'eliminarImagen']);
+$router->post('/admin/imagenesC/subir', [CategoryController::class, 'subirImagen']);
+$router->post('/admin/imagenesC/eliminar', [CategoryController::class, 'eliminarImagen']);
+
+
 
 
 // Rutas Carrito

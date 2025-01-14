@@ -183,14 +183,19 @@ class ProductController {
     {
         $alertas = [];
         $productos = Product::all();
+        $categorias = Category::all();
 
         foreach ($productos as $producto) {
             $producto->name = $producto->name;
         }
+        foreach ($categorias as $categoria) {
+            $categoria->nombre = $categoria->nombre;
+        }
         $alertas = Category::getAlertas();
         $router->render('ProductsSpects/gestionImagenes', [
             'alertas' => $alertas,
-            'productos' => $productos
+            'productos' => $productos,
+            'categorias'=> $categorias
         ]);
     }
 
@@ -230,7 +235,7 @@ class ProductController {
     
                     $product = Product::find($id);
                     if ($product) {
-                        $product->setImage($imagePath);
+                        $product->setImage2($imagePath);
                         $product->guardar();
                         $response['success'] = true;
                         $response['message'] = 'Imagen cargada con éxito.';
