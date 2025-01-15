@@ -99,9 +99,6 @@ class PromotionController
             }
         }
 
-
-
-
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             ProductxPromotion::deleteByPromotion($promocion->id);
             $promocion->sincronizar($_POST);

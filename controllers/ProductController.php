@@ -1,6 +1,7 @@
 <?php
 
 namespace Controllers;
+
 use MVC\Router;
 use Model\Product;
 use Model\Category;
@@ -8,29 +9,32 @@ use Model\CategoryXProduct;
 use Model\Option;
 use Model\ProductDecorator;
 use Model\OptionsXProduct;
+use Model\Inventorylog;
 use Controllers\CartController;
 
-class ProductController {
+class ProductController
+{
     public static function admin(Router $router)
     {
         $router->render('ProductsSpects/gestionProductos');
     }
-    
-    public static function crear(Router $router){
+
+    public static function crear(Router $router)
+    {
         $producto = new Product();
         $alertas = [];
         $categorias = Category::all();
-    
+
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if ($_POST['encargo'] == 1) {
                 $_POST['cantidad'] = 0;
             }
             $producto = new Product($_POST);
             $alertas = $producto->validate();
-            
+
             if (empty($alertas)) {
                 $datos = $producto->guardar();
-    
+
                 if ($datos) {
                     $categoriasSeleccionadas = $_POST['categories'] ?? [];
                     $productoId = $datos['id'];
@@ -42,21 +46,22 @@ class ProductController {
                         ]);
                         $categoriaProducto->guardar();
                     }
-    
+
                     // Redirigir con mensaje de éxito
                     header('Location: /admin/productos');
                     exit;
-                } 
+                }
             }
         }
-    
+
         $router->render('ProductsSpects/createProduct', [
             'categorias' => $categorias,
             'alertas' => $alertas,
             'producto' => $producto
         ]);
     }
-    public static function ver(Router $router){
+    public static function ver(Router $router)
+    {
         $alertas = [];
         $productos = Product::all();
 
@@ -76,7 +81,8 @@ class ProductController {
         ]);
     }
 
-    public static function editar(Router $router){
+    public static function editar(Router $router)
+    {
         //isAdmin();
         $alertas = [];
         $producto = $_GET['id'] ?? null;
@@ -84,7 +90,7 @@ class ProductController {
         $resultado = $productoID->fetch_assoc()['id'];
 
         $producto = Product::find($resultado);
-        
+
         $producto->name = $producto->name;
         $producto->id = $producto->id;
         $producto->description = $producto->description;
@@ -96,13 +102,13 @@ class ProductController {
         $categorias = Category::all();
         $categoriaxP = CategoryXProduct::all();
         $categoriasP = [];
-        foreach($categoriaxP as $categoria){
-            if($categoria->productID == $producto->id ){
+        foreach ($categoriaxP as $categoria) {
+            if ($categoria->productID == $producto->id) {
                 $categoriaP = Category::find($categoria->categoryID);
-                $categoriasP[] = $categoriaP; 
+                $categoriasP[] = $categoriaP;
             }
         }
-        if($_SERVER['REQUEST_METHOD'] === 'POST'){
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if (isset($_POST['categories']) && !empty($_POST['categories'])) {
                 CategoryXProduct::deleteByProduct($producto->id);
                 $categoriasSeleccionadas = $_POST['categories'];
@@ -111,14 +117,13 @@ class ProductController {
                         'productID' => $producto->id,
                         'categoryID' => $categoriaId
                     ]);
-    
+
                     $categoriaProducto->guardar();
                 }
-
             }
             $producto->sincronizar($_POST);
             $alertas = $producto->validate();
-            if(empty($alertas)){
+            if (empty($alertas)) {
                 $producto->guardar();
                 Product::setAlerta('success', 'Producto Editada');
                 header('Location: /admin/productos');
@@ -128,14 +133,15 @@ class ProductController {
             'alertas' => $alertas,
             'name' => $producto->name,
             'descripcion' => $producto->description,
-            'producto'=> $producto,
-            'categorias'=>$categorias,
-            'categoriasP'=>$categoriasP
+            'producto' => $producto,
+            'categorias' => $categorias,
+            'categoriasP' => $categoriasP
         ]);
     }
 
 
-    public static function eliminar(Router $router){
+    public static function eliminar(Router $router)
+    {
         $alertas = [];
         $productos = Product::all();
 
@@ -148,27 +154,27 @@ class ProductController {
             $producto->imagen = $producto->imagen;
             $producto->encargo = $producto->encargo;
         }
-        if($_SERVER['REQUEST_METHOD'] === 'POST'){
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $id = $_POST['id'];
-            $producto = Product::find($id); 
+            $producto = Product::find($id);
             $valid = true;
 
             $categorias = Category::all();
             $categoriaxP = CategoryXProduct::all();
             $categoriasP = [];
-            foreach($categoriaxP as $categoria){
-                if($categoria->productID == $producto->id ){
+            foreach ($categoriaxP as $categoria) {
+                if ($categoria->productID == $producto->id) {
                     $categoriaP = Category::find($categoria->categoryID);
-                    $categoriasP[] = $categoriaP; 
+                    $categoriasP[] = $categoriaP;
                 }
             }
             CategoryXProduct::deleteByProduct($producto->id);
             OptionsXProduct::deleteByProduct2($producto->id);
-                
-            if($valid){
+
+            if ($valid) {
                 $producto->eliminar();
                 header('Location: /admin/productos');
-            }else{
+            } else {
                 header('Location: /admin?error=1');
             }
         }
@@ -195,13 +201,14 @@ class ProductController {
         $router->render('ProductsSpects/gestionImagenes', [
             'alertas' => $alertas,
             'productos' => $productos,
-            'categorias'=> $categorias
+            'categorias' => $categorias
         ]);
     }
 
-    public static function subirImagen() {
+    public static function subirImagen()
+    {
         $response = ['success' => false, 'message' => ''];
-    
+
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
                 $id = $_POST['id'] ?? null;
@@ -210,29 +217,29 @@ class ProductController {
                     echo json_encode($response);
                     exit;
                 }
-    
+
                 $fileTmpPath = $_FILES['image']['tmp_name'];
                 $fileName = $_FILES['image']['name'];
                 $fileType = $_FILES['image']['type'];
-    
+
                 $allowedMimeTypes = ['image/jpeg', 'image/png', 'image/gif'];
                 if (!in_array($fileType, $allowedMimeTypes)) {
                     $response['message'] = 'Formato de imagen no válido.';
                     echo json_encode($response);
                     exit;
                 }
-    
+
                 $uploadDir = __DIR__ . '/../public/images/';
                 if (!is_dir($uploadDir)) {
                     mkdir($uploadDir, 0777, true);
                 }
-    
+
                 $newFileName = uniqid('img_', true) . '.' . pathinfo($fileName, PATHINFO_EXTENSION);
                 $uploadFilePath = $uploadDir . $newFileName;
-    
+
                 if (move_uploaded_file($fileTmpPath, $uploadFilePath)) {
                     $imagePath = '/images/' . $newFileName;
-    
+
                     $product = Product::find($id);
                     if ($product) {
                         $product->setImage2($imagePath);
@@ -249,17 +256,18 @@ class ProductController {
                 $response['message'] = 'No se subió ninguna imagen.';
             }
         }
-    
+
         echo json_encode($response);
         exit;
     }
 
-    public static function eliminarImagen(Router $router){
+    public static function eliminarImagen(Router $router)
+    {
         $response = ['success' => false, 'message' => ''];
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $id = $_POST['id'] ?? null;
-    
+
             if ($id) {
                 $product = Product::find($id);
                 if ($product) {
@@ -274,23 +282,24 @@ class ProductController {
                 $response['message'] = 'ID del producto no proporcionado.';
             }
         }
-    
+
         echo json_encode($response);
         exit;
     }
 
-    
-    public static function personalizar(Router $router) {
+
+    public static function personalizar(Router $router)
+    {
         $productId = $_GET['id'] ?? null;
 
         $producto = Product::find($productId);
         $opciones = Option::all();
         $opcionesXP = OptionsXProduct::all();
         $opcionesProducto = [];
-        foreach($opcionesXP as $opcion){
-            if($opcion->productID == $producto->id ){
+        foreach ($opcionesXP as $opcion) {
+            if ($opcion->productID == $producto->id) {
                 $opcionP = Option::find($opcion->optionID);
-                $opcionesProducto[] = $opcionP; 
+                $opcionesProducto[] = $opcionP;
             }
         }
 
@@ -310,12 +319,12 @@ class ProductController {
     {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $productId = $_GET['id'] ?? '';
-            $optionData = $_POST['nombre']; 
+            $optionData = $_POST['nombre'];
             $values = $_POST['values'] ?? [];
 
             // Usamos el ProductDecorator para crear la opción
             ProductDecorator::addOptionToProduct($productId, $optionData, $values);
-    
+
             header("Location: /personalizacion/producto?id={$productId}");
             exit;
         }
@@ -332,7 +341,7 @@ class ProductController {
 
         // Decodificar el JSON para obtener un array
         $values = json_decode($valuesJson->value, true);
-        
+
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $nombre = $_POST['nombre'] ?? '';
             $valuesJson = $_POST['values'] ?? [];
@@ -352,12 +361,13 @@ class ProductController {
         ]);
     }
 
-    public static function personalizarP(Router $router) {
+    public static function personalizarP(Router $router)
+    {
         $productId = $_GET['id'] ?? null;
-    
+
         $product = Product::find($productId);
         $options = OptionsXProduct::all2($productId);
-    
+
         foreach ($options as &$option) {
             $option->decodedValues = json_decode($option->value, true);
             $optionC = Option::find($option->optionID);
@@ -377,12 +387,12 @@ class ProductController {
 
             // Lógica para añadir al carrito
             $resultado = CartController::processAddToCart($productId, $quantity, $product->price, $userId);
-    
+
             // Redirigir a la página de resumen
             header("Location: /productos ");
             exit;
         }
-    
+
         // Renderizar la vista
         $router->render('profile/personalizar', [
             'product' => $product,
@@ -390,11 +400,100 @@ class ProductController {
             'productId' => $productId
         ]);
     }
-    
+
     public static function inventario(Router $router)
     {
 
-        $router->render('/inventario/inventario');
+        $alertas = [];
+        $productos = Product::all();
+
+        foreach ($productos as $producto) {
+            $producto->name = $producto->name;
+            $producto->id = $producto->id;
+            $producto->description = $producto->description;
+            $producto->price = $producto->price;
+            $producto->cantidad = $producto->cantidad;
+            $producto->imagen = $producto->imagen;
+            $producto->encargo = $producto->encargo;
+        }
+        $router->render('/inventario/inventario', [
+            'productos' => $productos
+        ]);
     }
-    
+
+    public static function log(Router $router)
+    {
+
+        $alertas = [];
+        $logTotales = Inventorylog::all();
+        $logs = [];
+        $product = Product::find($_GET['id']);
+
+        foreach ($logTotales as $log) {
+            if ($log->productID == $_GET['id']) {
+                $log->productID = $log->productID;
+                $log->quantity = $log->quantity;
+                $log->action = $log->action;
+                $log->date = $log->date;
+                $log->old_value = $log->old_value;
+                $log->new_value = $log->new_value;
+                $logs[] = $log;
+            }
+        }
+        $router->render('/inventario/log', [
+            'logs' => $logs,
+            'product' => $product
+        ]);
+    }
+
+    public static function crearlog(Router $router)
+    {
+        $inventario = new Inventorylog();
+        $alertas = [];
+        $productos = Product::all();
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            ProductController::createInventory($_POST['product'], $_POST['quantity'], $_POST['action'], $_POST['isIncrementing']);
+            header('Location: /admin/inventario');
+            exit;
+        }
+        $router->render('/inventario/crear', [
+            'inventario' => $inventario,
+            'alertas' => $alertas,
+            'productos' => $productos
+        ]);
+    }
+
+
+    public static function createInventory($productID, $quantity, $action, $isIncrementing)
+    {
+        $inventario = new Inventorylog([
+            'product' => $productID,
+            'quantity' => $quantity,
+            'action' => $action
+        ]);
+
+        $product = Product::find($productID);
+
+        $inventario->productID = $productID;
+        $inventario->quantity = $quantity;
+        $inventario->action = $action;
+        date_default_timezone_set('America/Costa_Rica');
+        $inventario->date = date('Y-m-d H:i:s');
+        $inventario->old_value = $product->cantidad;
+
+        if ($isIncrementing == 1) {
+            $inventario->new_value = $product->cantidad + $quantity;
+            $product->cantidad += $quantity;
+        } else {
+            $inventario->new_value = $product->cantidad - $quantity;
+            $product->cantidad -= $quantity;
+        }
+
+        $alertas = $inventario->validate();
+        if (empty($alertas)) {
+            $inventario->guardar();
+            $product->sincronizar($product);
+            $product->guardar();
+        }
+    }
 }

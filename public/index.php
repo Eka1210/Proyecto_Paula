@@ -108,6 +108,10 @@ $router->get('/admin/reporte', [ReportController::class, 'reporte']);
 //Rutas de inventario
 $router->get('/admin/inventario', [ProductController::class, 'inventario']);
 $router->post('/admin/inventario', [ProductController::class, 'inventario']);
+$router->get('/admin/inventario/log', [ProductController::class, 'log']);
+$router->post('/admin/inventario/log', [ProductController::class, 'log']);
+$router->get('/admin/inventario/crear', [ProductController::class, 'crearlog']);
+$router->post('/admin/inventario/crear', [ProductController::class, 'crearlog']);
 
 //Rutas de WishList
 $router->get('/wishlist', [WishListController::class, 'list']);

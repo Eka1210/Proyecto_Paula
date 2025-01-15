@@ -54,9 +54,8 @@
         <button type="submit" class="create-category__form__submit">Crear Promocion</button>
 
     </form>
-
-
 </div>
+
 <script>
     const startDateInput = document.getElementById('start_time');
     const endDateInput = document.getElementById('end_time');
