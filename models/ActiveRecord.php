@@ -1,6 +1,9 @@
 <?php
+
 namespace Model;
-class ActiveRecord {
+
+class ActiveRecord
+{
 
     // Base DE DATOS
     protected static $db;
@@ -9,34 +12,39 @@ class ActiveRecord {
 
     // Alertas y Mensajes
     protected static $alertas = [];
-    
+
     // Definir la conexión a la BD - includes/database.php
-    public static function setDB($database) {
+    public static function setDB($database)
+    {
         self::$db = $database;
     }
 
-    public static function setAlerta($tipo, $mensaje) {
+    public static function setAlerta($tipo, $mensaje)
+    {
         static::$alertas[$tipo][] = $mensaje;
     }
 
     // Validación
-    public static function getAlertas() {
+    public static function getAlertas()
+    {
         return static::$alertas;
     }
 
-    public function validar() {
+    public function validar()
+    {
         static::$alertas = [];
         return static::$alertas;
     }
 
     // Consulta SQL para crear un objeto en Memoria
-    public static function consultarSQL($query) {
+    public static function consultarSQL($query)
+    {
         // Consultar la base de datos
         $resultado = self::$db->query($query);
 
         // Iterar los resultados
         $array = [];
-        while($registro = $resultado->fetch_assoc()) {
+        while ($registro = $resultado->fetch_assoc()) {
             $array[] = static::crearObjeto($registro);
         }
 
@@ -48,11 +56,12 @@ class ActiveRecord {
     }
 
     // Crea el objeto en memoria que es igual al de la BD
-    protected static function crearObjeto($registro) {
+    protected static function crearObjeto($registro)
+    {
         $objeto = new static;
 
-        foreach($registro as $key => $value ) {
-            if(property_exists( $objeto, $key  )) {
+        foreach ($registro as $key => $value) {
+            if (property_exists($objeto, $key)) {
                 $objeto->$key = $value;
             }
         }
@@ -61,38 +70,42 @@ class ActiveRecord {
     }
 
     // Identificar y unir los atributos de la BD
-    public function atributos() {
+    public function atributos()
+    {
         $atributos = [];
-        foreach(static::$columnasDB as $columna) {
-            if($columna === 'id') continue;
+        foreach (static::$columnasDB as $columna) {
+            if ($columna === 'id') continue;
             $atributos[$columna] = $this->$columna;
         }
         return $atributos;
     }
 
     // Sanitizar los datos antes de guardarlos en la BD
-    public function sanitizarAtributos() {
+    public function sanitizarAtributos()
+    {
         $atributos = $this->atributos();
         $sanitizado = [];
-        foreach($atributos as $key => $value ) {
+        foreach ($atributos as $key => $value) {
             $sanitizado[$key] = self::$db->escape_string($value);
         }
         return $sanitizado;
     }
 
     // Sincroniza BD con Objetos en memoria
-    public function sincronizar($args=[]) { 
-        foreach($args as $key => $value) {
-          if(property_exists($this, $key) && !is_null($value)) {
-            $this->$key = $value;
-          }
+    public function sincronizar($args = [])
+    {
+        foreach ($args as $key => $value) {
+            if (property_exists($this, $key) && !is_null($value)) {
+                $this->$key = $value;
+            }
         }
     }
 
     // Registros - CRUD
-    public function guardar() {
+    public function guardar()
+    {
         $resultado = '';
-        if(!is_null($this->id)) {
+        if (!is_null($this->id)) {
             // actualizar
             $resultado = $this->actualizar();
         } else {
@@ -103,51 +116,58 @@ class ActiveRecord {
     }
 
     // Todos los registros
-    public static function all() {
+    public static function all()
+    {
         $query = "SELECT * FROM " . static::$tabla;
         $resultado = self::consultarSQL($query);
         return $resultado;
     }
-    public static function all2($id) {
+    public static function all2($id)
+    {
         $query = "SELECT * FROM " . static::$tabla . " WHERE productID = " . $id;
         $resultado = self::consultarSQL($query);
         return $resultado;
     }
 
     // Busca un registro por su id
-    public static function find($id) {
-        $query = "SELECT * FROM " . static::$tabla  ." WHERE id = " . $id;
+    public static function find($id)
+    {
+        $query = "SELECT * FROM " . static::$tabla  . " WHERE id = " . $id;
         $resultado = self::consultarSQL($query);
-        return array_shift( $resultado ) ;
+        return array_shift($resultado);
     }
 
-    public static function find2($nombre) {
-        $query = "SELECT id FROM " . static::$tabla  ." WHERE nombre = '$nombre'";
+    public static function find2($nombre)
+    {
+        $query = "SELECT id FROM " . static::$tabla  . " WHERE nombre = '$nombre'";
         $result = self::$db->query($query);
-        return ( $result ) ;
+        return ($result);
     }
-    public static function find3($nombre) {
-        $query = "SELECT id FROM " . static::$tabla  ." WHERE name = '$nombre'";
+    public static function find3($nombre)
+    {
+        $query = "SELECT id FROM " . static::$tabla  . " WHERE name = '$nombre'";
         $result = self::$db->query($query);
-        return ( $result ) ;
+        return ($result);
     }
-    
+
     // Obtener Registros con cierta cantidad
-    public static function get($limite) {
+    public static function get($limite)
+    {
         $query = "SELECT * FROM " . static::$tabla . " LIMIT " . $limite;
         $resultado = self::consultarSQL($query);
-        return $resultado ;
+        return $resultado;
     }
 
     // crea un nuevo registro
-    public function crear() {
+    public function crear()
+    {
         // Sanitizar los datos
         $atributos = $this->sanitizarAtributos();
 
         // Insertar en la base de datos
         $query = " INSERT INTO " . static::$tabla . " ( ";
         $query .= join(', ', array_keys($atributos));
-        $query .= " ) VALUES (' "; 
+        $query .= " ) VALUES (' ";
         $query .= join("', '", array_values($atributos));
         $query .= " ') ";
 
@@ -156,27 +176,28 @@ class ActiveRecord {
         // Resultado de la consulta
         $resultado = self::$db->query($query);
         return [
-           'resultado' =>  $resultado,
-           'id' => self::$db->insert_id
+            'resultado' =>  $resultado,
+            'id' => self::$db->insert_id
         ];
     }
 
     // Actualizar el registro
-    public function actualizar() {
+    public function actualizar()
+    {
         // Sanitizar los datos
         $atributos = $this->sanitizarAtributos();
 
         // Iterar para ir agregando cada campo de la BD
         $valores = [];
-        foreach($atributos as $key => $value) {
+        foreach ($atributos as $key => $value) {
             $valores[] = "{$key}='{$value}'";
         }
 
         // Consulta SQL
-        $query = "UPDATE " . static::$tabla ." SET ";
-        $query .=  join(', ', $valores );
+        $query = "UPDATE " . static::$tabla . " SET ";
+        $query .=  join(', ', $valores);
         $query .= " WHERE id = '" . self::$db->escape_string($this->id) . "' ";
-        $query .= " LIMIT 1 "; 
+        $query .= " LIMIT 1 ";
 
         // Actualizar BD
         $resultado = self::$db->query($query);
@@ -184,85 +205,96 @@ class ActiveRecord {
     }
 
     // Eliminar un Registro por su ID
-    public function eliminar() {
+    public function eliminar()
+    {
         $query = "DELETE FROM "  . static::$tabla . " WHERE id = " . self::$db->escape_string($this->id) . " LIMIT 1";
         $resultado = self::$db->query($query);
         return $resultado;
     }
 
-    public function eliminar2() {
+    public function eliminar2()
+    {
         $query = "DELETE FROM "  . static::$tabla . " WHERE productID = " . self::$db->escape_string($this->productID) . " LIMIT 1";
         $resultado = self::$db->query($query);
         return $resultado;
     }
 
-    public static function deleteByProduct($productId) {
+    public static function deleteByProduct($productId)
+    {
         // Eliminar todas las relaciones de categorías con el producto especificado
         $query = "DELETE FROM categoriesxproduct WHERE productID = $productId";
         $resultado = self::$db->query($query);
         return $resultado;
     }
 
-    public static function deleteFromCart($productId, $cartId) {
+    public static function deleteFromCart($productId, $cartId)
+    {
         $query = "DELETE FROM productsxcart WHERE productID = $productId AND cartID = $cartId";
         $resultado = self::$db->query($query);
         return  $resultado;
     }
-    
-    public static function where($column, $value){
+
+    public static function where($column, $value)
+    {
         $query = "SELECT * FROM " . static::$tabla . " WHERE $column = '$value'";
         // debuguear($query);
         $result = self::consultarSQL($query);
         return array_shift($result); // Get the first element of the array
     }
 
-    public static function findToken($column, $value){
+    public static function findToken($column, $value)
+    {
         $query = "SELECT * FROM users WHERE token LIKE '%$value%'";
         // debuguear($query);
         $result = self::consultarSQL($query);
         return array_shift($result); // Get the first element of the array
     }
 
-    public static function findClient($value){
+    public static function findClient($value)
+    {
         $query = "SELECT * FROM clients WHERE userID = $value";
         // debuguear($query);
         $result = self::consultarSQL($query);
         return array_shift($result); // Get the first element of the array
     }
 
-    public static function whereAll($column, $value){
+    public static function whereAll($column, $value)
+    {
         $query = "SELECT * FROM " . static::$tabla . " WHERE $column = '$value'";
         // debuguear($query);
         $result = self::consultarSQL($query);
         return $result; // Get the first element of the array
     }
 
-    public function setImage($image){
+    public function setImage($image)
+    {
         // Delete the previous image
-        if(!is_null($this->id)){
+        if (!is_null($this->id)) {
             $this->deleteImage();
         }
 
-        if($image){
+        if ($image) {
             $this->imagen = $image;
         }
     }
 
-    public function setImage2($image){
+    public function setImage2($image)
+    {
         // Delete the previous image
-        if(!is_null($this->id)){
+        if (!is_null($this->id)) {
             $this->deleteImage2();
         }
 
-        if($image){
+        if ($image) {
             $this->imagen = $image;
         }
     }
 
-    public function deleteImage() {
+    public function deleteImage()
+    {
         if (!empty($this->imagen)) {
             $filePath = IMAGES_DIR . $this->imagen;
-    
+
             if (file_exists($filePath) && is_file($filePath)) {
                 unlink($filePath);
             } else {
@@ -272,21 +304,22 @@ class ActiveRecord {
             error_log("El campo 'imagen' está vacío para el objeto con ID: $this->id");
         }
     }
-    public function deleteImage2() {
+    public function deleteImage2()
+    {
         if (!empty($this->imagen)) {
-            error_log( $this->imagen);
-            $filePath =__DIR__ . '/../public' . $this->imagen;
+            error_log($this->imagen);
+            $filePath = __DIR__ . '/../public' . $this->imagen;
             unlink($filePath);
             $this->imagen = '';
-            
         } else {
             error_log("El campo 'imagen' está vacío para el objeto con ID: $this->id");
         }
     }
-    
 
-    public static function categoria($id){
-        $query = "SELECT * FROM " . static::$tabla  ." WHERE categoryID = " . $id . " LIMIT 1";
+
+    public static function categoria($id)
+    {
+        $query = "SELECT * FROM " . static::$tabla  . " WHERE categoryID = " . $id . " LIMIT 1";
         $resultado = self::consultarSQL($query);
         if (!empty($resultado)) {
             return false;
@@ -294,11 +327,11 @@ class ActiveRecord {
         return true;
     }
 
-    public static function makeAdmin($column, $value){
-        if($column == 'username'){
+    public static function makeAdmin($column, $value)
+    {
+        if ($column == 'username') {
             $query = "UPDATE users SET admin = 1 WHERE username = '$value'";
-        }
-        else{
+        } else {
             $query = "UPDATE users SET admin = 1 WHERE email = '$value'";
         }
         // Actualizar BD
@@ -308,22 +341,25 @@ class ActiveRecord {
 
     // Funciones Carrito
 
-    
 
-    public static function allCart($cartId) {
+
+    public static function allCart($cartId)
+    {
         $query = "SELECT * FROM " . static::$tabla . " WHERE cartID = " . $cartId;
         $resultado = self::consultarSQL($query);
         return  $resultado;
     }
 
-    public static function findProductInCart( $productId, $cartId) {
+    public static function findProductInCart($productId, $cartId)
+    {
         $query = "SELECT * FROM " . static::$tabla . " WHERE cartID = " . $cartId . " AND productID = " . $productId;
         $resultado = self::consultarSQL($query);
-        
-        return array_shift( $resultado ) ;
+
+        return array_shift($resultado);
     }
 
-    public function actualizarProductInCart() {
+    public function actualizarProductInCart()
+    {
         // Sanitizar los datos
         $atributos = $this->sanitizarAtributos();
         // Iterar para agregar cada campo y valor
@@ -341,13 +377,20 @@ class ActiveRecord {
         }
         // Construir la consulta SQL
         $query = "UPDATE " . static::$tabla . " SET " . join(', ', $valores) .
-                    " WHERE cartID = '" . self::$db->escape_string($this->cartID) . "'" .
-                    " AND productID = '" . self::$db->escape_string($this->productID) . "'" .
-                    " LIMIT 1";
+            " WHERE cartID = '" . self::$db->escape_string($this->cartID) . "'" .
+            " AND productID = '" . self::$db->escape_string($this->productID) . "'" .
+            " LIMIT 1";
         // Ejecutar la consulta
         $resultado = self::$db->query($query);
         // Retornar el resultado
         return $resultado;
     }
 
+    public static function deleteByPromotion($promotionId)
+    {
+        // Eliminar todas las relaciones de promociones con el producto especificado
+        $query = "DELETE FROM productXpromotion WHERE promotionID = $promotionId";
+        $resultado = self::$db->query($query);
+        return $resultado;
+    }
 }

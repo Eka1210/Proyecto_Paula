@@ -3,7 +3,6 @@
         Crear Promociones
     </a>
 </div>
-<?php var_dump($promociones) ?>
 
 <div class="detalle">
     <h1 class="section__heading"><span> Gestión de Promociones </span></h1>
@@ -24,13 +23,13 @@
                             <?php echo $promocion->name; ?>
                         </td>
                         <td class="table__td">
-                            <a href="/admin/editar/categoria?id=<?php echo $promocion->id; ?>" class="categoryCard__view">
+                            <a href="/admin/editar/promocion?id=<?php echo $promocion->id; ?>" class="categoryCard__view">
                                 <i class="fa-solid fa-pen-to-square"></i>
                                 Editar Promocion
                             </a>
                         </td>
                         <td class="table__td">
-                            <form action="/admin/categorias/eliminar" method="POST" onsubmit="return confirm('Está seguro que quiere eliminar la categoría?')">
+                            <form action="/admin/promocion/eliminar" method="POST" onsubmit="return confirm('Está seguro que quiere eliminar la promoción?')">
                                 <input type="hidden" name="id" value="<?php echo $promocion->id; ?>">
                                 <button type="submit" class="categoryCard__view">
                                     <i class="fa-solid fa-trash"></i>

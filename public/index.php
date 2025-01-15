@@ -97,7 +97,10 @@ $router->get('/admin/promocion', [PromotionController::class, 'ver']);
 $router->post('/admin/promocion', [PromotionController::class, 'promotion']);
 $router->get('/admin/promocion/crear', [PromotionController::class, 'crear']);
 $router->post('/admin/promocion/crear', [PromotionController::class, 'crear']);
-
+$router->get('/admin/promocion/eliminar', [PromotionController::class, 'eliminar']);
+$router->post('/admin/promocion/eliminar', [PromotionController::class, 'eliminar']);
+$router->get('/admin/editar/promocion', [PromotionController::class, 'editar']);
+$router->post('/admin/editar/promocion', [PromotionController::class, 'editar']);
 //Reporte de ventas 
 $router->get('/admin/reporte', [ReportController::class, 'reporte']);
 
