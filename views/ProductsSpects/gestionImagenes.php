@@ -80,7 +80,7 @@
                                     <?php echo $categoria->nombre; ?>
                                 </td>
                                 <td class="table__td">
-                                    <?php if (!empty($categoria->imagen)) { ?>
+                                    <?php if (!($categoria->imagen == ' ') and !($categoria->imagen == '')) { ?>
                                         <img src="<?php echo htmlspecialchars($categoria->imagen);?>" alt="Imagen de <?php echo htmlspecialchars($categoria->nombre); ?>" style="width: 100px; height: 100px;">
                                     <?php } else { ?>
                                         <span>No tiene</span>
