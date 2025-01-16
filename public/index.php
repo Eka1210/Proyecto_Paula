@@ -103,6 +103,7 @@ $router->get('/admin/editar/promocion', [PromotionController::class, 'editar']);
 $router->post('/admin/editar/promocion', [PromotionController::class, 'editar']);
 //Reporte de ventas 
 $router->get('/admin/reporte', [ReportController::class, 'reporte']);
+$router->post('/admin/reporte', [ReportController::class, 'reporte']);
 
 
 //Rutas de inventario
