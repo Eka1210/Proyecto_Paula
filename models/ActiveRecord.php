@@ -401,4 +401,10 @@ class ActiveRecord
         $resultado = self::consultarSQL($query);
         return array_shift($resultado);
     }
+    public function eliminarLike($user, $prod)
+    {
+        $query = "DELETE FROM "  . static::$tabla . " WHERE userID = " . $user . " AND productID = " . $prod . " LIMIT 1";
+        $resultado = self::$db->query($query);
+        return $resultado;
+    }
 }

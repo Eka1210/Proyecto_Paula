@@ -116,6 +116,8 @@ $router->post('/admin/inventario/crear', [ProductController::class, 'crearlog'])
 //Rutas de WishList
 $router->get('/wishlist', [WishListController::class, 'list']);
 $router->post('/wishlist', [WishListController::class, 'list']);
+$router->get('/like', [ProductController::class, 'like']);
+$router->post('/like', [ProductController::class, 'like']);
 
 // Comprueba y valida las rutas, que existan y les asigna las funciones del Controlador
 $router->comprobarRutas();

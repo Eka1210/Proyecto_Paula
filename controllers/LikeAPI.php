@@ -6,31 +6,11 @@ use MVC\Router;
 use Model\Product;
 use Model\Wishlist;
 
-class WishListController
+
+class APIGifts
 {
 
-    public static function list(Router $router)
-    {
-        $userId = $_SESSION['userId'] ?? null;
-        $productList = [];
-        if ($userId) {
-            $lists = Wishlist::all();
-            foreach ($lists as $list) {
-
-                if ($list->userID == $userId) {
-                    $product = Product::find($list->productID);
-                    $productList[] = $product;
-                }
-            }
-        }
-
-
-        $router->render('wishlist/wishlist', [
-            'productList' => $productList,
-        ]);
-    }
-
-    public static function like($productId)
+    public static function like1($productId)
     {
         $userId = $_SESSION['userId'] ?? null;
 

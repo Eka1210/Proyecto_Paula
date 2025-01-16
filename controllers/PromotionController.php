@@ -162,6 +162,5 @@ class PromotionController
             'alertas' => $alertas,
             'promociones' => $promociones
         ]);
-        $router->render('/promocion/promocion');
     }
 }

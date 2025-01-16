@@ -2,3 +2,25 @@
 height: 5rem;
 width: 12rem;
 }
+
+
+.wishImage{
+    width: 15rem;
+
+}
+
+.btn{
+    background-color: #693334;
+    /* Maroon/brown color */
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    transition: background-color 0.3s ease;
+    margin-top: 2rem;
+}

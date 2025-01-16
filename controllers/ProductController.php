@@ -496,4 +496,9 @@ class ProductController
             $product->guardar();
         }
     }
+
+    public static function like(Router $router)
+    {
+        $router->render('/profile/like');
+    }
 }
