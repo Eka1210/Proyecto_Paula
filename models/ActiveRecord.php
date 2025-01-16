@@ -393,4 +393,12 @@ class ActiveRecord
         $resultado = self::$db->query($query);
         return $resultado;
     }
+
+
+    public static function findlike($user, $productId)
+    {
+        $query = "SELECT id FROM " . static::$tabla . " WHERE userID = " . $user . " AND productID = " . $productId;
+        $resultado = self::consultarSQL($query);
+        return array_shift($resultado);
+    }
 }

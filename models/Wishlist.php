@@ -15,4 +15,5 @@ class Wishlist extends ActiveRecord{
         $this->productID = $args['productID'] ?? null;
     }
 
+
 }
