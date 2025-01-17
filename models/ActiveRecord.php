@@ -407,4 +407,11 @@ class ActiveRecord
         $resultado = self::$db->query($query);
         return $resultado;
     }
+
+    public static function getSales($start, $end)
+    {
+        $query = "SELECT * FROM " . static::$tabla . " WHERE fecha BETWEEN '$start' AND '$end'";
+        $resultado = self::consultarSQL($query);
+        return $resultado;
+    }
 }
