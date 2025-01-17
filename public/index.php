@@ -13,6 +13,7 @@ use Controllers\CartController;
 use Controllers\PromotionController;
 use Controllers\ReportController;
 use Controllers\WishListController;
+use Controllers\PaymentMethodsController;
 
 $router = new Router();
 
@@ -101,7 +102,8 @@ $router->get('/admin/promocion/eliminar', [PromotionController::class, 'eliminar
 $router->post('/admin/promocion/eliminar', [PromotionController::class, 'eliminar']);
 $router->get('/admin/editar/promocion', [PromotionController::class, 'editar']);
 $router->post('/admin/editar/promocion', [PromotionController::class, 'editar']);
-//Reporte de ventas 
+
+//Reporte de ventas
 $router->get('/admin/reporte', [ReportController::class, 'reporte']);
 $router->post('/admin/reporte', [ReportController::class, 'reporte']);
 
@@ -119,6 +121,19 @@ $router->get('/wishlist', [WishListController::class, 'list']);
 $router->post('/wishlist', [WishListController::class, 'list']);
 $router->get('/like', [ProductController::class, 'like']);
 $router->post('/like', [ProductController::class, 'like']);
+
+//Rutas de Métodos de Pago
+$router->get('/metodosPago', [PaymentMethodsController::class, 'verPaymentMethods']);
+$router->post('/addMetodoPago', [PaymentMethodsController::class, 'addMetodoPago']);
+$router->get('/addMetodoPago', [PaymentMethodsController::class, 'addMetodoPago']);
+$router->post('/editMetodoPago', [PaymentMethodsController::class, 'editMetodoPago']);
+$router->get('/editMetodoPago', [PaymentMethodsController::class, 'editMetodoPago']);
+$router->post('/removeMetodoPago', [PaymentMethodsController::class, 'removeMetodoPago']);
+$router->get('/removeMetodoPago', [PaymentMethodsController::class, 'removeMetodoPago']);
+
+// Rutas de Métodos de Entrega
+$router->get('/metodosEntrega', [MethodsController::class, 'verDeliveryMethods']);
+
 
 // Comprueba y valida las rutas, que existan y les asigna las funciones del Controlador
 $router->comprobarRutas();

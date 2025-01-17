@@ -200,8 +200,6 @@ class CartController {
             } else {
                 echo "<script>alert('No se especificó el producto a eliminar.');</script>";
             }
-    
-            // Redirigir a la página del carrito
             header('Location: /cart');
             exit;
         } else {

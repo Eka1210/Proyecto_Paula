@@ -129,6 +129,18 @@ verificarAccesoAdmin();
                 } ?> href="/admin/inventario">
                 Inventario</a>
         <?php } ?>
+        <?php if (isset($_SESSION['admin'])) { ?>
+            <a <?php if ($page == 'admin') {
+                    echo 'class="active"';
+                } ?> href="/metodosPago">
+                Métodos de Pago</a>
+        <?php } ?>
+        <?php if (isset($_SESSION['admin'])) { ?>
+            <a <?php if ($page == 'admin') {
+                    echo 'class="active"';
+                } ?> href="/metodosEntrega">
+                Métodos de Entrega</a>
+        <?php } ?>
     </nav>
 
     <?php echo $contenido; ?>
