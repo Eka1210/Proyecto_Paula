@@ -81,7 +81,7 @@ class ProductController
         ]);
     }
 
-    public static function editar(Router $router)
+    public static function aar(Router $router)
     {
         //isAdmin();
         $alertas = [];
@@ -304,7 +304,7 @@ class ProductController
         }
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            header("Location: /personalizacion/producto?id={$productId}");
+            header("Location: /admin/personalizacion/producto?id={$productId}");
             exit;
         }
 
@@ -325,7 +325,7 @@ class ProductController
             // Usamos el ProductDecorator para crear la opción
             ProductDecorator::addOptionToProduct($productId, $optionData, $values);
 
-            header("Location: /personalizacion/producto?id={$productId}");
+            header("Location: /admin/personalizacion/producto?id={$productId}");
             exit;
         }
 
@@ -350,7 +350,7 @@ class ProductController
             $productId = OptionsXProduct::findProduct($optionID);
 
             // Redirigir después de la edición
-            header("Location: /personalizacion/producto?id={$productId}");
+            header("Location: /admin/personalizacion/producto?id={$productId}");
             exit;
         }
 
@@ -359,6 +359,31 @@ class ProductController
             'option' => $option,
             'values' => $values
         ]);
+    }
+
+    public static function eliminarOpcion(Router $router)
+    {
+        $alertas = [];
+        $productos = Product::all();
+
+        $optionID = $_POST['id'] ?? null;
+
+        $option = Option::find($optionID);
+        $valuesJson = OptionsXProduct::findValues($optionID);
+
+
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $productId = OptionsXProduct::findProduct($optionID);
+            $product = Product::find($productId);
+            OptionsXProduct::deleteOp($optionID);
+            $option->eliminar();
+            $option->guardar();
+            $product->guardar();
+
+
+            // Redirigir después de la edición
+            header("Location: /admin/personalizacion/producto?id={$productId}");
+            exit;}
     }
 
     public static function personalizarP(Router $router)
@@ -381,7 +406,7 @@ class ProductController
 
             if (!$userId) {
                 echo "<script>alert('No se encontró un usuario en la sesión.');</script>";
-                header('Location: /personalizacion/producto?id=' . $productId);
+                header('Location: /admin/personalizacion/producto?id=' . $productId);
                 exit;
             }
 

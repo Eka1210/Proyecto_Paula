@@ -70,6 +70,8 @@ $router->get('/admin/editar/option', [ProductController::class, 'editarOpcion'])
 $router->post('/admin/editar/option', [ProductController::class, 'editarOpcion']);
 $router->get('/personalizar/producto', [ProductController::class, 'personalizarP']);
 $router->post('/personalizar/producto', [ProductController::class, 'personalizarP']);
+$router->get('/admin/eliminar/option', [ProductController::class, 'eliminarOpcion']);
+$router->post('/admin/eliminar/option', [ProductController::class, 'eliminarOpcion']);
 
 //Rutas permisos de admin
 $router->get('/admin/permisos', [AdminController::class, 'ver']);

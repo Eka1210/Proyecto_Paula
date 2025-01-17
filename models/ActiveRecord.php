@@ -122,6 +122,12 @@ class ActiveRecord
         $resultado = self::consultarSQL($query);
         return $resultado;
     }
+    public static function deleteByProduct2($productId) {
+        // Eliminar todas las relaciones de categorías con el producto especificado
+        $query = "DELETE FROM optionsxproduct WHERE productID = $productId";
+        $resultado = self::$db->query($query);
+        return $resultado;
+    }
     public static function all2($id)
     {
         $query = "SELECT * FROM " . static::$tabla . " WHERE productID = " . $id;
@@ -223,6 +229,13 @@ class ActiveRecord
     {
         // Eliminar todas las relaciones de categorías con el producto especificado
         $query = "DELETE FROM categoriesxproduct WHERE productID = $productId";
+        $resultado = self::$db->query($query);
+        return $resultado;
+    }
+
+    public static function deleteOp($optionID)
+    {
+        $query = "DELETE FROM optionsxproduct WHERE optionID = $optionID";
         $resultado = self::$db->query($query);
         return $resultado;
     }
@@ -405,6 +418,13 @@ class ActiveRecord
     {
         $query = "DELETE FROM "  . static::$tabla . " WHERE userID = " . $user . " AND productID = " . $prod . " LIMIT 1";
         $resultado = self::$db->query($query);
+        return $resultado;
+    }
+
+    public static function getSales($start, $end)
+    {
+        $query = "SELECT * FROM " . static::$tabla . " WHERE fecha BETWEEN '$start' AND '$end'";
+        $resultado = self::consultarSQL($query);
         return $resultado;
     }
 }
