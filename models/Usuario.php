@@ -26,21 +26,33 @@ class Usuario extends ActiveRecord{
         $this->token = $args['token'] ?? '';
     }
 
-    public function validateRegister(){
-        if(!$this->email){
+    public function validateRegister() {
+        if (!$this->email) {
             self::setAlerta('error', 'El email es obligatorio');
         }
-        if(!$this->username){
+        if (!$this->username) {
             self::setAlerta('error', 'El nombre de usuario es obligatorio');
-        }elseif(preg_match('/\s/', $this->username)) { // Verifica si hay espacios
+        } elseif (preg_match('/\s/', $this->username)) { // Verifica si hay espacios
             self::setAlerta('error', 'El nombre de usuario no puede contener espacios');
         }
-        if(!$this->password){
+        if (!$this->password) {
             self::setAlerta('error', 'La contraseña es obligatoria');
-        } else if(strlen($this->password) < 6) {
-            self::$alertas['error'][] = 'La contraseña debe tener al menos 6 caracteres';
+        } else {
+            if (strlen($this->password) < 8) {
+                self::setAlerta('error', 'La contraseña debe tener al menos 8 caracteres');
+            } 
+            // Verifica si la contraseña cumple con los requisitos: al menos una letra mayúscula, un número y un carácter especial
+            if (!preg_match('/[A-Z]/', $this->password)) {
+                self::setAlerta('error', 'La contraseña debe tener al menos una letra mayúscula');
+            } 
+            if (!preg_match('/\d/', $this->password)) {
+                self::setAlerta('error', 'La contraseña debe tener al menos un número');
+            }
+            if (!preg_match('/[@#$%&*]/', $this->password)) {
+                self::setAlerta('error', 'La contraseña debe tener al menos un carácter especial (@#$%&*)');
+            }
         }
-
+    
         return self::$alertas;
     }
 
@@ -148,10 +160,22 @@ class Usuario extends ActiveRecord{
     }
 
     public function validatePassword(){
-        if(!$this->password) {
-            self::$alertas['error'][] = 'La contraseña es olbigatoria';
-        }else if(strlen($this->password) < 6) {
-            self::$alertas['error'][] = 'La contraseña debe tener al menos 6 caracteres';
+        if (!$this->password) {
+            self::setAlerta('error', 'La contraseña es obligatoria');
+        } else {
+            if (strlen($this->password) < 8) {
+                self::setAlerta('error', 'La contraseña debe tener al menos 8 caracteres');
+            } 
+            // Verifica si la contraseña cumple con los requisitos: al menos una letra mayúscula, un número y un carácter especial
+            if (!preg_match('/[A-Z]/', $this->password)) {
+                self::setAlerta('error', 'La contraseña debe tener al menos una letra mayúscula');
+            } 
+            if (!preg_match('/\d/', $this->password)) {
+                self::setAlerta('error', 'La contraseña debe tener al menos un número');
+            }
+            if (!preg_match('/[@#$%&*]/', $this->password)) {
+                self::setAlerta('error', 'La contraseña debe tener al menos un carácter especial (@#$%&*)');
+            }
         }
         return self::$alertas;
     }

@@ -352,6 +352,18 @@ class ActiveRecord
         return $resultado;
     }
 
+    public static function unmakeAdmin($column, $value)
+    {
+        if ($column == 'username') {
+            $query = "UPDATE users SET admin = 0 WHERE username = '$value'";
+        } else {
+            $query = "UPDATE users SET admin = 0 WHERE email = '$value'";
+        }
+        // Actualizar BD
+        $resultado = self::$db->query($query);
+        return $resultado;
+    }
+
     // Funciones Carrito
 
 

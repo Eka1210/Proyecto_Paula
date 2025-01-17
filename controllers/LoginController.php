@@ -54,47 +54,57 @@ class LoginController {
         ]);
     }
 
-    public static function register(Router $router){
+    public static function register(Router $router) {
         $user = new Usuario();
         $alertas = [];
-        
-        if($_SERVER['REQUEST_METHOD'] === 'POST'){
-            echo $_POST['password'];
+    
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            // Sincronizar datos del formulario
             $user->sincronizar($_POST);
-            $alertas = $user->validateRegister();
-            if(empty($alertas['error'])){
-                $result = $user->exists();
-                if($result->num_rows){
-                    $alertas = Usuario::getAlertas();
-                } else{
+    
+            // Verificar si el usuario ya existe
+            $result = $user->exists();
+            if ($result->num_rows) {
+                $alertas = Usuario::getAlertas();
+            } else {
+                // Validar registro (sintaxis, contraseñas, etc.)
+                $alertas = $user->validateRegister();
+    
+                // Si no hay errores, proceder al registro
+                if (empty($alertas['error'])) {
                     $user->hashPassword();
                     $user->generateToken();
-
+    
                     // Crear el sujeto
                     $subject = new Subject();
-
+    
                     // Agregar observadores
                     $emailNotifier = new Email();
-
                     $subject->attach($emailNotifier);
-
+    
                     // Simular un evento de registro de usuario
                     $userData = [
                         'email' => $user->email,
                         'name' => $user->username,
                         'token' => $user->token,
                     ];
-
+    
                     $subject->notifyObservers('user_registered', $userData);
-
+    
+                    // Guardar el usuario en la base de datos
                     $result = $user->guardar();
-                    if($result){
+                    if ($result) {
                         header('Location: /mensaje');
+                        exit;
+                    } else {
+                        Usuario::setAlerta('error', 'Hubo un problema al guardar el usuario');
+                        $alertas = Usuario::getAlertas();
                     }
                 }
             }
         }
-
+    
+        // Renderizar la vista con los datos y alertas
         $router->render('auth/register', [
             'user' => $user,
             'alertas' => $alertas
@@ -151,6 +161,7 @@ class LoginController {
             $auth = new Usuario($_POST);
             $alertas = $auth->validateEmail();
 
+
             if(empty($alertas)){
                 $user = Usuario::where('email', $auth->email);
                 if($user && $user->verified === "1"){
@@ -202,14 +213,16 @@ class LoginController {
             
             $password = new Usuario($_POST);
             $alertas = $password->comparePasswords($_POST['password'], $_POST['password2']);
-
             if(empty($alertas['error'])){
-                $user->password = $password->password;
-                $user->hashPassword();
-                $user->token = '';
-                $result = $user->guardar();
-                if($result){
-                    header('Location: /login');
+                $alertas = $password->validatepassword($_POST['password']);
+                if(empty($alertas['error'])){
+                    $user->password = $password->password;
+                    $user->hashPassword();
+                    $user->token = '';
+                    $result = $user->guardar();
+                    if($result){
+                        header('Location: /cuenta?result=2');
+                    }
                 }
             }
         }

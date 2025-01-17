@@ -78,7 +78,6 @@ $router->get('/admin/permisos', [AdminController::class, 'ver']);
 $router->post('/admin/permisos', [AdminController::class, 'permisos']);
 
 
-
 // Rutas Imágenes
 $router->get('/admin/imagenes', [ProductController::class, 'imagenes']);
 $router->post('/admin/imagenes', [ProductController::class, 'imagenes']);
