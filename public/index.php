@@ -14,6 +14,7 @@ use Controllers\PromotionController;
 use Controllers\ReportController;
 use Controllers\WishListController;
 use Controllers\PaymentMethodsController;
+use Controllers\DeliveryMethodsController;
 
 $router = new Router();
 
@@ -133,8 +134,13 @@ $router->post('/removeMetodoPago', [PaymentMethodsController::class, 'removeMeto
 $router->get('/removeMetodoPago', [PaymentMethodsController::class, 'removeMetodoPago']);
 
 // Rutas de Métodos de Entrega
-$router->get('/metodosEntrega', [MethodsController::class, 'verDeliveryMethods']);
-
+$router->get('/metodosEntrega', [DeliveryMethodsController::class, 'verDeliveryMethods']);
+$router->post('/addMetodoEntrega', [DeliveryMethodsController::class, 'addMetodoEntrega']);
+$router->get('/addMetodoEntrega', [DeliveryMethodsController::class, 'addMetodoEntrega']);
+$router->post('/editMetodoEntrega', [DeliveryMethodsController::class, 'editMetodoEntrega']);
+$router->get('/editMetodoEntrega', [DeliveryMethodsController::class, 'editMetodoEntrega']);
+$router->post('/removeMetodoEntrega', [DeliveryMethodsController::class, 'removeMetodoEntrega']);
+$router->get('/removeMetodoEntrega', [DeliveryMethodsController::class, 'removeMetodoEntrega']);
 
 // Comprueba y valida las rutas, que existan y les asigna las funciones del Controlador
 $router->comprobarRutas();

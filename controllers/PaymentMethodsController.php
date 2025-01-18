@@ -4,7 +4,6 @@ namespace Controllers;
 use MVC\Router;
 use Model\Usuario;
 use Model\PaymentMethod;
-use Model\deliveryMethod;
 
 class PaymentMethodsController {
 

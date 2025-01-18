@@ -3,7 +3,7 @@
 ?>
 
 <div class="create-category">
-    <h1 class="create-category__title">Editar Método de Pago <?php echo $nombre;?> </h1>
+    <h1 class="create-category__title">Editar Método de Entrega <?php echo $nombre;?> </h1>
     <p class="create-category__description">Edite el siguiente formulario para actualizar el método de <?php echo $nombre;?></p>
 
     <form method="POST" class="create-category__form">
@@ -12,9 +12,13 @@
             <input type="text" name="name" value="<?php echo $nombre; ?>" id="name" class="create-category__form__input" required>
         </div>
         <div class="create-category__form__field">
+            <label for="cost" class="create-category__form__label">Costo</label>
+            <input type="text" name="cost" value="<?php echo $costo; ?>" id="cost" class="create-category__form__input" required>
+        </div>
+        <div class="create-category__form__field">
             <label for="description" class="create-plan__form__label">Descripción</label>
             <textarea name="description" id="description" class="create-category__form__textarea" required><?php echo $descripcion; ?></textarea>
         </div>
-        <button type="submit" class="edit-category__form__submit">Editar Método de Pago</button>
+        <button type="submit" class="edit-category__form__submit">Editar Método de Entrega</button>
     </form>
 </div>
