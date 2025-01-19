@@ -44,6 +44,7 @@ verificarAccesoAdmin();
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
         integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
         crossorigin=""></script>
+    
 </head>
 
 <body>
@@ -141,6 +142,10 @@ verificarAccesoAdmin();
                 } ?> href="/metodosEntrega">
                 Métodos de Entrega</a>
         <?php } ?>
+        <?php if (isset($_SESSION['admin'])) { ?>
+            <button id="toggle-nav" class="toggle-nav"></button>
+        <?php } ?>
+        
     </nav>
 
     <?php echo $contenido; ?>
@@ -153,5 +158,58 @@ verificarAccesoAdmin();
 
     <script src='/build/js/app.js'></script>
 </body>
+
+<script>
+    function checkOverflow() {
+        const nav = document.querySelector('.navegacion');
+        const toggleNav = document.querySelector('.toggle-nav');
+        const links = nav.querySelectorAll('a');
+
+        // Calcular el ancho total de los enlaces visibles
+        let totalWidth = 0;
+        let hideFromIndex = -1;
+
+        links.forEach((link, index) => {
+            totalWidth += link.offsetWidth;
+
+            if (totalWidth > nav.offsetWidth) {
+                if (hideFromIndex === -1) hideFromIndex = index;
+                link.style.display = 'none'; // Ocultar los que no caben
+            } else {
+                link.style.display = 'block'; // Asegurarse de mostrar los visibles
+            }
+        });
+
+        // Mostrar el botón de flecha solo si hay elementos ocultos
+        if (hideFromIndex !== -1) {
+            toggleNav.style.display = 'block';
+        } else {
+            toggleNav.style.display = 'none';
+        }
+    }
+
+    // Alternar visibilidad de elementos ocultos
+    document.querySelector('.toggle-nav').addEventListener('click', () => {
+        const nav = document.querySelector('.navegacion');
+        nav.classList.toggle('expanded');
+
+        const links = nav.querySelectorAll('a');
+        links.forEach(link => {
+            if (nav.classList.contains('expanded')) {
+                link.style.display = 'block'; // Mostrar todo
+            } else {
+                checkOverflow(); // Volver a ocultar los que no caben
+            }
+        });
+    });
+
+    // Detectar redimensionamiento de ventana
+    window.addEventListener('resize', checkOverflow);
+
+    // Verificar el estado inicial
+    checkOverflow();
+
+
+</script>
 
 </html>
