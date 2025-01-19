@@ -225,6 +225,13 @@ class ActiveRecord
         return $resultado;
     }
 
+    public function eliminarPorUserID($userID)
+    {
+        $query = "DELETE FROM "  . static::$tabla . " WHERE userID = " . $userID . " LIMIT 1";
+        $resultado = self::$db->query($query);
+        return $resultado;
+    }
+
     public static function deleteByProduct($productId)
     {
         // Eliminar todas las relaciones de categorías con el producto especificado

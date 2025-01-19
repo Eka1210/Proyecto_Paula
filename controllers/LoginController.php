@@ -8,6 +8,7 @@ use Classes\Subject;
 use Classes\Email;
 use Model\Productsxcart;
 use Model\Sale;
+use Model\Wishlist;
 use Model\Client;
 
 class LoginController {
@@ -337,6 +338,12 @@ class LoginController {
         foreach($sales as $sale){
             $sale->removeUser();
         }
+
+        $wishlist = Wishlist::whereAll('userID', $id);
+        foreach($wishlist as $wL){
+            $wL->eliminarPorUserID($id);
+        }
+
         $client->eliminar();
         $user->eliminar();
 
