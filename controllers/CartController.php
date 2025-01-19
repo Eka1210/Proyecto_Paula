@@ -8,6 +8,8 @@ use Model\Productsxcart;
 use Model\Usuario;
 use Model\Category;
 use Model\CategoryXProduct;
+use Model\PaymentMethod;
+use Model\DeliveryMethod;
 
 class CartController {
 
@@ -43,7 +45,7 @@ class CartController {
                     }
                 }
             }
-            $router->render('cuenta/cart', [
+            $router->render('ventas/cart', [
                 'productos' => $productosEnCarrito,
             ]);
         } else {
@@ -207,5 +209,48 @@ class CartController {
             exit;
         }
     }
-    
+
+    private static function calcularDescuento(array $productos, float $totalMonto): float {
+        $descuento = 0;
+
+        return $descuento;
+    }
+
+    public static function checkout(Router $router) {
+        // Verificar si el usuario está autenticado
+        $userId = $_SESSION['userId'] ?? null;
+        $totalMonto = $_POST['totalMonto'] ?? null;;
+
+        $carrito = Cart::where('userId', $userId);
+        $productosEnCarrito = [];
+
+        if ($carrito) {
+            $productosxCart = Productsxcart::allCart($carrito->id);
+
+            foreach ($productosxCart as $productoEnCarrito) {
+                $producto = Product::find($productoEnCarrito->productID);
+
+                if ($producto) {
+                    $producto->quantity = $productoEnCarrito->quantity;
+                    $productosEnCarrito[] = $producto;
+                }
+            }
+        }
+
+        // Calcular descuento
+        $descuento = self::calcularDescuento($productosEnCarrito, $totalMonto);
+
+        // Cargar métodos de pago y entrega desde la base de datos
+        $metodosPago = PaymentMethod::all();
+        $metodosEntrega = DeliveryMethod::all();
+
+        // Renderizar la vista del checkout
+        $router->render('ventas/checkout', [
+            'productos' => $productosEnCarrito,
+            'totalMonto' => $totalMonto,
+            'descuento' => $descuento,
+            'metodosPago' => $metodosPago,
+            'metodosEntrega' => $metodosEntrega
+        ]);
+    }
 }
