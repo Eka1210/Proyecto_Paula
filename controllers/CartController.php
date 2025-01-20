@@ -234,19 +234,19 @@ class CartController {
 
     private static function calcularDescuento(array $productos): array {
         $promocionesActivas = Promotion::getActivePromotions();
-    
+
         foreach ($productos as $producto) {
-            $producto->discount = 0; // Inicializa el descuento por producto
-            $producto->discountPercentage = 0; // Inicializa el porcentaje por producto
-    
+            $producto->discount = 0;
+            $producto->discountPercentage = 0;
+
             $promocionesDelProducto = self::obtenerPromocionesDelProducto($producto->id, $promocionesActivas);
-    
+
             foreach ($promocionesDelProducto as $promocion) {
                 $producto->discount += self::aplicarDescuentoPorPromocion($producto, $promocion);
                 $producto->discountPercentage = $promocion->percentage; // Último porcentaje aplicado
             }
         }
-    
+
         return $productos;
     }
 
@@ -286,4 +286,20 @@ class CartController {
             'metodosEntrega' => $metodosEntrega
         ]);
     }
+
+    public static function confirmOrder(Router $router) {
+        // Simular la creación de un pedido (por ahora, sin guardar en la base de datos)
+
+
+        $orderId = rand(1000, 9999);
+        $totalAmount = 1000;
+
+        // Renderizar la página de éxito
+        $router->render('ventas/success', [
+            'orderId' => $orderId,
+            'totalAmount' => $totalAmount
+        ]);
+    }
+
+
 }

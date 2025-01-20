@@ -93,6 +93,8 @@ $router->post('/cart/AddToCart', [CartController::class, 'AddToCart']);
 $router->post('/cart/removeFromCart', [CartController::class, 'removeFromCart']);
 $router->get('/cart/checkout', [CartController::class, 'checkout']);
 $router->post('/cart/checkout', [CartController::class, 'checkout']);
+$router->get('/cart/confirmOrder', [CartController::class, 'confirmOrder']);
+$router->post('/cart/confirmOrder', [CartController::class, 'confirmOrder']);
 
 //Rutas de descuento
 $router->get('/admin/promocion', [PromotionController::class, 'ver']);

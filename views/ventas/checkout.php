@@ -53,37 +53,33 @@
                 </div>
 
                 <h2 class="checkout-title">Métodos de Entrega</h2>
-        <div class="delivery-methods">
-            <?php foreach ($metodosEntrega as $metodo) : ?>
-                <div>
-                    <input 
-                        type="radio" 
-                        id="delivery-<?php echo $metodo->id; ?>" 
-                        name="metodoEntrega" 
-                        value="<?php echo $metodo->cost; ?>" 
-                        required 
-                        class="delivery-option"
-                    >
-                    <label for="delivery-<?php echo $metodo->id; ?>">
-                        <strong><?php echo htmlspecialchars($metodo->name); ?></strong>: 
-                        <?php echo htmlspecialchars($metodo->description); ?> 
-                        (Costo: ₡<?php echo number_format($metodo->cost, 2); ?>)
-                    </label>
+                <div class="delivery-methods">
+                    <?php foreach ($metodosEntrega as $metodo) : ?>
+                        <div>
+                            <input 
+                                type="radio" 
+                                id="delivery-<?php echo $metodo->id; ?>" 
+                                name="metodoEntrega" 
+                                value="<?php echo $metodo->id; ?>" 
+                                required
+                            >   
+                            <label for="delivery-<?php echo $metodo->id; ?>">
+                                <strong><?php echo htmlspecialchars($metodo->name); ?></strong>: 
+                                <?php echo htmlspecialchars($metodo->description); ?> 
+                                (Costo: ₡<?php echo number_format($metodo->cost, 2); ?>)
+                            </label>
+                        </div>
+                    <?php endforeach; ?>
                 </div>
-            <?php endforeach; ?>
-        </div>
+            </form>
 
         <div class="checkout-summary">
             <p>Total: <strong>₡<?php echo number_format($totalMonto, 2); ?></strong></p>
             <?php if ($descuento > 0) : ?>
                 <p>Descuento aplicado: <strong>₡<?php echo number_format($descuento, 2); ?></strong></p>
-                <p>Total a pagar: 
-                    <strong id="total-pagar">₡<?php echo number_format($totalMonto - $descuento, 2); ?></strong>
-                </p>
+                <p>Total a pagar: <strong>₡<?php echo number_format($totalMonto - $descuento, 2); ?></strong></p>
             <?php else : ?>
-                <p>Total a pagar: 
-                    <strong id="total-pagar">₡<?php echo number_format($totalMonto, 2); ?></strong>
-                </p>
+                <p>Total a pagar: <strong>₡<?php echo number_format($totalMonto, 2); ?></strong></p>
             <?php endif; ?>
         </div>
         <form action="/cart/confirmOrder" method="POST" onsubmit="return confirm('¿Está seguro de confirmar el pedido?')">
