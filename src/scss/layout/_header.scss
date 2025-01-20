@@ -119,20 +119,63 @@
 }
 
 
-.navegacion{
+.navegacion {
     display: flex;
+    flex-wrap: wrap; /* Evita que los elementos bajen de línea */
     background-color: v.$vino;
     margin-bottom: 2rem;
-    a{
-        color: v.$blanco;
-        padding: 2rem 5rem;
-        font-size: 1.8rem;
-        &:hover{
-            background-color: v.$vino;
-        }
-        &.active{
-            background-color: v.$vino;
-        }
-    }
-}
+    overflow: hidden; /* Oculta los elementos que no caben */
+    white-space: nowrap; /* Fuerza los elementos a estar en una sola línea */
+    position: relative;
 
+  
+    a {
+      color: v.$hueso;
+      padding: 2rem 5rem;
+      font-size: 1.8rem;
+      text-decoration: none;
+      white-space: nowrap; // Evita que los enlaces se muevan a otra línea
+      transition: background-color 0.3s;
+  
+      &:hover {
+        background-color: v.$vinoC;
+      }
+  
+      &.active {
+        background-color: v.$vinoC;
+      }
+    }
+  
+    .toggle-nav {
+      display: none; // Por defecto, oculto
+      position: absolute;
+      right: 10px;
+      bottom: 10px;
+      background: none;
+      border: none;
+      color: v.$hueso;
+      font-size: 2rem;
+      cursor: pointer;
+      margin-right: 4rem;
+      margin-bottom: 0.5rem;
+  
+      &::before {
+        content: '\25BC'; // Flecha hacia abajo
+      }
+    }
+  
+    &.extra {
+        .toggle-nav {
+          display: block; // Muestra el botón de navegación
+        }
+      }
+    
+      &.expanded {
+        overflow: visible; // Permite ver los elementos ocultos
+        .toggle-nav::before {
+          content: '\25B2'; // Cambia la flecha hacia arriba
+        }
+      }
+  }
+  
+  
