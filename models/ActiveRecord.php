@@ -373,8 +373,6 @@ class ActiveRecord
 
     // Funciones Carrito
 
-
-
     public static function allCart($cartId)
     {
         $query = "SELECT * FROM " . static::$tabla . " WHERE cartID = " . $cartId;
@@ -446,4 +444,21 @@ class ActiveRecord
         $resultado = self::consultarSQL($query);
         return $resultado;
     }
+
+    // Funciones Checkout
+
+    public static function getActivePromotions()
+    {
+        $query = "SELECT * FROM " . static::$tabla . " WHERE active = 1 AND start_time <= NOW() AND end_time >= NOW()";
+        $resultado = self::consultarSQL($query);
+        return $resultado;
+    }
+
+    public static function isProductPromotion($productID,$promocionID)
+    {
+        $query = "SELECT id FROM " . static::$tabla . " WHERE promotionID = " . $promocionID . " AND productID = " . $productID . " LIMIT 1";
+        $resultado = self::consultarSQL($query);
+        return $resultado;
+    }
+
 }

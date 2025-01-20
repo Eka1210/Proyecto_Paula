@@ -10,6 +10,8 @@ use Model\Category;
 use Model\CategoryXProduct;
 use Model\PaymentMethod;
 use Model\DeliveryMethod;
+use Model\Promotion;
+use Model\ProductXPromotion;
 
 class CartController {
 
@@ -209,11 +211,43 @@ class CartController {
             exit;
         }
     }
+    
+    private static function obtenerPromocionesDelProducto(int $productID, array $promocionesActivas): array {
+        $promocionesDelProducto = [];
 
-    private static function calcularDescuento(array $productos, float $totalMonto): float {
-        $descuento = 0;
+        foreach ($promocionesActivas as $promocion) {
+            // Verificar si el producto está asociado con la promoción
+            $productoEnPromocion = ProductXPromotion::isProductPromotion($productID,$promocion->id);
+            if ($productoEnPromocion) {
+                $promocionesDelProducto[] = $promocion;
+            }
+        }
 
-        return $descuento;
+        return $promocionesDelProducto;
+    }
+
+    private static function aplicarDescuentoPorPromocion(object $producto, object $promocion): float {
+        // El descuento es un porcentaje sobre el precio del producto
+        $descuentoPorProducto = $producto->price * ($promocion->percentage / 100);
+        return $descuentoPorProducto * $producto->quantity; // Descuento total por cantidad
+    }
+
+    private static function calcularDescuento(array $productos): array {
+        $promocionesActivas = Promotion::getActivePromotions();
+    
+        foreach ($productos as $producto) {
+            $producto->discount = 0; // Inicializa el descuento por producto
+            $producto->discountPercentage = 0; // Inicializa el porcentaje por producto
+    
+            $promocionesDelProducto = self::obtenerPromocionesDelProducto($producto->id, $promocionesActivas);
+    
+            foreach ($promocionesDelProducto as $promocion) {
+                $producto->discount += self::aplicarDescuentoPorPromocion($producto, $promocion);
+                $producto->discountPercentage = $promocion->percentage; // Último porcentaje aplicado
+            }
+        }
+    
+        return $productos;
     }
 
     public static function checkout(Router $router) {
@@ -237,18 +271,17 @@ class CartController {
             }
         }
 
-        // Calcular descuento
-        $descuento = self::calcularDescuento($productosEnCarrito, $totalMonto);
-
         // Cargar métodos de pago y entrega desde la base de datos
         $metodosPago = PaymentMethod::all();
         $metodosEntrega = DeliveryMethod::all();
 
         // Renderizar la vista del checkout
+        $productosEnCarrito = self::calcularDescuento($productosEnCarrito);
+
         $router->render('ventas/checkout', [
             'productos' => $productosEnCarrito,
             'totalMonto' => $totalMonto,
-            'descuento' => $descuento,
+            'descuento' => array_sum(array_column($productosEnCarrito, 'discount')), // Suma total de descuentos
             'metodosPago' => $metodosPago,
             'metodosEntrega' => $metodosEntrega
         ]);
