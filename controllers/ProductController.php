@@ -28,11 +28,13 @@ class ProductController
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if ($_POST['encargo'] == 1) {
                 $_POST['cantidad'] = 0;
-            }
+            } 
             $producto = new Product($_POST);
             $alertas = $producto->validate();
 
             if (empty($alertas)) {
+                $producto->activo = 1;
+
                 $datos = $producto->guardar();
 
                 if ($datos) {
@@ -63,21 +65,93 @@ class ProductController
     public static function ver(Router $router)
     {
         $alertas = [];
-        $productos = Product::all();
+        $products = Product::all();
+        $productos = [];
 
-        foreach ($productos as $producto) {
-            $producto->name = $producto->name;
-            $producto->id = $producto->id;
-            $producto->description = $producto->description;
-            $producto->price = $producto->price;
-            $producto->cantidad = $producto->cantidad;
-            $producto->imagen = $producto->imagen;
-            $producto->encargo = $producto->encargo;
+        foreach ($products as $producto) {
+            if ($producto->activo == 1){
+                $productos [] = $producto;
+            }
         }
         $alertas = Category::getAlertas();
         $router->render('ProductsSpects/gestionProductos', [
             'alertas' => $alertas,
             'productos' => $productos
+        ]);
+    }
+
+    public static function deshabilitados(Router $router)
+    {
+        $alertas = [];
+        $products = Product::all();
+        $productos = [];
+
+        foreach ($products as $producto) {
+            if ($producto->activo == 0){
+                $productos [] = $producto;
+            }
+        }
+        $alertas = Category::getAlertas();
+        $router->render('ProductsSpects/deshabilitados', [
+            'alertas' => $alertas,
+            'productos' => $productos
+        ]);
+    }
+
+    public static function editar(Router $router){
+        //isAdmin();
+        $alertas = [];
+        $producto = $_GET['id'] ?? null;
+        $productoID = Product::find3($producto);
+        $resultado = $productoID->fetch_assoc()['id'];
+
+        $producto = Product::find($resultado);
+
+        $producto->name = $producto->name;
+        $producto->id = $producto->id;
+        $producto->description = $producto->description;
+        $producto->price = $producto->price;
+        $producto->cantidad = $producto->cantidad;
+        $producto->imagen = $producto->imagen;
+        $producto->encargo = $producto->encargo;
+
+        $categorias = Category::all();
+        $categoriaxP = CategoryXProduct::all();
+        $categoriasP = [];
+        foreach ($categoriaxP as $categoria) {
+            if ($categoria->productID == $producto->id) {
+                $categoriaP = Category::find($categoria->categoryID);
+                $categoriasP[] = $categoriaP;
+            }
+        }
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            if (isset($_POST['categories']) && !empty($_POST['categories'])) {
+                CategoryXProduct::deleteByProduct($producto->id);
+                $categoriasSeleccionadas = $_POST['categories'];
+                foreach ($categoriasSeleccionadas as $categoriaId) {
+                    $categoriaProducto = new CategoryXProduct([
+                        'productID' => $producto->id,
+                        'categoryID' => $categoriaId
+                    ]);
+
+                    $categoriaProducto->guardar();
+                }
+            }
+            $producto->sincronizar($_POST);
+            $alertas = $producto->validate();
+            if (empty($alertas)) {
+                $producto->guardar();
+                Product::setAlerta('success', 'Producto Editada');
+                header('Location: /admin/productos');
+            }
+        }
+        $router->render('ProductsSpects/editProduct', [
+            'alertas' => $alertas,
+            'name' => $producto->name,
+            'descripcion' => $producto->description,
+            'producto' => $producto,
+            'categorias' => $categorias,
+            'categoriasP' => $categoriasP
         ]);
     }
 
@@ -140,7 +214,7 @@ class ProductController
     }
 
 
-    public static function eliminar(Router $router)
+    public static function activo(Router $router)
     {
         $alertas = [];
         $productos = Product::all();
@@ -157,29 +231,48 @@ class ProductController
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $id = $_POST['id'];
             $producto = Product::find($id);
-            $valid = true;
+            $activo = $_POST['activo'];
+            $producto->updateActivo($activo);
 
-            $categorias = Category::all();
-            $categoriaxP = CategoryXProduct::all();
-            $categoriasP = [];
-            foreach ($categoriaxP as $categoria) {
-                if ($categoria->productID == $producto->id) {
-                    $categoriaP = Category::find($categoria->categoryID);
-                    $categoriasP[] = $categoriaP;
-                }
-            }
-            CategoryXProduct::deleteByProduct($producto->id);
-            OptionsXProduct::deleteByProduct2($producto->id);
+            header('Location: /admin/productos');
+            exit;
 
-            if ($valid) {
-                $producto->eliminar();
-                header('Location: /admin/productos');
-            } else {
-                header('Location: /admin?error=1');
-            }
+    
         }
         $alertas = Category::getAlertas();
         $router->render('ProductsSpects/gestionProductos', [
+            'alertas' => $alertas,
+            'productos' => $productos
+        ]);
+    }
+
+    public static function activo2(Router $router)
+    {
+        $alertas = [];
+        $productos = Product::all();
+
+        foreach ($productos as $producto) {
+            $producto->name = $producto->name;
+            $producto->id = $producto->id;
+            $producto->description = $producto->description;
+            $producto->price = $producto->price;
+            $producto->cantidad = $producto->cantidad;
+            $producto->imagen = $producto->imagen;
+            $producto->encargo = $producto->encargo;
+        }
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $id = $_POST['id'];
+            $producto = Product::find($id);
+            $activo = $_POST['activo'];
+            $producto->updateActivo($activo);
+
+            header('Location: /admin/productos/deshabilitados');
+            exit;
+
+    
+        }
+        $alertas = Category::getAlertas();
+        $router->render('ProductsSpects/deshabilitados', [
             'alertas' => $alertas,
             'productos' => $productos
         ]);
@@ -383,7 +476,8 @@ class ProductController
 
             // Redirigir después de la edición
             header("Location: /admin/personalizacion/producto?id={$productId}");
-            exit;}
+            exit;
+        }
     }
 
     public static function personalizarP(Router $router)
@@ -522,8 +616,44 @@ class ProductController
         }
     }
 
+    public static function mostrarproducto(Router $router)
+    {
+        //$producto = Product::find($_GET['id']);
+        $producto = new Product();
+
+        $producto->name = $producto->name;
+        $producto->id = $producto->id;
+        $producto->description = $producto->description;
+        $producto->price = $producto->price;
+        $producto->cantidad = $producto->cantidad;
+        $producto->imagen = $producto->imagen;
+        $producto->encargo = $producto->encargo;
+        $router->render('ProductsSpects/productsSpects', [
+            'producto' => $producto
+        ]);
+    }
+
+
+
     public static function like(Router $router)
     {
-        $router->render('/profile/like');
+
+        $userId = isset($_SESSION['userId']) ? $_SESSION['userId'] : null;
+
+        if (!$userId) {
+            header("Location: /login");
+            exit();
+        }
+        if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+            if (!isset($_GET['productLiked'])) {
+                header("Location: /productos"); // Redirect to products page
+                exit();
+            }
+
+            $router->render('/profile/like');
+        } else {
+            header("Location: /productos");
+            exit();
+        }
     }
 }
