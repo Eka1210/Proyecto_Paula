@@ -15,6 +15,9 @@ class Product extends ActiveRecord{
     public $quantity;
     public $categories;
     public $activo;
+    public $liked;
+    public $discount;
+    public $discountPercentage;
 
     public function __construct($args = []){
         $this->id = $args['id'] ?? null;

@@ -12,7 +12,7 @@
                     <th>Precio Unitario</th>
                     <th>Subtotal(Sin descuento)</th>
                     <th>Descuento</th>
-                    <th>Subtotal</th>
+                    <th>Total</th>
                 </tr>
             </thead>
             <tbody>
@@ -36,7 +36,7 @@
         </table>
 
         <form method="POST" action="/cart/confirmOrder" onsubmit="return confirm('¿Está seguro de confirmar el pedido?')">
-            <h2 class="checkout-title">Métodos de Pago</h2>
+            <h2 ><span>Métodos de Pago</span></h2>
             <div class="payment-methods">
                 <?php foreach ($metodosPago as $metodo) : ?>
                     <div>
@@ -76,20 +76,21 @@
                 <?php endforeach; ?>
             </div>
 
-            <div class="checkout-summary">
-                <p>Total: <strong>₡<?php echo number_format($totalMonto, 2); ?></strong></p>
-                <p id="descuento-info">
-                    <?php if ($descuento > 0) : ?>
-                        Descuento aplicado: <strong>₡<?php echo number_format($descuento, 2); ?></strong>
-                    <?php endif; ?>
-                </p>
-                <p>Total a pagar: <strong id="total-pagar">₡<?php echo number_format($totalMonto - $descuento, 2); ?></strong></p>
-            </div>
+            <div class="info-carrito">
+                <p> Subtotal: <span>₡<?php echo number_format($totalMonto, 2); ?></span></p>
+                <?php if ($descuento > 0) : ?>
+                    <p id="descuento-info"  style="margin-bottom: 20px;">
+                    Descuento aplicado: <strong>₡<?php echo number_format($descuento, 2); ?></strong>
+                    </p>
+                <?php endif; ?>
+                <p class = "total" style="margin-bottom: 3rem;">Total a pagar: <span id="total-pagar">₡<?php echo number_format($totalMonto - $descuento, 2); ?></span></p>
+            
 
             <input type="hidden" value="<?php echo $descuento; ?>" name="descuento">
             <input type="hidden" value="<?php echo ($totalMonto - $descuento); ?>" name="totalMonto">
 
-            <button type="submit" class="btn btn-primary">Realizar Pedido</button>
+            <button type="submit" class="send-cart">Realizar Pedido</button>
+            </div>
         </form>
     <?php else : ?>
         <p class="checkout-empty">No hay productos en el carrito.</p>
