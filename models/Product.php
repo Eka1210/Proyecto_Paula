@@ -3,7 +3,7 @@ namespace Model;
 
 class Product extends ActiveRecord{
     protected static $tabla = 'products';
-    protected static $columnasDB = ['id', 'name', 'description', 'price', 'cantidad', 'imagen', 'encargo'];
+    protected static $columnasDB = ['id', 'name', 'description', 'price', 'cantidad', 'imagen', 'encargo', 'activo'];
 
     public $id;
     public $name;
@@ -14,6 +14,7 @@ class Product extends ActiveRecord{
     public $encargo;
     public $quantity;
     public $categories;
+    public $activo;
 
     public function __construct($args = []){
         $this->id = $args['id'] ?? null;
@@ -23,6 +24,7 @@ class Product extends ActiveRecord{
         $this->cantidad = $args['cantidad'] ?? NULL;
         $this->imagen = $args['imagen'] ?? '';
         $this->encargo = $args['encargo'] ?? 0;
+        $this->encargo = $args['activo'] ?? 1;
     }
 
     public function validate(){
@@ -58,6 +60,12 @@ class Product extends ActiveRecord{
     private static function escapeString($string) {
         // Escapa caracteres especiales para evitar SQL Injection
         return htmlspecialchars(mysqli_real_escape_string(self::getConnection(), $string));
+    }
+
+    public function updateActivo($activo) {
+        $query = "UPDATE products SET activo = " . intval($activo) . " WHERE id = " . intval($this->id);
+        $resultado = self::$db->query($query);
+        return $resultado;
     }
 
 }

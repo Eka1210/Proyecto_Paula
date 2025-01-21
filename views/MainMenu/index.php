@@ -11,15 +11,17 @@
 <div class="container-info">
     <div class="products-list">
         <?php foreach($productos as $producto) { ?>
-            <div class="product">
-                <div class="product-image">
-                    <img src="<?php echo htmlspecialchars($producto->imagen); ?>" alt="Imagen del Anuncio"  style="display: block; margin: 0 auto;">
-                </div>
-                <div class="contenido-anuncio">
-                    <p> <?php echo $producto->name; ?> </p>
-                    <p class="precio">₡<?php echo $producto->price; ?></p>
-                </div>
-            </div> <!--.anuncio-->
+            <?php if ($producto->activo == 1) { ?>
+                <div class="product">
+                    <div class="product-image">
+                        <img src="<?php echo htmlspecialchars($producto->imagen); ?>" alt="Imagen del Anuncio"  style="display: block; margin: 0 auto;">
+                    </div>
+                    <div class="contenido-anuncio">
+                        <p> <?php echo $producto->name; ?> </p>
+                        <p class="precio">₡<?php echo $producto->price; ?></p>
+                    </div>
+                </div> <!--.anuncio-->
+                <?php } ?>
         <?php } ?>
     </div>
     <a href="productos" class="ver-todos">

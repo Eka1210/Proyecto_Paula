@@ -22,7 +22,7 @@
                         <th scope="col" class="table__th">Producto</th>
                         <th scope="col" class="table__th"></th>
                         <th scope="col" class="table__th"></th>
-                        <th scope="col" class="table__th"></th>
+                        <th scope="col" class="table__th">Activo</th>
                     </tr>
                 </thead>
                 <tbody class="table__tbody">
@@ -45,14 +45,15 @@
                                 </a>
                             </td>
                             <td class="table__td">
-                                <form action="/admin/productos/eliminar" method="POST" onsubmit="return confirm('Está seguro que quiere eliminar el producto?')">
-                                    <input type="hidden" name="id" value="<?php echo $producto->id; ?>">
-                                    <button type="submit" class="categoryCard__view">
-                                        <i class="fa-solid fa-trash"></i>
-                                        Eliminar
-                                    </button>
-                                </form>
-                            </td>
+                            <form action="/admin/productos/activo" method="POST">
+                                <input type="hidden" name="id" value="<?php echo $producto->id; ?>">
+                                <input type="hidden" name="activo" value="<?php echo $producto->activo ? 0 : 1; ?>">
+                                <button type="submit" class="categoryCard__view">
+                                    <i class="fa-solid <?php echo $producto->activo ? 'fa-toggle-on' : 'fa-toggle-off'; ?>"></i>
+                                    <?php echo $producto->activo ? 'Deshabilitar' : 'Habilitar'; ?>
+                                </button>
+                            </form>
+                        </td>
                         </tr>
                         
                     <?php }?>
