@@ -24,7 +24,7 @@ class Product extends ActiveRecord{
         $this->cantidad = $args['cantidad'] ?? NULL;
         $this->imagen = $args['imagen'] ?? '';
         $this->encargo = $args['encargo'] ?? 0;
-        $this->encargo = $args['activo'] ?? 1;
+        $this->activo = $args['activo'] ?? 1;
     }
 
     public function validate(){

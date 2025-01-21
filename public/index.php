@@ -62,6 +62,8 @@ $router->get('/admin/editar/producto', [ProductController::class, 'editar']);
 $router->post('/admin/editar/producto', [ProductController::class, 'editar']);
 $router->get('/admin/productos/activo', [ProductController::class, 'activo']);
 $router->post('/admin/productos/activo', [ProductController::class, 'activo']);
+$router->get('/admin/productos/activo2', [ProductController::class, 'activo2']);
+$router->post('/admin/productos/activo2', [ProductController::class, 'activo2']);
 $router->get('/productos', [PagesController::class, 'productos']);
 $router->get('/admin/personalizacion/producto', [ProductController::class, 'personalizar']);
 $router->post('/admin/personalizacion/producto', [ProductController::class, 'personalizar']);
@@ -75,6 +77,9 @@ $router->get('/admin/eliminar/option', [ProductController::class, 'eliminarOpcio
 $router->post('/admin/eliminar/option', [ProductController::class, 'eliminarOpcion']);
 $router->get('/mostrarproducto', [ProductController::class, 'mostrarproducto']);
 $router->post('/mostrarproducto', [ProductController::class, 'mostrarproducto']);
+$router->get('/admin/productos/deshabilitados', [ProductController::class, 'deshabilitados']);
+
+
 //Rutas permisos de admin
 $router->get('/admin/permisos', [AdminController::class, 'ver']);
 $router->post('/admin/permisos', [AdminController::class, 'permisos']);

@@ -13,6 +13,8 @@
     
 </div>
 
+
+
 <div class="detalle">   
     <h1 class="section__heading"><span> Gestión de Productos </span></h1>
     <?php if(!empty($productos)){ ?>
@@ -64,3 +66,9 @@
     <?php } ?>
 </div>
 
+<div style="display: flex; justify-content: right; align-items: center; margin: 20px 20px;">
+    <a href="/admin/productos/deshabilitados" class="form__submit--orange">
+        Productos deshabilitados
+    </a>
+    
+</div>
