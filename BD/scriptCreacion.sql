@@ -218,11 +218,11 @@ CREATE TABLE `products` (
   `price` decimal(10,2) NOT NULL,
   `cantidad` int DEFAULT NULL,
   `imagen` varchar(255) DEFAULT NULL,
-  `encargo` tinyint(3) unsigned zerofill NOT NULL DEFAULT '000',
+  `encargo` tinyint NOT NULL DEFAULT '0',
   `activo` tinyint NOT NULL DEFAULT '1',
   PRIMARY KEY (`id`),
   UNIQUE KEY `productID_UNIQUE` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -395,4 +395,4 @@ CREATE TABLE `wishlist` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-01-20 19:18:37
+-- Dump completed on 2025-01-20 20:12:29

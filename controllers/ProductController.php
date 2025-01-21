@@ -82,6 +82,64 @@ class ProductController
         ]);
     }
 
+    public static function editar(Router $router){
+        //isAdmin();
+        $alertas = [];
+        $producto = $_GET['id'] ?? null;
+        $productoID = Product::find3($producto);
+        $resultado = $productoID->fetch_assoc()['id'];
+
+        $producto = Product::find($resultado);
+        
+        $producto->name = $producto->name;
+        $producto->id = $producto->id;
+        $producto->description = $producto->description;
+        $producto->price = $producto->price;
+        $producto->cantidad = $producto->cantidad;
+        $producto->imagen = $producto->imagen;
+        $producto->encargo = $producto->encargo;
+
+        $categorias = Category::all();
+        $categoriaxP = CategoryXProduct::all();
+        $categoriasP = [];
+        foreach($categoriaxP as $categoria){
+            if($categoria->productID == $producto->id ){
+                $categoriaP = Category::find($categoria->categoryID);
+                $categoriasP[] = $categoriaP; 
+            }
+        }
+        if($_SERVER['REQUEST_METHOD'] === 'POST'){
+            if (isset($_POST['categories']) && !empty($_POST['categories'])) {
+                CategoryXProduct::deleteByProduct($producto->id);
+                $categoriasSeleccionadas = $_POST['categories'];
+                foreach ($categoriasSeleccionadas as $categoriaId) {
+                    $categoriaProducto = new CategoryXProduct([
+                        'productID' => $producto->id,
+                        'categoryID' => $categoriaId
+                    ]);
+    
+                    $categoriaProducto->guardar();
+                }
+
+            }
+            $producto->sincronizar($_POST);
+            $alertas = $producto->validate();
+            if(empty($alertas)){
+                $producto->guardar();
+                Product::setAlerta('success', 'Producto Editada');
+                header('Location: /admin/productos');
+            }
+        }
+        $router->render('ProductsSpects/editProduct', [
+            'alertas' => $alertas,
+            'name' => $producto->name,
+            'descripcion' => $producto->description,
+            'producto'=> $producto,
+            'categorias'=>$categorias,
+            'categoriasP'=>$categoriasP
+        ]);
+    }
+
     public static function aar(Router $router)
     {
         //isAdmin();
