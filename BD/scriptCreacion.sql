@@ -336,10 +336,14 @@ CREATE TABLE `sales` (
   `fecha` datetime NOT NULL,
   `discount` decimal(10,2) DEFAULT NULL,
   `userId` int DEFAULT NULL,
+  `paymentMethodId`int DEFAULT NULL,
+  `deliveryMethodId`int DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `ventasID_UNIQUE` (`id`),
   KEY `fk_sales_users1_idx` (`userId`),
-  CONSTRAINT `fk_sales_users1` FOREIGN KEY (`userId`) REFERENCES `clients` (`id`)
+  CONSTRAINT `fk_sales_users1` FOREIGN KEY (`userId`) REFERENCES `clients` (`id`),
+  CONSTRAINT `fk_sales_paymentMethods1` FOREIGN KEY (`paymentMethodId`) REFERENCES `paymentmethods` (`id`),
+  CONSTRAINT `fk_sales_deliveryMethods1` FOREIGN KEY (`deliveryMethodId`) REFERENCES `deliverymethods` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 

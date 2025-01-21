@@ -8,6 +8,8 @@ use Model\Productsxcart;
 use Model\Usuario;
 use Model\Category;
 use Model\CategoryXProduct;
+use Model\Sale;
+use Model\Productxsale;
 use Model\PaymentMethod;
 use Model\DeliveryMethod;
 use Model\Promotion;
@@ -243,7 +245,7 @@ class CartController {
 
             foreach ($promocionesDelProducto as $promocion) {
                 $producto->discount += self::aplicarDescuentoPorPromocion($producto, $promocion);
-                $producto->discountPercentage = $promocion->percentage; // Último porcentaje aplicado
+                $producto->discountPercentage += $promocion->percentage; // Último porcentaje aplicado
             }
         }
 
@@ -251,7 +253,6 @@ class CartController {
     }
 
     public static function checkout(Router $router) {
-        // Verificar si el usuario está autenticado
         $userId = $_SESSION['userId'] ?? null;
         $totalMonto = $_POST['totalMonto'] ?? null;;
 
@@ -271,11 +272,9 @@ class CartController {
             }
         }
 
-        // Cargar métodos de pago y entrega desde la base de datos
         $metodosPago = PaymentMethod::all();
         $metodosEntrega = DeliveryMethod::all();
 
-        // Renderizar la vista del checkout
         $productosEnCarrito = self::calcularDescuento($productosEnCarrito);
 
         $router->render('ventas/checkout', [
@@ -288,16 +287,32 @@ class CartController {
     }
 
     public static function confirmOrder(Router $router) {
-        // Simular la creación de un pedido (por ahora, sin guardar en la base de datos)
+
+        $userId = $_SESSION['userId'] ?? null;
+        $totalMonto = $_POST['totalMonto'] ?? null;
+        $descuento = $_POST['descuento'] ?? null;
+        $metodoPagoId = $_POST['paymentMethod'] ?? null;
+        $metodoEntregaId = $_POST['deliveryMethod'] ?? null;
 
 
-        $orderId = rand(1000, 9999);
-        $totalAmount = 1000;
+        $metodoPago = PaymentMethod::find($metodoPagoId);
+  
+        $metodoEntrega = DeliveryMethod::find($metodoEntregaId);
+    
+        // Sumar el costo del método de entrega al total
+        $totalMonto += $metodoEntrega->cost;
+        
+        // FALTA
+        //$pedido = new Sale([]);
+        //$resultado = $pedido->guardar();
 
+
+        $orderId = 1; // Este es solo un ejemplo, deberías reemplazarlo con la lógica real.
+    
         // Renderizar la página de éxito
         $router->render('ventas/success', [
             'orderId' => $orderId,
-            'totalAmount' => $totalAmount
+            'totalAmount' => $totalMonto,
         ]);
     }
 

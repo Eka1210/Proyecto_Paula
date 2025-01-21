@@ -67,7 +67,6 @@
         <p class="total">Total: <span>₡<?php echo number_format($totalMonto, 2); ?></span></p>
 
         <form action="/cart/checkout" method="POST" onsubmit="return confirm('Está seguro que quiere confirmar estos productos?')">
-            <input type="hidden" name="productos" value='<?php echo json_encode($productosT); ?>'>
             <input type="hidden" name="totalMonto" value="<?php echo $totalMonto; ?>">
             <input type="submit" class="send-cart" value="Continuar">
         </form>
