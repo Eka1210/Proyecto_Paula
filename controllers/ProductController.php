@@ -28,12 +28,13 @@ class ProductController
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if ($_POST['encargo'] == 1) {
                 $_POST['cantidad'] = 0;
-            }
+            } 
             $producto = new Product($_POST);
             $alertas = $producto->validate();
 
             if (empty($alertas)) {
                 $producto->activo = 1;
+
                 $datos = $producto->guardar();
 
                 if ($datos) {
@@ -64,19 +65,34 @@ class ProductController
     public static function ver(Router $router)
     {
         $alertas = [];
-        $productos = Product::all();
+        $products = Product::all();
+        $productos = [];
 
-        foreach ($productos as $producto) {
-            $producto->name = $producto->name;
-            $producto->id = $producto->id;
-            $producto->description = $producto->description;
-            $producto->price = $producto->price;
-            $producto->cantidad = $producto->cantidad;
-            $producto->imagen = $producto->imagen;
-            $producto->encargo = $producto->encargo;
+        foreach ($products as $producto) {
+            if ($producto->activo == 1){
+                $productos [] = $producto;
+            }
         }
         $alertas = Category::getAlertas();
         $router->render('ProductsSpects/gestionProductos', [
+            'alertas' => $alertas,
+            'productos' => $productos
+        ]);
+    }
+
+    public static function deshabilitados(Router $router)
+    {
+        $alertas = [];
+        $products = Product::all();
+        $productos = [];
+
+        foreach ($products as $producto) {
+            if ($producto->activo == 0){
+                $productos [] = $producto;
+            }
+        }
+        $alertas = Category::getAlertas();
+        $router->render('ProductsSpects/deshabilitados', [
             'alertas' => $alertas,
             'productos' => $productos
         ]);
@@ -219,12 +235,45 @@ class ProductController
             $activo = $_POST['activo'];
             $producto->updateActivo($activo);
 
-            // Redirecciona de vuelta a la gestión de productos
-            header("Location: /admin/productos");
-            exit();
+            header('Location: /admin/productos');
+            exit;
+
+    
         }
         $alertas = Category::getAlertas();
         $router->render('ProductsSpects/gestionProductos', [
+            'alertas' => $alertas,
+            'productos' => $productos
+        ]);
+    }
+
+    public static function activo2(Router $router)
+    {
+        $alertas = [];
+        $productos = Product::all();
+
+        foreach ($productos as $producto) {
+            $producto->name = $producto->name;
+            $producto->id = $producto->id;
+            $producto->description = $producto->description;
+            $producto->price = $producto->price;
+            $producto->cantidad = $producto->cantidad;
+            $producto->imagen = $producto->imagen;
+            $producto->encargo = $producto->encargo;
+        }
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $id = $_POST['id'];
+            $producto = Product::find($id);
+            $activo = $_POST['activo'];
+            $producto->updateActivo($activo);
+
+            header('Location: /admin/productos/deshabilitados');
+            exit;
+
+    
+        }
+        $alertas = Category::getAlertas();
+        $router->render('ProductsSpects/deshabilitados', [
             'alertas' => $alertas,
             'productos' => $productos
         ]);
