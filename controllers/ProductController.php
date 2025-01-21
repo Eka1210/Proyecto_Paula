@@ -33,6 +33,7 @@ class ProductController
             $alertas = $producto->validate();
 
             if (empty($alertas)) {
+                $producto->activo = 1;
                 $datos = $producto->guardar();
 
                 if ($datos) {
@@ -140,7 +141,7 @@ class ProductController
     }
 
 
-    public static function eliminar(Router $router)
+    public static function activo(Router $router)
     {
         $alertas = [];
         $productos = Product::all();
@@ -157,26 +158,12 @@ class ProductController
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $id = $_POST['id'];
             $producto = Product::find($id);
-            $valid = true;
+            $activo = $_POST['activo'];
+            $producto->updateActivo($activo);
 
-            $categorias = Category::all();
-            $categoriaxP = CategoryXProduct::all();
-            $categoriasP = [];
-            foreach ($categoriaxP as $categoria) {
-                if ($categoria->productID == $producto->id) {
-                    $categoriaP = Category::find($categoria->categoryID);
-                    $categoriasP[] = $categoriaP;
-                }
-            }
-            CategoryXProduct::deleteByProduct($producto->id);
-            OptionsXProduct::deleteByProduct2($producto->id);
-
-            if ($valid) {
-                $producto->eliminar();
-                header('Location: /admin/productos');
-            } else {
-                header('Location: /admin?error=1');
-            }
+            // Redirecciona de vuelta a la gestión de productos
+            header("Location: /admin/productos");
+            exit();
         }
         $alertas = Category::getAlertas();
         $router->render('ProductsSpects/gestionProductos', [
