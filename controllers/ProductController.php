@@ -383,7 +383,8 @@ class ProductController
 
             // Redirigir después de la edición
             header("Location: /admin/personalizacion/producto?id={$productId}");
-            exit;}
+            exit;
+        }
     }
 
     public static function personalizarP(Router $router)
@@ -524,6 +525,23 @@ class ProductController
 
     public static function like(Router $router)
     {
-        $router->render('/profile/like');
+
+        $userId = isset($_SESSION['userId']) ? $_SESSION['userId'] : null;
+
+        if (!$userId) {
+            header("Location: /login");
+            exit();
+        }
+        if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+            if (!isset($_GET['productLiked'])) {
+                header("Location: /productos"); // Redirect to products page
+                exit();
+            }
+
+            $router->render('/profile/like');
+        } else {
+            header("Location: /productos");
+            exit();
+        }
     }
 }

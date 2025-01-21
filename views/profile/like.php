@@ -6,14 +6,15 @@ use Model\Wishlist;
 $userId = $_SESSION['userId'] ?? null;
 $wishlistElement = findWishList($_GET['productLiked']);
 $productId = $_GET['productLiked'];
-echo "Primero///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////";
+
 if ($userId) {
-    echo "///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////";
     if ($wishlistElement != null) {
         dislike($productId);
     } else {
         like($productId);
     }
+} else {
+    header('Location: /login');
 }
 
 function dislike($productId)
@@ -37,8 +38,6 @@ function like($productId)
         $wishlist->productID = $productId;
         date_default_timezone_set('America/Costa_Rica');
         $wishlist->create_time = date('Y-m-d H:i:s');
-        echo "///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////";
-        echo $wishlist->productID;
         $wishlist->guardar();
     }
 }

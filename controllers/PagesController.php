@@ -36,11 +36,16 @@ class PagesController
             //Para agregar a carrito!!!!!!!!!!!!
         }
 
-        foreach ($productos as $producto) {
-            $producto->liked = Wishlist::isLiked($producto->id, $_SESSION['userId']);
+        if (isset($_SESSION['userId'])) {
+            foreach ($productos as $producto) {
+                $producto->liked = Wishlist::isLiked($producto->id, $_SESSION['userId']);
+            }
+        } else {
+            foreach ($productos as $producto) {
+                $producto->liked = false;
+            }
         }
 
-        //debuguear($productos);
         $router->render('profile/productos', [
             'productos' => $productos,
             'page' => 'productos'
