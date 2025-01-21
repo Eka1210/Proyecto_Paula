@@ -16,9 +16,12 @@
         <?php foreach ($productos as $producto) { ?>
             <?php if ($producto->activo == 1) { ?>
                 <div class="product">
-                    <div class="product-image">
-                        <img src="<?php echo htmlspecialchars($producto->imagen); ?>" alt="Imagen del Anuncio" style="display: block; margin: 0 auto;">
-                    </div>
+                    <a href="/mostrarproducto?nombre=<?php echo $producto->name; ?>">
+                        <div class="product-image">
+                            <img src="<?php echo htmlspecialchars($producto->imagen); ?>" alt="Imagen del Anuncio" style="display: block; margin: 0 auto;">
+                        </div>
+                    </a>
+
                     <p><?php echo htmlspecialchars($producto->name); ?></p>
                     <p class="precio">₡<?php echo htmlspecialchars($producto->price); ?> I.V.A.I</p>
 
@@ -47,7 +50,7 @@
                     <?php } ?>
 
                 </div>
-                <?php } ?>
+            <?php } ?>
         <?php } ?>
     <?php } else { ?>
         <p class="admins__empty">No hay Productos</p>

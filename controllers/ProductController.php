@@ -82,7 +82,8 @@ class ProductController
         ]);
     }
 
-    public static function editar(Router $router){
+    public static function editar(Router $router)
+    {
         //isAdmin();
         $alertas = [];
         $producto = $_GET['id'] ?? null;
@@ -90,7 +91,7 @@ class ProductController
         $resultado = $productoID->fetch_assoc()['id'];
 
         $producto = Product::find($resultado);
-        
+
         $producto->name = $producto->name;
         $producto->id = $producto->id;
         $producto->description = $producto->description;
@@ -102,13 +103,13 @@ class ProductController
         $categorias = Category::all();
         $categoriaxP = CategoryXProduct::all();
         $categoriasP = [];
-        foreach($categoriaxP as $categoria){
-            if($categoria->productID == $producto->id ){
+        foreach ($categoriaxP as $categoria) {
+            if ($categoria->productID == $producto->id) {
                 $categoriaP = Category::find($categoria->categoryID);
-                $categoriasP[] = $categoriaP; 
+                $categoriasP[] = $categoriaP;
             }
         }
-        if($_SERVER['REQUEST_METHOD'] === 'POST'){
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if (isset($_POST['categories']) && !empty($_POST['categories'])) {
                 CategoryXProduct::deleteByProduct($producto->id);
                 $categoriasSeleccionadas = $_POST['categories'];
@@ -117,14 +118,13 @@ class ProductController
                         'productID' => $producto->id,
                         'categoryID' => $categoriaId
                     ]);
-    
+
                     $categoriaProducto->guardar();
                 }
-
             }
             $producto->sincronizar($_POST);
             $alertas = $producto->validate();
-            if(empty($alertas)){
+            if (empty($alertas)) {
                 $producto->guardar();
                 Product::setAlerta('success', 'Producto Editada');
                 header('Location: /admin/productos');
@@ -134,9 +134,9 @@ class ProductController
             'alertas' => $alertas,
             'name' => $producto->name,
             'descripcion' => $producto->description,
-            'producto'=> $producto,
-            'categorias'=>$categorias,
-            'categoriasP'=>$categoriasP
+            'producto' => $producto,
+            'categorias' => $categorias,
+            'categoriasP' => $categoriasP
         ]);
     }
 
@@ -567,6 +567,25 @@ class ProductController
             $product->guardar();
         }
     }
+
+    public static function mostrarproducto(Router $router)
+    {
+        //$producto = Product::find($_GET['id']);
+        $producto = new Product();
+
+        $producto->name = $producto->name;
+        $producto->id = $producto->id;
+        $producto->description = $producto->description;
+        $producto->price = $producto->price;
+        $producto->cantidad = $producto->cantidad;
+        $producto->imagen = $producto->imagen;
+        $producto->encargo = $producto->encargo;
+        $router->render('ProductsSpects/productsSpects', [
+            'producto' => $producto
+        ]);
+    }
+
+
 
     public static function like(Router $router)
     {
