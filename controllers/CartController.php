@@ -14,6 +14,7 @@ use Model\PaymentMethod;
 use Model\DeliveryMethod;
 use Model\Promotion;
 use Model\ProductXPromotion;
+use Model\Client;
 
 class CartController {
 
@@ -214,18 +215,21 @@ class CartController {
         }
     }
     
-    private static function obtenerPromocionesDelProducto(int $productID, array $promocionesActivas): array {
+    private static function obtenerPromocionesDelProducto(int $productID, array $promocionesActivas): Promotion {
+        $promocionMayor = 0;
         $promocionesDelProducto = [];
 
         foreach ($promocionesActivas as $promocion) {
             // Verificar si el producto está asociado con la promoción
             $productoEnPromocion = ProductXPromotion::isProductPromotion($productID,$promocion->id);
             if ($productoEnPromocion) {
-                $promocionesDelProducto[] = $promocion;
+                if ($promocion->percentage >= $promocionMayor->percentage){
+                    $promocionMayor = $promocion;
+                }
             }
         }
 
-        return $promocionesDelProducto;
+        return $promocionMayor;
     }
 
     private static function aplicarDescuentoPorPromocion(object $producto, object $promocion): float {
@@ -243,10 +247,9 @@ class CartController {
 
             $promocionesDelProducto = self::obtenerPromocionesDelProducto($producto->id, $promocionesActivas);
 
-            foreach ($promocionesDelProducto as $promocion) {
-                $producto->discount += self::aplicarDescuentoPorPromocion($producto, $promocion);
-                $producto->discountPercentage += $promocion->percentage; // Último porcentaje aplicado
-            }
+            $producto->discount += self::aplicarDescuentoPorPromocion($producto, $promocionesDelProducto);
+            $producto->discountPercentage += $promocionesDelProducto->percentage; // Último porcentaje aplicado
+
         }
 
         return $productos;
@@ -301,17 +304,29 @@ class CartController {
     
         // Sumar el costo del método de entrega al total
         $totalMonto += $metodoEntrega->cost;
-        
-        // FALTA
-        //$pedido = new Sale([]);
-        //$resultado = $pedido->guardar();
 
+        $cliente = Client::find($userId);
 
-        $orderId = 1; // Este es solo un ejemplo, deberías reemplazarlo con la lógica real.
+        if(is_null($cliente->name)){
+            echo "<script>alert('Debe actualizar sus datos para realizar el pedido.');</script>";
+            header('Location: /cart');
+            exit;
+        }
+
+        $pedido = new Sale([
+            'descripcion' => 'Pedido',
+            'monto' => $totalMonto,
+            'descuento' => $descuento,
+            'userId' => $user->id,
+            'paymentMethodId' => $metodoPago->id,
+            'deliveryMethodId' => $metodoEntrega->id,
+        ]);
+        $pedido->crearSale();
+        $resultado = $pedido->guardar();
     
         // Renderizar la página de éxito
         $router->render('ventas/success', [
-            'orderId' => $orderId,
+            'orderId' => $pedido->id,
             'totalAmount' => $totalMonto,
         ]);
     }
