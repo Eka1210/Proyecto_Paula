@@ -10,6 +10,7 @@ use Model\Option;
 use Model\ProductDecorator;
 use Model\OptionsXProduct;
 use Model\Inventorylog;
+use Model\Wishlist;
 use Controllers\CartController;
 
 class ProductController
@@ -28,7 +29,7 @@ class ProductController
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if ($_POST['encargo'] == 1) {
                 $_POST['cantidad'] = 0;
-            } 
+            }
             $producto = new Product($_POST);
             $alertas = $producto->validate();
 
@@ -69,8 +70,8 @@ class ProductController
         $productos = [];
 
         foreach ($products as $producto) {
-            if ($producto->activo == 1){
-                $productos [] = $producto;
+            if ($producto->activo == 1) {
+                $productos[] = $producto;
             }
         }
         $alertas = Category::getAlertas();
@@ -87,8 +88,8 @@ class ProductController
         $productos = [];
 
         foreach ($products as $producto) {
-            if ($producto->activo == 0){
-                $productos [] = $producto;
+            if ($producto->activo == 0) {
+                $productos[] = $producto;
             }
         }
         $alertas = Category::getAlertas();
@@ -98,7 +99,8 @@ class ProductController
         ]);
     }
 
-    public static function editar(Router $router){
+    public static function editar(Router $router)
+    {
         //isAdmin();
         $alertas = [];
         $producto = $_GET['id'] ?? null;
@@ -236,8 +238,6 @@ class ProductController
 
             header('Location: /admin/productos');
             exit;
-
-    
         }
         $alertas = Category::getAlertas();
         $router->render('ProductsSpects/gestionProductos', [
@@ -268,8 +268,6 @@ class ProductController
 
             header('Location: /admin/productos/deshabilitados');
             exit;
-
-    
         }
         $alertas = Category::getAlertas();
         $router->render('ProductsSpects/deshabilitados', [
@@ -618,8 +616,19 @@ class ProductController
 
     public static function mostrarproducto(Router $router)
     {
-        //$producto = Product::find($_GET['id']);
-        $producto = new Product();
+        $alertas = [];
+        $producto = $_GET['nombre'] ?? null;
+        $productoID = Product::find3($producto);
+        $resultado = $productoID->fetch_assoc()['id'];
+
+        $producto = Product::find($resultado);
+
+        if (isset($_SESSION['userId'])) {
+            $producto->liked = Wishlist::isLiked($producto->id, $_SESSION['userId']);
+        } else {
+            $producto->liked = false;
+        }
+
 
         $producto->name = $producto->name;
         $producto->id = $producto->id;
@@ -628,8 +637,21 @@ class ProductController
         $producto->cantidad = $producto->cantidad;
         $producto->imagen = $producto->imagen;
         $producto->encargo = $producto->encargo;
+        $recomendados = $producto->recomended();
+
+        foreach ($recomendados as $recomendado) {
+            $recomendado->name = $recomendado->name;
+            $recomendado->id = $recomendado->id;
+            $recomendado->description = $recomendado->description;
+            $recomendado->price = $recomendado->price;
+            $recomendado->cantidad = $recomendado->cantidad;
+            $recomendado->imagen = $recomendado->imagen;
+            $recomendado->encargo = $recomendado->encargo;
+        }
+        
         $router->render('ProductsSpects/productsSpects', [
-            'producto' => $producto
+            'producto' => $producto,
+            'recomendados' => $recomendados
         ]);
     }
 

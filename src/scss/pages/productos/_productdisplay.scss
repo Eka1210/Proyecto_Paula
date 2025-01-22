@@ -1,0 +1,203 @@
+@use 'base/variables' as v;
+@use 'base/mixins' as m;
+
+.prodpage{
+    display: flex;
+    flex-direction: column;
+
+    .button {
+        text-align: center;
+        background-color: #703838;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+      }
+
+    .display-card{
+        position: relative;
+        display: flex;
+        padding: 20px;
+        width: 300px; 
+        min-height: 400px;
+        flex-direction: column;
+
+        .display-image {
+            text-align: center;
+        }
+        
+        .display-image img {
+            max-width: 100%;
+            height: auto;
+        }
+    
+        .display-info {
+            padding: 0 20px;
+        
+            .display-title {
+                font-size: 3rem;
+                margin-bottom: 2px;
+                text-transform: uppercase;
+            }
+  
+              .display-price {
+                font-size: 2rem;
+                margin-bottom: 10px;
+                color: #693334; 
+                font-weight: bold;
+              }
+              .display-heart {
+                height: auto;
+              }   
+              .heart{
+                max-width: 2.5rem;
+                height: auto;
+                position: absolute;
+                top: 10px; /* Adjust as needed for spacing */
+                right: 10px; /* Adjust as needed for spacing */
+              }
+              .cart{
+                margin-top: 2rem;
+              }
+        }      
+        
+    }
+    .recomendations{
+            margin-left: 0;
+            width: 100%;
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+
+            .recommended-cards{
+                display: flex;
+                flex-wrap: wrap;
+
+                .product{
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    justify-content: space-between;
+                    padding: 0.5rem;
+                    &-image{
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        border: 2px solid v.$gris;
+                    }
+                    img{
+                        max-width: 100%;
+                        max-height: 100%;
+                    }
+                    margin: 2rem;
+                    p{
+                        text-align: center;
+                        &.precio{
+                            color: v.$vino;
+                            font-weight: v.$bold;
+                            margin-top: auto;
+                        }
+                    }
+            }
+
+        
+        }
+
+    }
+
+    .comments{
+        .comment-section {
+            margin-left: 0;
+            width: 100%;
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+        }
+        
+        .comment-form {
+            margin-bottom: 20px;
+        }
+        
+        .comment-form textarea {
+            width: 100%;
+            min-height: 100px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            margin-bottom: 10px;
+            resize: vertical;
+        }
+        
+        .rating {
+            margin-bottom: 15px;
+        }
+        
+        .stars {
+            display: inline-flex;
+            flex-direction: row-reverse;
+        }
+        
+        .stars input {
+            display: none;
+        }
+        
+        .stars label {
+            color: #ddd;
+            font-size: 20px;
+            padding: 0 2px;
+            cursor: pointer;
+        }
+        
+        .stars input:checked ~ label,
+        .stars label:hover,
+        .stars label:hover ~ label {
+            color: #ffd700;
+        }
+        
+        
+        .comment {
+            border-bottom: 1px solid #eee;
+            padding: 15px 0;
+        }
+        
+        .comment:last-child {
+            border-bottom: none;
+        }
+        
+        .comment-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+        
+        .user-name {
+            font-weight: bold;
+        }
+        
+        .rating-display {
+            display: flex;
+            gap: 2px;
+            align-items: right;
+        }
+        
+        .star {
+            color: #ddd;
+        }
+        
+        .star.filled {
+            color: #ffd700;
+        }
+        
+        .date {
+            color: #666;
+            font-size: 0.9em;
+        }
+        
+        .comment-text {
+            color: #333;
+            line-height: 1.5;
+        }
+    }
+}
