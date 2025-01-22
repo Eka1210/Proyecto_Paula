@@ -3,10 +3,10 @@ namespace Model;
 
 class Sale extends ActiveRecord{
     protected static $tabla = 'sales';
-    protected static $columnasDB = ['id', 'description', 'monto', 'fecha', 'discount', 'userId', 'paymentMethodId', 'deliveryMethodId'];
+    protected static $columnasDB = ['id', 'descripcion', 'monto', 'fecha', 'discount', 'userId', 'paymentMethodId', 'deliveryMethodId'];
 
     public $id;
-    public $description;
+    public $descripcion;
     public $monto;
     public $fecha;
     public $discount;
@@ -16,18 +16,18 @@ class Sale extends ActiveRecord{
 
     public function __construct($args = []) {
         $this->id = $args['id'] ?? null;
-        $this->description = $args['description'] ?? '';
+        $this->descripcion = $args['descripcion'] ?? '';
         $this->monto = $args['monto'] ?? null;
         $this->fecha = $args['fecha'] ?? '';
         $this->discount = $args['discount'] ?? null;
         $this->userId = $args['userId'] ?? null;
-        $this->paymentMethodId['paymentMethodId'] ?? null;
-        $this->deliveryMethodId['deliveryMethodId'] ?? null;
+        $this->paymentMethodId = $args['paymentMethodId'] ?? null;
+        $this->deliveryMethodId = $args['deliveryMethodId'] ?? null;
     }
     public function crearSale() {
-
+        $fechaActual = date('Y-m-d H:i:s');
         $query = "INSERT INTO sales (descripcion, monto, fecha, discount, userId, paymentMethodId, deliveryMethodId) VALUES
-        ('$this->description', $this->monto, NOW(), $this->discount, $this->userId, $this->paymentMethodId, $this->deliveryMethodId)";
+        ('$this->descripcion', $this->monto, '$this->fecha', $this->discount, $this->userId, $this->paymentMethodId, $this->deliveryMethodId)";
 
         // Resultado de la consulta
         $resultado = self::$db->query($query);

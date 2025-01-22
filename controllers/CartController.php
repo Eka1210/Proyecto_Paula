@@ -305,31 +305,29 @@ class CartController {
         // Sumar el costo del método de entrega al total
         $totalMonto += $metodoEntrega->cost;
 
-        $cliente = Client::find($userId);
+        $cliente = Client::find4($userId);
 
         if(is_null($cliente->name)){
             echo "<script>alert('Debe actualizar sus datos para realizar el pedido.');</script>";
             header('Location: /cart');
             exit;
         }
-
+        $fecha = date('Y-m-d H:i:s');
         $pedido = new Sale([
             'descripcion' => 'Pedido',
             'monto' => $totalMonto,
-            'descuento' => $descuento,
-            'userId' => $user->id,
+            'fecha' => $fecha,
+            'discount' => $descuento,
+            'userId' => $cliente->id,
             'paymentMethodId' => $metodoPago->id,
             'deliveryMethodId' => $metodoEntrega->id,
         ]);
-        $pedido->crearSale();
-        $resultado = $pedido->guardar();
-    
+        $resultado = $pedido->crearSale();
+        $orderId = $resultado['id'];
         // Renderizar la página de éxito
         $router->render('ventas/success', [
-            'orderId' => $pedido->id,
+            'orderId' => $orderId,
             'totalAmount' => $totalMonto,
         ]);
     }
-
-
 }

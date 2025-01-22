@@ -156,6 +156,13 @@ class ActiveRecord
         return ($result);
     }
 
+    public static function find4($id)
+    {
+        $query = "SELECT * FROM " . static::$tabla  . " WHERE userID = " . $id;
+        $resultado = self::consultarSQL($query);
+        return array_shift($resultado);
+    }
+
     // Obtener Registros con cierta cantidad
     public static function get($limite)
     {
