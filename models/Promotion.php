@@ -45,4 +45,22 @@ class Promotion extends ActiveRecord
         }
         return self::$alertas;
     }
+
+
+    public static function getDiscount($productID)
+    {
+        $today = date('Y-m-d H:i:s');
+
+        $query = "SELECT p.*
+                FROM promotions p
+                JOIN productXpromotion pxp ON p.id = pxp.promotionID
+                WHERE pxp.productID = '$productID'
+                AND p.active = 1
+                AND '$today' BETWEEN p.start_time AND p.end_time
+                ORDER BY p.percentage DESC
+                LIMIT 1";
+
+        $resultado = self::consultarSQL($query);
+        return $resultado;
+    }
 }

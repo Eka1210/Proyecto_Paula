@@ -1,3 +1,4 @@
+<?php var_dump($discount); ?>
 <div class="prodpage">
     <div class="display-card">
         <div class="display-image">

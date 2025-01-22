@@ -100,4 +100,7 @@ class Product extends ActiveRecord
         $resultado = self::consultarSQL($query);
         return $resultado;
     }
+
+
+    
 }

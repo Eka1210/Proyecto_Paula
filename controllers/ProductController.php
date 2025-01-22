@@ -11,6 +11,8 @@ use Model\ProductDecorator;
 use Model\OptionsXProduct;
 use Model\Inventorylog;
 use Model\Wishlist;
+use Model\Promotion;
+
 use Controllers\CartController;
 
 class ProductController
@@ -630,6 +632,7 @@ class ProductController
         }
 
 
+
         $producto->name = $producto->name;
         $producto->id = $producto->id;
         $producto->description = $producto->description;
@@ -648,10 +651,14 @@ class ProductController
             $recomendado->imagen = $recomendado->imagen;
             $recomendado->encargo = $recomendado->encargo;
         }
-        
+
+        //$producto->discount = $producto->getDiscount()->discountPercentage;
+        $discount = Promotion::getDiscount($producto->id);
+
         $router->render('ProductsSpects/productsSpects', [
             'producto' => $producto,
-            'recomendados' => $recomendados
+            'recomendados' => $recomendados,
+            'discount' => $discount
         ]);
     }
 
