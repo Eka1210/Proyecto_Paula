@@ -652,13 +652,11 @@ class ProductController
             $recomendado->encargo = $recomendado->encargo;
         }
 
-        //$producto->discount = $producto->getDiscount()->discountPercentage;
-        $discount = Promotion::getDiscount($producto->id);
-
+        $discount = Promotion::getDiscount($producto->id)[0] ?? null;
+        $producto->discountPercentage = $discount ? $discount->percentage : 0;
         $router->render('ProductsSpects/productsSpects', [
             'producto' => $producto,
             'recomendados' => $recomendados,
-            'discount' => $discount
         ]);
     }
 

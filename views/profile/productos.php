@@ -14,7 +14,19 @@
                         </div>
                     </a>
                     <p><?php echo htmlspecialchars($producto->name); ?></p>
-                    <p class="precio">₡<?php echo htmlspecialchars($producto->price); ?> I.V.A.I</p>
+                    <?php
+                    if ($producto->discountPercentage > 0) {
+                        $discountedPrice = $producto->price - ($producto->price * $producto->discountPercentage / 100);
+                    ?>
+                        <p class="precio" style="color: green;">₡<?php echo number_format($discountedPrice, 2); ?> I.V.A.I</p>
+                        <p class="precio" style="text-decoration: line-through; font-size: 1em;">₡<?php echo number_format($producto->price, 2); ?></p>
+                    <?php
+                    } else {
+                    ?>
+                        <p class="precio">₡<?php echo number_format($producto->price, 2); ?> I.V.A.I</p>
+                    <?php
+                    }
+                    ?>
 
 
                     <?php if ($producto->encargo == 1) { ?>

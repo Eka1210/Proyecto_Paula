@@ -1,4 +1,3 @@
-<?php var_dump($discount); ?>
 <div class="prodpage">
     <div class="display-card">
         <div class="display-image">
@@ -7,7 +6,19 @@
         <div class="display-info">
             <p class="display-title"><?php echo htmlspecialchars($producto->name); ?></p>
             <p class="display-description">Descripción: <?php echo htmlspecialchars($producto->description); ?></p>
-            <p class="display-price">₡<?php echo htmlspecialchars($producto->price); ?> I.V.A.I</p>
+            <?php
+            if ($producto->discountPercentage > 0) {
+                $discountedPrice = $producto->price - ($producto->price * $producto->discountPercentage / 100);
+            ?>
+                <p class="display-price" style="color: green;">₡<?php echo number_format($discountedPrice, 2); ?> I.V.A.I</p>
+                <p class="display-price" style="text-decoration: line-through; font-size: 1em;">₡<?php echo number_format($producto->price, 2); ?></p>
+            <?php
+            } else {
+            ?>
+                <p class="display-price">₡<?php echo number_format($producto->price, 2); ?> I.V.A.I</p>
+            <?php
+            }
+            ?>
 
             <?php if ($producto->encargo == 1): ?>
                 <form action="/personalizar/producto" method="get">

@@ -6,6 +6,7 @@ use MVC\Router;
 use Model\Product;
 use Model\Category;
 use Model\CategoryXProduct;
+use Model\Promotion;
 use Model\Wishlist;
 
 
@@ -15,6 +16,10 @@ class PagesController
     public static function index(Router $router)
     {
         $productos = Product::get(3);
+        foreach ($productos as $producto) {
+            $discount = Promotion::getDiscount($producto->id)[0] ?? null;
+            $producto->discountPercentage = $discount ? $discount->percentage : 0;
+        }
         $router->render('MainMenu/index', [
             'productos' => $productos,
             'page' => 'inicio'
@@ -36,15 +41,18 @@ class PagesController
             //Para agregar a carrito!!!!!!!!!!!!
         }
 
-        if (isset($_SESSION['userId'])) {
-            foreach ($productos as $producto) {
+        foreach ($productos as $producto) {
+            if (isset($_SESSION['userId'])) {
                 $producto->liked = Wishlist::isLiked($producto->id, $_SESSION['userId']);
-            }
-        } else {
-            foreach ($productos as $producto) {
+            } else {
                 $producto->liked = false;
             }
+
+            $discount = Promotion::getDiscount($producto->id)[0] ?? null;
+            $producto->discountPercentage = $discount ? $discount->percentage : 0;
         }
+
+
 
         $router->render('profile/productos', [
             'productos' => $productos,
@@ -56,6 +64,10 @@ class PagesController
     {
         $categorias = Category::all();
         $productos = Product::all();
+        foreach ($productos as $producto) {
+            $discount = Promotion::getDiscount($producto->id)[0] ?? null;
+            $producto->discountPercentage = $discount ? $discount->percentage : 0;
+        }
         $router->render('profile/categorias', [
             'categorias' => $categorias,
             'productos' => $productos,
