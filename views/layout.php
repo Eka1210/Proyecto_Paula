@@ -133,6 +133,12 @@ verificarAccesoAdmin();
         <?php if (isset($_SESSION['admin'])) { ?>
             <a <?php if ($page == 'admin') {
                     echo 'class="active"';
+                } ?> href="/pedidosAdmin">
+                Pedidos</a>
+        <?php } ?>
+        <?php if (isset($_SESSION['admin'])) { ?>
+            <a <?php if ($page == 'admin') {
+                    echo 'class="active"';
                 } ?> href="/metodosPago">
                 Métodos de Pago</a>
         <?php } ?>
@@ -145,7 +151,6 @@ verificarAccesoAdmin();
         <?php if (isset($_SESSION['admin'])) { ?>
             <button id="toggle-nav" class="toggle-nav"></button>
         <?php } ?>
-        
     </nav>
 
     <?php echo $contenido; ?>

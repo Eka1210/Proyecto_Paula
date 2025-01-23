@@ -15,6 +15,7 @@ use Controllers\ReportController;
 use Controllers\WishListController;
 use Controllers\PaymentMethodsController;
 use Controllers\DeliveryMethodsController;
+use Controllers\PedidosController;
 
 $router = new Router();
 
@@ -124,6 +125,12 @@ $router->get('/admin/inventario/log', [ProductController::class, 'log']);
 $router->post('/admin/inventario/log', [ProductController::class, 'log']);
 $router->get('/admin/inventario/crear', [ProductController::class, 'crearlog']);
 $router->post('/admin/inventario/crear', [ProductController::class, 'crearlog']);
+
+//Rutas de pedidos
+$router->get('/pedidosAdmin', [PedidosController::class, 'verAdmin']);
+$router->post('/pedidosAdmin/verProductosPedido', [PedidosController::class, 'verProductosPedido']);
+$router->get('/pedidosAdmin/verProductosPedido', [PedidosController::class, 'verProductosPedido']);
+$router->post('/pedidosAdmin/guardarEstado', [PedidosController::class, 'editPedido']);
 
 //Rutas de WishList
 $router->get('/wishlist', [WishListController::class, 'list']);

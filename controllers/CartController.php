@@ -306,7 +306,6 @@ class CartController {
         $totalMonto += $metodoEntrega->cost;
 
         $cliente = Client::find4($userId);
-
         if(is_null($cliente->name)){
             echo "<script>alert('Debe actualizar sus datos para realizar el pedido.');</script>";
             header('Location: /cart');
@@ -314,7 +313,7 @@ class CartController {
         }
         $fecha = date('Y-m-d H:i:s');
         $pedido = new Sale([
-            'descripcion' => 'Pedido',
+            'descripcion' => 'Pago pendiente',
             'monto' => $totalMonto,
             'fecha' => $fecha,
             'discount' => $descuento,
@@ -324,6 +323,29 @@ class CartController {
         ]);
         $resultado = $pedido->crearSale();
         $orderId = $resultado['id'];
+
+        // Limpiar el carrito y crear registros en ProductxSale
+
+        $carrito = Cart::where('userId', $userId);
+
+        if ($carrito) {
+            $productosxCart = Productsxcart::allCart($carrito->id);
+            foreach ($productosxCart as $productoEnCarrito) {
+                $productID = $productoEnCarrito->productID;
+
+                $saleItem = new Productxsale([
+                    'salesID' => $orderId,
+                    'productID' => $productID,
+                    'quantity' => $productoEnCarrito->quantity,
+                    'price' => $productoEnCarrito->price,
+                ]);
+                $saleItem->guardar();
+                $productoEnCarrito->deleteFromCart($productID, $carrito->id);
+            }
+        }
+
+        // Implementar Logica para actualizar cantidad del inventario
+
         // Renderizar la página de éxito
         $router->render('ventas/success', [
             'orderId' => $orderId,

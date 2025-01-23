@@ -354,6 +354,23 @@ class ActiveRecord
         return true;
     }
 
+    public static function findCategoria($productId)
+    {
+        $query = "SELECT c.nombre
+                FROM categoriesxproduct cp 
+                INNER JOIN categories c ON cp.categoryID = c.id 
+                WHERE cp.productID = " . $productId;
+        
+        $resultado = self::consultarSQL($query);
+        
+        // Si hay un resultado, devolver el nombre de la categoría
+        if (!empty($resultado)) {
+            return $resultado[0]->name; // Obtener solo el primer resultado
+        }
+        
+        return null; // Si no hay categoría, retornar null
+    }
+
     public static function makeAdmin($column, $value)
     {
         if ($column == 'username') {
@@ -376,6 +393,14 @@ class ActiveRecord
         // Actualizar BD
         $resultado = self::$db->query($query);
         return $resultado;
+    }
+    // Funciones Pedidos
+
+    public static function allSale($pedidoId)
+    {
+        $query = "SELECT * FROM " . static::$tabla . " WHERE salesID = " . $pedidoId;
+        $resultado = self::consultarSQL($query);
+        return  $resultado;
     }
 
     // Funciones Carrito

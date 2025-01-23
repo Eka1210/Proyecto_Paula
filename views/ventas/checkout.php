@@ -11,8 +11,8 @@
                     <th>Cantidad</th>
                     <th>Precio Unitario</th>
                     <th>Subtotal(Sin descuento)</th>
-                    <th>Descuento(Por unidad)</th>
-                    <th>Total</th>
+                    <th>Descuento(Por total de productos)</th>
+                    <th>Total(Con descuento)</th>
                 </tr>
             </thead>
             <tbody>
