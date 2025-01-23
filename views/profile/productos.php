@@ -29,10 +29,8 @@
                     }
                     ?>
                     <?php if ($producto->encargo == 1) { ?>
-                        <form action="/personalizar/producto" method="get">
-                            <input type="hidden" value="<?php echo htmlspecialchars($producto->id); ?>" name="id">
-                            <button class="personalizar" style="margin-top: 20px;" type="submit">Personalizar</button>
-                        </form>
+                        <a href= "/mostrarproducto?nombre=<?php echo $producto->name; ?>" style="margin-top: 20px; font-size: 24px; color:  var(--dorado); font-weight: bold;" >Personalizar</a>
+
                     <?php } else { ?>
                         <form action="cart/AddToCart" method="post" style="margin-bottom: 10px;">
                             <input type="hidden" value="<?php echo htmlspecialchars($producto->id); ?>" id="producto" name="producto">

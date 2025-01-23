@@ -615,6 +615,8 @@ class ProductController
             $product->guardar();
         }
     }
+    
+
 
     public static function mostrarproducto(Router $router)
     {
@@ -624,14 +626,19 @@ class ProductController
         $resultado = $productoID->fetch_assoc()['id'];
 
         $producto = Product::find($resultado);
+        $options = OptionsXProduct::all2($resultado);
+
+        foreach ($options as &$option) {
+            $option->decodedValues = json_decode($option->value, true);
+            $optionC = Option::find($option->optionID);
+            $option->name = $optionC->name;
+        }
 
         if (isset($_SESSION['userId'])) {
             $producto->liked = Wishlist::isLiked($producto->id, $_SESSION['userId']);
         } else {
             $producto->liked = false;
         }
-
-
 
         $producto->name = $producto->name;
         $producto->id = $producto->id;
@@ -652,11 +659,27 @@ class ProductController
             $recomendado->encargo = $recomendado->encargo;
         }
 
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $selectedOptions = $_POST['options'] ?? [];
+            $quantity = $_POST['quantity'] ?? 1;
+            $userId = $_SESSION['userId'] ?? null;
+
+
+            // Lógica para añadir al carrito
+            $resultado = CartController::processAddToCart($resultado, $quantity, $product->price, $userId);
+
+            // Redirigir a la página de resumen
+            header("Location: /productos ");
+            exit; 
+        }
+
         $discount = Promotion::getDiscount($producto->id)[0] ?? null;
         $producto->discountPercentage = $discount ? $discount->percentage : 0;
         $router->render('ProductsSpects/productsSpects', [
             'producto' => $producto,
             'recomendados' => $recomendados,
+            'options' => $options,
+            'productId' => $resultado
         ]);
     }
 
