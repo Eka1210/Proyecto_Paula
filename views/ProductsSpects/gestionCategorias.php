@@ -8,7 +8,7 @@
         Gestión Imágenes
     </a>  
     <a href="/admin/categorias/crear" class="form__submit--orange">
-        Crear Categoria
+        Crear Categoría
     </a>
 </div>
 
@@ -33,7 +33,7 @@
                             <td class="table__td">
                                 <a href="/admin/editar/categoria?id=<?php echo $categoria->nombre;?>" class="categoryCard__view">
                                     <i class="fa-solid fa-pen-to-square"></i>
-                                    Editar Categoria
+                                    Editar Categoría
                                 </a>
                             </td>
                             <td class="table__td">

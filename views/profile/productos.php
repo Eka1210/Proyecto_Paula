@@ -13,7 +13,8 @@
                             <img src="<?php echo htmlspecialchars($producto->imagen); ?>" alt="Imagen del Anuncio" style="display: block; margin: 0 auto;">
                         </div>
                     </a>
-                    <p><?php echo htmlspecialchars($producto->name); ?></p>
+                    <div class="product-details">
+                    <p style="margin-top: 15px; margin-bottom: 15px;"><?php echo htmlspecialchars($producto->name); ?></p>
                     <?php
                     if ($producto->discountPercentage > 0) {
                         $discountedPrice = $producto->price - ($producto->price * $producto->discountPercentage / 100);
@@ -27,12 +28,10 @@
                     <?php
                     }
                     ?>
-
-
                     <?php if ($producto->encargo == 1) { ?>
                         <form action="/personalizar/producto" method="get">
                             <input type="hidden" value="<?php echo htmlspecialchars($producto->id); ?>" name="id">
-                            <button class="personalizar" type="submit">Personalizar</button>
+                            <button class="personalizar" style="margin-top: 20px;" type="submit">Personalizar</button>
                         </form>
                     <?php } else { ?>
                         <form action="cart/AddToCart" method="post" style="margin-bottom: 10px;">
@@ -64,7 +63,7 @@
                         </button>
 
                     <?php } ?>
-
+                    </div>
                 </div>
             <?php } ?>
 

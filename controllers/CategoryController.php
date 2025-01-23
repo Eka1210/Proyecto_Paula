@@ -32,20 +32,19 @@ class CategoryController {
     public static function crear(Router $router){
         //isAdmin();
         $categoria = new Category();
+        $alertas = [];
         
         if($_SERVER['REQUEST_METHOD'] === 'POST'){
             $categoria = new Category($_POST);
             $alertas = $categoria->validate();
             if(empty($alertas)){
                 $categoria->guardar();
-                Category::setAlerta('success', 'Categoría Creada');
                 header('Location: /admin/categorias');
             }
         }
-        $alertas = Category::getAlertas();
         $router->render('ProductsSpects/createCategory', [
             'categoria' => $categoria,
-            'alertas' => $alertas,
+            'alertas' => $alertas
         ]);
     }
 

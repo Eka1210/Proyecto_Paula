@@ -1,8 +1,8 @@
 <?php
     include_once __DIR__ . "/../templates/alerts.php";
 ?>
-<div style="display: flex; justify-content: space-between; align-items: flex-start;">
-    <div class="detalle2">   
+<div style="display: flex; justify-content: center; align-items: flex-start; gap: 50px;">
+    <div class="detalle2" style="flex: 1;">   
         <h1 class="section__heading"><span> Gestión de Imagen de Producto  </span></h1>
         <?php if(!empty($productos)){ ?>
                 <table class="table">
@@ -37,7 +37,7 @@
                                             <input type="file" name="image" id="file-<?php echo $producto->id; ?>" class="image-input" style="Display:none">
                                         </div>
 
-                                        <button type="button" class="categoryCard__view">
+                                        <button type="button" class="categoryCard__view" style= "margin-top: 10px;">
                                             <i class="fas fa-cloud-upload-alt"></i> Subir
                                         </button>
                                     </form>
@@ -45,7 +45,7 @@
                                 <td class="table__td">
                                     <form class="delete-form" method="POST">
                                     <input type="hidden" name="id" value="<?php echo $producto->id; ?>">
-                                        <button type="submit" class="categoryCard__view">
+                                        <button type="submit" class="categoryCard__view" >
                                             <i class="fa-solid fa-trash"></i>
                                             Eliminar Imagen
                                         </button>
@@ -61,7 +61,7 @@
         <?php } ?>
     </div>
 
-    <div class="detalle2">   
+    <div class="detalle2" style="flex: 1;">   
         <h1 class="section__heading"><span> Gestión de Imagen de Categoría  </span></h1>
         <?php if(!empty($categorias)){ ?>
                 <table class="table">
@@ -87,16 +87,16 @@
                                     <?php } ?>
                                 </td>
                                 <td class="table__td">
-                                    <form class="image-form2" enctype="multipart/form-data">
+                                    <form class="image-form2" enctype="multipart/form-data" >
                                         <input type="hidden" name="id" value="<?php echo $categoria->id; ?>">
                                         <div class="custom-file-upload">
-                                            <label for="file-<?php echo $categoria->id; ?>" class="categoryCard__view">
-                                                <i class="fas fa-upload"></i> Seleccionar Imagen
+                                            <label for="file-<?php echo $categoria->id; ?>" class="categoryCard__view"  >
+                                                <i class="fas fa-upload" ></i> Seleccionar Imagen
                                             </label>
                                             <input type="file" name="image" id="file-<?php echo $categoria->id; ?>" class="image-input2" style="Display:none">
                                         </div>
 
-                                        <button type="button" class="categoryCard__view">
+                                        <button type="button" class="categoryCard__view" style= "margin-top: 10px;">
                                             <i class="fas fa-cloud-upload-alt"></i> Subir
                                         </button>
                                     </form>
@@ -135,6 +135,12 @@
                 const formData = new FormData(form);
                 const id = formData.get('id');
                 const imageFile = fileInput.files[0];
+
+                const allowedExtensions = ['image/jpeg', 'image/png', 'image/jpg'];
+                if (!allowedExtensions.includes(imageFile.type)) {
+                    alert('Formato de archivo no permitido. Solo se aceptan PNG, JPEG y JPG.');
+                    return;
+                }
 
                 if (!imageFile) {
                     alert('Por favor selecciona una imagen.');
@@ -200,3 +206,8 @@
     });
 
 </script>
+<style>
+    .categoryCard__view:hover {
+        color: #f6b229;
+    }
+</style>

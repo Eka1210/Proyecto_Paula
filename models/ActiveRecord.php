@@ -319,7 +319,7 @@ class ActiveRecord
 
     public function deleteImage()
     {
-        if (!empty($this->imagen)) {
+        if (!empty($this->imagen) and $this->imagen!='') {
             $filePath = IMAGES_DIR . $this->imagen;
 
             if (file_exists($filePath) && is_file($filePath)) {

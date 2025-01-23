@@ -1,3 +1,6 @@
+<?php
+    include_once __DIR__ . "/../templates/alerts.php";
+?>
 <div class="create-category">
     <h1 class="create-category__title">Crear Categoría</h1>
     <p class="create-category__description">Llena el siguiente formulario para registrar una nueva Categoría</p>

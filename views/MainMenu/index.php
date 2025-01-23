@@ -19,15 +19,16 @@
                             <img src="<?php echo htmlspecialchars($producto->imagen); ?>" alt="Imagen del Anuncio" style="display: block; margin: 0 auto;">
                         </div>
                     </a>
-
+                    
                     <div class="contenido-anuncio">
-                        <p> <?php echo $producto->name; ?> </p>
+                    <div class="product-details">
+                        <p style="margin-top: 15px; margin-bottom: 15px;"> <?php echo $producto->name; ?> </p>
                         <?php
                         if ($producto->discountPercentage > 0) {
                             $discountedPrice = $producto->price - ($producto->price * $producto->discountPercentage / 100);
                         ?>
                             <p class="precio" style="color: green;">₡<?php echo number_format($discountedPrice, 2); ?> I.V.A.I</p>
-                            <p class="precio" style="text-decoration: line-through; font-size: 1em;">₡<?php echo number_format($producto->price, 2); ?></p>
+                            <p class="precio" style="text-decoration: line-through; font-size: 1em; margin-bottom: 15px;">₡<?php echo number_format($producto->price, 2); ?></p>
                         <?php
                         } else {
                         ?>
@@ -35,6 +36,7 @@
                         <?php
                         }
                         ?>
+                    </div>
                     </div>
                 </div> <!--.anuncio-->
             <?php } ?>

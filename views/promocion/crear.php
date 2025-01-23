@@ -51,7 +51,7 @@
                 <p class="students__empty">No hay Productos Registrados</p>
             <?php } ?>
         </div>
-        <button type="submit" class="create-category__form__submit">Crear Promocion</button>
+        <button type="submit" class="create-category__form__submit">Crear Promoción</button>
 
     </form>
 </div>
