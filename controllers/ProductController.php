@@ -141,11 +141,19 @@ class ProductController
                     $categoriaProducto->guardar();
                 }
             }
+            $cantidadOriginal = $producto->cantidad;
+            $cantidad = intval($_POST['cantidad']);
             $producto->sincronizar($_POST);
             $alertas = $producto->validate();
             if (empty($alertas)) {
+                if ($cantidadOriginal < $cantidad) {
+                    ProductController::createInventoryOnly($producto->id, $cantidad - $cantidadOriginal, 'Modificación de admin', true);
+                } else if ($cantidadOriginal > $cantidad) {
+                    ProductController::createInventoryOnly($producto->id, $cantidadOriginal - $cantidad, 'Modificación de admin', false);
+                }
                 $producto->guardar();
                 Product::setAlerta('success', 'Producto Editada');
+
                 header('Location: /admin/productos');
             }
         }
@@ -582,6 +590,38 @@ class ProductController
         ]);
     }
 
+    public static function createInventoryOnly($productID, $quantity, $action, $isIncrementing)
+    {
+        $inventario = new Inventorylog([
+            'product' => $productID,
+            'quantity' => $quantity,
+            'action' => $action
+        ]);
+
+        $product = Product::find($productID);
+
+        $inventario->productID = $productID;
+        $inventario->quantity = $quantity;
+        $inventario->action = $action;
+        date_default_timezone_set('America/Costa_Rica');
+        $inventario->date = date('Y-m-d H:i:s');
+        $inventario->old_value = $product->cantidad;
+
+        if ($isIncrementing == 1) {
+            $inventario->new_value = $product->cantidad + $quantity;
+            $product->cantidad += $quantity;
+        } else {
+            $inventario->new_value = $product->cantidad - $quantity;
+            $product->cantidad -= $quantity;
+        }
+
+        $alertas = $inventario->validate();
+        if (empty($alertas)) {
+            $inventario->guardar();
+        }
+    }
+
+
 
     public static function createInventory($productID, $quantity, $action, $isIncrementing)
     {
@@ -615,7 +655,7 @@ class ProductController
             $product->guardar();
         }
     }
-    
+
 
 
     public static function mostrarproducto(Router $router)
@@ -657,6 +697,8 @@ class ProductController
             $recomendado->cantidad = $recomendado->cantidad;
             $recomendado->imagen = $recomendado->imagen;
             $recomendado->encargo = $recomendado->encargo;
+            $discount = Promotion::getDiscount($recomendado->id)[0] ?? null;
+            $recomendado->discountPercentage = $discount ? $discount->percentage : 0;
         }
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -670,7 +712,7 @@ class ProductController
 
             // Redirigir a la página de resumen
             header("Location: /productos ");
-            exit; 
+            exit;
         }
 
         $discount = Promotion::getDiscount($producto->id)[0] ?? null;
