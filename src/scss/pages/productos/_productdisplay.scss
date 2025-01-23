@@ -54,8 +54,8 @@
                 max-width: 2.5rem;
                 height: auto;
                 position: absolute;
-                top: 10px; /* Adjust as needed for spacing */
-                right: 10px; /* Adjust as needed for spacing */
+                top: 10px; 
+                right: 10px; 
               }
               .cart{
                 margin-top: 2rem;
@@ -63,48 +63,62 @@
         }      
         
     }
-    .recomendations{
-            margin-left: 0;
-            width: 100%;
-            background: white;
-            border-radius: 8px;
-            padding: 20px;
-
-            .recommended-cards{
-                display: flex;
-                flex-wrap: wrap;
-
-                .product{
-                    display: flex;
-                    flex-direction: column;
-                    align-items: center;
-                    justify-content: space-between;
-                    padding: 0.5rem;
-                    &-image{
-                        display: flex;
-                        justify-content: center;
-                        align-items: center;
-                        border: 2px solid v.$gris;
-                    }
-                    img{
-                        max-width: 100%;
-                        max-height: 100%;
-                    }
-                    margin: 2rem;
-                    p{
-                        text-align: center;
-                        &.precio{
-                            color: v.$vino;
-                            font-weight: v.$bold;
-                            margin-top: auto;
-                        }
-                    }
-            }
-
-        
+    .recomendations {
+        margin-left: 0;
+        width: 100%;
+        background: white;
+        border-radius: 8px;
+        padding: 20px;
+    
+        .recommended-cards {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
         }
 
+        .products-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .product {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            padding: 0.5rem;
+            width: 200px;
+        }
+    
+        .product-image {
+            width: 200px;
+            height: 200px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+    
+        .product-image img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain; 
+            display: block;
+        }
+    
+        p {
+            text-align: center;
+            margin: 0.5rem 0;
+    
+            &.precio {
+                color: #b22222;
+                font-weight: bold;
+            }
+        }
     }
+    
 
     .comments{
         .comment-section {
