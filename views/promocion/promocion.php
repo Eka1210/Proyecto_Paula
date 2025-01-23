@@ -25,7 +25,7 @@
                         <td class="table__td">
                             <a href="/admin/editar/promocion?id=<?php echo $promocion->id; ?>" class="categoryCard__view">
                                 <i class="fa-solid fa-pen-to-square"></i>
-                                Editar Promocion
+                                Editar Promoción
                             </a>
                         </td>
                         <td class="table__td">
@@ -33,7 +33,7 @@
                                 <input type="hidden" name="id" value="<?php echo $promocion->id; ?>">
                                 <button type="submit" class="categoryCard__view">
                                     <i class="fa-solid fa-trash"></i>
-                                    Eliminar Promocion
+                                    Eliminar Promoción
                                 </button>
                             </form>
                         </td>

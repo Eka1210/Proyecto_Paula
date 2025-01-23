@@ -1,5 +1,5 @@
-<?php 
-    include_once __DIR__ . "/../templates/alerts.php";
+<?php
+include_once __DIR__ . "/../templates/alerts.php";
 ?>
 
 <div class="sm-container">
@@ -15,6 +15,6 @@
         </div> <!-- /form__field -->
         <a href="/forgot" class="action align-right">¿Olvidaste tu Contraseña?</a>
         <input class="form__submit" type="submit" value="Ingresar">
-        <a href="/register" class="action align-center">¿Aún no tienes un usuario? <span>Registrate Aquí</span></a>
+        <a href="/register" class="action align-center">¿Aún no tienes un usuario? <span>Regístrate Aquí</span></a>
     </form>
 </div>

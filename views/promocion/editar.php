@@ -20,10 +20,10 @@
         $end_date = !empty($promocion->end_time) ? date('Y-m-d', strtotime($promocion->end_time)) : date('Y-m-d');
         ?>
         <div class="create-category__form__field">
-            <label for="start_time" class="create-category__form__label">Start Date:</label>
+            <label for="start_time" class="create-category__form__label">Fecha inicial:</label>
             <input type="date" id="start_time" name="start_time" min="<?php echo date('Y-m-d'); ?>" class="create-category__form__input" value="<?php echo $start_date; ?>" required>
 
-            <label for="end_time" class="create-category__form__label">End Date:</label>
+            <label for="end_time" class="create-category__form__label">Fecha final:</label>
             <input type="date" id="end_time" name="end_time" min="<?php echo date('Y-m-d'); ?>" class="create-category__form__input" value="<?php echo $end_date; ?>" required>
         </div>
 
@@ -56,7 +56,7 @@
                 <p class="students__empty">No hay Productos Registrados</p>
             <?php } ?>
         </div>
-        <button type="submit" class="create-category__form__submit">Crear Promocion</button>
+        <button type="submit" class="create-category__form__submit">Editar Promoción</button>
 
     </form>
 

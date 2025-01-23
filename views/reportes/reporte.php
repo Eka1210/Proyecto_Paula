@@ -1,6 +1,6 @@
 <div class="create-category">
     <h1 class="create-category__title">Generar Reporte</h1>
-    <p class="create-category__description">Llena el siguiente formulario para generar reporte de ventas</p>
+    <p class="create-category__description">Llena el siguiente formulario para generar el reporte de ventas</p>
 
     <form method="POST" class="create-category__form">
         <div class="create-category__form__field">
