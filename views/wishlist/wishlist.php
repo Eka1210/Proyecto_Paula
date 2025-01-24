@@ -10,6 +10,7 @@
                     <th scope="col" class="table__th">Imagen</th>
                     <th scope="col" class="table__th">Precio</th>
                     <th scope="col" class="table__th"></th>
+
                 </tr>
             </thead>
             <tbody class="table__tbody">
@@ -35,7 +36,7 @@
                                     <label for="quantity">Cantidad:</label>
                                     <select id="quantity" name="quantity">
                                         <?php
-                                        for ($i = 1; $i <= 100; $i++) {
+                                        for ($i = 1; $i <= $product->cantidad; $i++) {
                                             echo '<option value="' . htmlspecialchars($i) . '">' . htmlspecialchars($i) . '</option>';
                                         }
                                         ?>
@@ -43,7 +44,15 @@
                                 </div>
                                 <button class="btn" type="submit" id="addToCartButton" data-product="<?php echo htmlspecialchars($product->id); ?>">Agregar al Carrito</button>
                             </form>
+                            <form action="/wishlist/eliminar" method="post" onsubmit="return confirm('Está seguro que quiere eliminar el producto de la lista de favoritos?')">
+                                <input type="hidden" value="<?php echo htmlspecialchars($product->id); ?>" id="producto" name="producto">
+                                <button style="background-color: red;" class="btn" type="submit" id="removeFromWishlistButton" data-product="<?php echo htmlspecialchars($product->id); ?>">Eliminar de la lista</button>
+                            </form>
+
+
                         </td>
+
+
                     </tr>
                 <?php } ?>
             </tbody>
