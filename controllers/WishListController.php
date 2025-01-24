@@ -61,4 +61,27 @@ class WishListController
         }
         return null;
     }
+
+    public static function eliminar()
+    {
+        $productId = $_POST['producto'] ?? null;
+        $userId = $_SESSION['userId'] ?? null;
+        if ($productId && $userId) {
+            self::dislike($productId);
+        }
+        header('Location: /wishlist');
+    }
+
+    public static function dislike($productId)
+    {
+        $lists = Wishlist::all();
+        $userId = $_SESSION['userId'] ?? null;
+        if ($userId) {
+            foreach ($lists as $list) {
+                if ($list->productID == $productId && $list->userID == $userId) {
+                    $list->eliminarLike($userId, $productId);
+                }
+            }
+        }
+    }
 }

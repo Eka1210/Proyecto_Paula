@@ -51,7 +51,7 @@ verificarAccesoAdmin();
 
 <body>
     <header class="header section">
-        <a href="/" class="logo">
+        <a href="/" class="logo" style="width: 70px; height: auto;">
             <img src="/images/logo.png">
         </a>
         

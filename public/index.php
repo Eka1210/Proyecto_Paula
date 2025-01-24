@@ -138,7 +138,7 @@ $router->get('/wishlist', [WishListController::class, 'list']);
 $router->post('/wishlist', [WishListController::class, 'list']);
 $router->get('/like', [ProductController::class, 'like']);
 $router->post('/like', [ProductController::class, 'like']);
-
+$router->post('/wishlist/eliminar', [WishListController::class, 'eliminar']);
 //Rutas de Métodos de Pago
 $router->get('/admin/metodosPago', [PaymentMethodsController::class, 'verPaymentMethods']);
 $router->post('/admin/addMetodoPago', [PaymentMethodsController::class, 'addMetodoPago']);

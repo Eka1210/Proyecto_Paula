@@ -34,7 +34,7 @@ include_once __DIR__ . "/../templates/alerts.php";
                         </td>
                         <td class="table__td">
                             <form action="/admin/promocion/eliminar" method="POST" onsubmit="return confirm('Está seguro que quiere eliminar la promoción?')">
-                                <input type="hidden" name="id" value="<?php echo $promocion->id; ?>">
+                                <input type="hidden" name="id" value="<?php echo htmlspecialchars($promocion->id);  ?>">
                                 <button type="submit" class="categoryCard__view">
                                     <i class="fa-solid fa-trash"></i>
                                     Eliminar Promoción

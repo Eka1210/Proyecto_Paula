@@ -11,7 +11,7 @@ include_once __DIR__ . "/../templates/alerts.php";
         <div class="create-category__form__field">
             <label for="product" class="create-category__form__label">Producto</label>
 
-            <select id="product" name="product" required>
+            <select id="product" name="product" style="margin-bottom: 10px;" required>
                 <option value="">Seleccionar Producto</option>
                 <?php foreach ($productos as $producto): ?>
                     <option value="<?php echo $producto->id; ?>"><?php echo $producto->name; ?></option>
