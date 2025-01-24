@@ -26,7 +26,7 @@ class DeliveryMethod extends ActiveRecord{
         if(!$this->description){
             self::setAlerta('error', 'La descripcion es obligatoria');
         }
-        if(!$this->cost){
+        if($this->cost === null || $this->cost === '') {
             self::setAlerta('error', 'El costo es obligatorio');
         }
         return self::$alertas;

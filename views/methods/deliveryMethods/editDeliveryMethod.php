@@ -11,9 +11,9 @@
             <label for="name" class="create-category__form__label">Nombre del método de pago</label>
             <input type="text" name="name" value="<?php echo $nombre; ?>" id="name" class="create-category__form__input" required>
         </div>
-        <div class="create-category__form__field">
-            <label for="cost" class="create-category__form__label">Costo</label>
-            <input type="text" name="cost" value="<?php echo $costo; ?>" id="cost" class="create-category__form__input" required>
+        <div class="create-product_form_field">
+            <label for="price" class="create-product_form_label">Costo</label>
+            <input class="form__input" type="number" step="0.01" placeholder="Precio del Método" id="cost" name="cost" value="<?php echo $costo; ?>"; ?>
         </div>
         <div class="create-category__form__field">
             <label for="description" class="create-plan__form__label">Descripción</label>
