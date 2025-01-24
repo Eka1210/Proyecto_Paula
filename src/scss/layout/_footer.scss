@@ -5,10 +5,40 @@
     padding: 2rem 0;
     background-color: v.$vino;
     margin-bottom: 0;
+
     .footer-content {
         text-align: center;
+
+        .footer-title {
+            font-size: 2rem;
+            font-weight: bold;
+            color: v.$hueso;
+            margin-bottom: 1rem;
+        }
+
+        .footer-contact {
+            font-size: 1.5rem;
+            color: v.$hueso;
+            margin: 1rem 0;
+            a {
+                color: v.$hueso;
+                text-decoration: none;
+                &:hover {
+                    text-decoration: underline;
+                }
+            }
+        }
+
+        .footer-location {
+            color: v.$hueso;
+            margin-top: 1rem;
+            font-size: 1.5rem;
+        }
+
         .copyright {
-            color: v.$blanco;
+            color: v.$dorado;
+            margin-top: 1rem;
+            font-size: 1.5rem;
         }
     }
 }

@@ -162,10 +162,19 @@ verificarAccesoAdmin();
     <?php echo $contenido; ?>
 
     <footer class="footer section">
-        <div class="container footer-content">
-            <p class="copyright">PJ Solutions &copy. Todos los derechos reservados.</p>
-        </div>
-    </footer>
+    <div class="container footer-content">
+        <p class="footer-title">Escríbenos</p>
+        <p class="footer-contact">
+            <a href="mailto:pj.solutions.notifications@gmail.com">pj.solutions.notifications@gmail.com</a>
+        </p>
+        <p class="footer-contact">
+            WhatsApp: <a href="tel:+50687459920">+506 8745 9920</a>
+        </p>
+        <p class="footer-location">Cartago, Costa Rica</p>
+        <p class="copyright">PJ Solutions &copy; Todos los derechos reservados.</p>
+    </div>
+</footer>
+
 
     <script src='/build/js/app.js'></script>
 </body>
