@@ -20,6 +20,8 @@ class Category extends ActiveRecord{
     public function validate(){
         if(!$this->nombre){
             self::setAlerta('error', 'El nombre es obligatorio');
+        }elseif (strlen($this->nombre) > 45) {
+            self::setAlerta('error', 'El nombre no puede exceder los 45 caracteres');
         }
         if(!$this->descripcion){
             self::setAlerta('error', 'La descripcion es obligatoria');

@@ -1,7 +1,18 @@
 <head>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css" integrity="sha512-1sCRPdkRXhB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
-
+<div class="categorias-wrapper">
+    <div class="categorias">
+        <?php foreach ($categorias as $categoria) { ?>
+            <div class="categoria">
+                <a href="/categoria?id=<?php echo $categoria->id; ?>">
+                    <div class="categoria-imagen" style="background-image: url('<?php echo $categoria->imagen; ?>');"></div>
+                </a>
+                <p><?php echo $categoria->nombre; ?></p>
+            </div>
+        <?php } ?>
+    </div>
+</div>
 <h1 style="text-align: center;">Productos de Categoría: <?php echo $categoria->nombre; ?></h1>
 <div class="products-list">
     <?php if (!empty($productos)) { ?>

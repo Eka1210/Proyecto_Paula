@@ -1,9 +1,5 @@
-<div class="publicidad">
-    <p class="flecha">
-        < </p>
-            <div class="contenido-publicidad">
-            </div>
-            <p class="flecha"> > </p>
+<div class="publicidad" style="justify-content: center;">
+    <p class="flecha" style="color: #693334; justify-content: center; font-size: 7rem; ">Productos Hechos a Mano </p>
 </div>
 
 
