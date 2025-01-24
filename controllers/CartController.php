@@ -15,6 +15,7 @@ use Model\DeliveryMethod;
 use Model\Promotion;
 use Model\ProductXPromotion;
 use Model\Client;
+use Controllers\ProductController;
 
 class CartController {
 
@@ -327,7 +328,7 @@ class CartController {
         // Limpiar el carrito y crear registros en ProductxSale
 
         $carrito = Cart::where('userId', $userId);
-
+        
         if ($carrito) {
             $productosxCart = Productsxcart::allCart($carrito->id);
             foreach ($productosxCart as $productoEnCarrito) {
@@ -339,12 +340,12 @@ class CartController {
                     'quantity' => $productoEnCarrito->quantity,
                     'price' => $productoEnCarrito->price,
                 ]);
+
+                //ProductController::createInventory($productID,$productoEnCarrito->quantity,'Pedido',0);
                 $saleItem->guardar();
                 $productoEnCarrito->deleteFromCart($productID, $carrito->id);
             }
         }
-
-        // Implementar Logica para actualizar cantidad del inventario
 
         // Renderizar la página de éxito
         $router->render('ventas/success', [

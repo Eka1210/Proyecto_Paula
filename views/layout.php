@@ -107,7 +107,6 @@ verificarAccesoAdmin();
                 } ?> href="/categorias">
                 Categorías</a>
         <?php } ?>
-
         <?php if (isset($_SESSION['admin'])) { ?>
             <a <?php if ($page == 'admin') {
                     echo 'class="active"';
@@ -137,6 +136,11 @@ verificarAccesoAdmin();
                     echo 'class="active"';
                 } ?> href="/pedidosAdmin">
                 Pedidos</a>
+        <?php } elseif (isset($_SESSION['login'])){ ?>
+            <a <?php if ($page == 'Mis pedidos') {
+                    echo 'class="active"';
+                } ?> href="/pedidos">
+                Mis Pedidos</a>
         <?php } ?>
         <?php if (isset($_SESSION['admin'])) { ?>
             <a <?php if ($page == 'admin') {
