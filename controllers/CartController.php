@@ -15,6 +15,7 @@ use Model\DeliveryMethod;
 use Model\Promotion;
 use Model\ProductXPromotion;
 use Model\Client;
+use Controllers\ProductController;
 
 class CartController {
 
@@ -296,12 +297,9 @@ class CartController {
         $descuento = $_POST['descuento'] ?? null;
         $metodoPagoId = $_POST['paymentMethod'] ?? null;
         $metodoEntregaId = $_POST['deliveryMethod'] ?? null;
-
-
         $metodoPago = PaymentMethod::find($metodoPagoId);
-  
         $metodoEntrega = DeliveryMethod::find($metodoEntregaId);
-    
+
         // Sumar el costo del método de entrega al total
         $totalMonto += $metodoEntrega->cost;
 
@@ -311,6 +309,7 @@ class CartController {
             header('Location: /cart');
             exit;
         }
+
         $fecha = date('Y-m-d H:i:s');
         $pedido = new Sale([
             'descripcion' => 'Pago pendiente',
@@ -327,7 +326,7 @@ class CartController {
         // Limpiar el carrito y crear registros en ProductxSale
 
         $carrito = Cart::where('userId', $userId);
-
+        
         if ($carrito) {
             $productosxCart = Productsxcart::allCart($carrito->id);
             foreach ($productosxCart as $productoEnCarrito) {
@@ -339,12 +338,16 @@ class CartController {
                     'quantity' => $productoEnCarrito->quantity,
                     'price' => $productoEnCarrito->price,
                 ]);
+
+                $productoReal = Product::find($productID);
+
+                if($productoReal->encargo == 0){
+                    ProductController::createInventory($productID,$productoEnCarrito->quantity,'Pedido Realizado',0);
+                }
                 $saleItem->guardar();
                 $productoEnCarrito->deleteFromCart($productID, $carrito->id);
             }
         }
-
-        // Implementar Logica para actualizar cantidad del inventario
 
         // Renderizar la página de éxito
         $router->render('ventas/success', [

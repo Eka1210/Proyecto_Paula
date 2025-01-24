@@ -15,7 +15,7 @@ class PagesController
 {
     public static function index(Router $router)
     {
-        $productos = Product::get(3);
+        $productos = Product::get(5);
         foreach ($productos as $producto) {
             $discount = Promotion::getDiscount($producto->id)[0] ?? null;
             $producto->discountPercentage = $discount ? $discount->percentage : 0;
@@ -77,6 +77,7 @@ class PagesController
 
     public static function ver(Router $router)
     {
+        $categorias = Category::all();
         $categoryID = $_GET['id'] ?? null;
         $categoria = Category::find($categoryID);
         $productosC = CategoryXProduct::findProducts($categoryID);
@@ -93,6 +94,7 @@ class PagesController
         $router->render('profile/categoria', [
             'categoria' => $categoria,
             'productos' => $productos,
+            'categorias' => $categorias,
             'page' => 'categoria'
         ]);
     }

@@ -12,8 +12,8 @@
             <div class="create-category__form__field dynamic-value">
                 <label class="create-category__form__label">Valor</label>
                 <input type="text" name="values[]" class="create-category__form__input" required>
-                <button type="button" class="delete-value-btn">
-                    <i class="fa-solid fa-trash"></i>
+                <button type="button" class="delete-value-btn" style="margin-bottom: 15px">
+                    <i class="fas fa-trash"></i>
                 </button>
             </div>
         </div>
@@ -50,7 +50,7 @@
         newField.innerHTML = `
             <label class="create-category__form__label">Valor</label>
             <input type="text" name="values[]" class="create-category__form__input" required>
-            <button type="button" class="delete-value-btn">
+            <button type="button" class="delete-value-btn" style="margin-bottom: 15px">
                 <i class="fa-solid fa-trash"></i>
             </button>
         `;

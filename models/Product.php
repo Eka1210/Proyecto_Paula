@@ -37,9 +37,13 @@ class Product extends ActiveRecord
     {
         if (!$this->name) {
             self::setAlerta('error', 'El nombre es obligatorio');
+        }elseif (strlen($this->name) > 45) {
+            self::setAlerta('error', 'El nombre no puede exceder los 45 caracteres');
         }
         if (!$this->description) {
             self::setAlerta('error', 'La descripcion es obligatoria');
+        }elseif (strlen($this->description) > 45) {
+            self::setAlerta('error', 'La descripción no puede exceder los 45 caracteres');
         }
         if (!$this->price) {
             self::setAlerta('error', 'El precio es obligatorio');

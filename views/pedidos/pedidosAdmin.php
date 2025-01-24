@@ -16,7 +16,7 @@
                         <th scope="col" class="table__th">Método de Entrega</th>
                         <th scope="col" class="table__th">Estado</th>
                         <th scope="col" class="table__th"></th>
-                        <th scope="col" class="table__th"></th>
+                        
                     </tr>
                 </thead>
                 <tbody class="table__tbody">
@@ -43,13 +43,27 @@
                             <td class="table__td">
                                 <form action="/pedidosAdmin/guardarEstado" method="POST" onsubmit="return confirm('¿Está seguro de guardar los cambios?')">
                                     <input type="hidden" name="id" value="<?php echo $pedido->id; ?>">
-                                    <input 
-                                        type="text" 
+                                    <select 
                                         name="descripcion" 
-                                        value="<?php echo htmlspecialchars($pedido->descripcion); ?>" 
-                                        class="table__input"
+                                        class="table__select"
                                         required
                                     >
+                                        <option value="pendiente de pago" <?php echo $pedido->descripcion === 'pendiente de pago' ? 'selected' : ''; ?>>
+                                            Pendiente de Pago
+                                        </option>
+                                        <option value="en proceso" <?php echo $pedido->descripcion === 'en proceso' ? 'selected' : ''; ?>>
+                                            En Proceso
+                                        </option>
+                                        <option value="terminado" <?php echo $pedido->descripcion === 'terminado' ? 'selected' : ''; ?>>
+                                            Terminado
+                                        </option>
+                                        <option value="entregado" <?php echo $pedido->descripcion === 'entregado' ? 'selected' : ''; ?>>
+                                            Entregado
+                                        </option>
+                                        <option value="cancelado" <?php echo $pedido->descripcion === 'cancelado' ? 'selected' : ''; ?>>
+                                            Cancelado
+                                        </option>
+                                    </select>
                                     <button type="submit" class="categoryCard__view">
                                         <i class="fa-solid fa-save"></i>
                                         Guardar
@@ -57,7 +71,7 @@
                                 </form>
                             </td>
                             <td class="table__td">
-                                <a href="/pedidosAdmin/verProductosPedido?id=<?php echo $pedido->id;?>" class="categoryCard__view">
+                                <a href="/pedidos/verProductosPedido?id=<?php echo $pedido->id;?>" class="categoryCard__view">
                                     <i class="fa-solid fa-pen-to-square"></i>
                                     Ver Productos
                                 </a>
@@ -70,6 +84,3 @@
         <p class="admins__empty">No hay pedidos</p>
     <?php } ?>
 </div>
-
-
-
