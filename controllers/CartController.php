@@ -297,12 +297,9 @@ class CartController {
         $descuento = $_POST['descuento'] ?? null;
         $metodoPagoId = $_POST['paymentMethod'] ?? null;
         $metodoEntregaId = $_POST['deliveryMethod'] ?? null;
-
-
         $metodoPago = PaymentMethod::find($metodoPagoId);
-  
         $metodoEntrega = DeliveryMethod::find($metodoEntregaId);
-    
+
         // Sumar el costo del método de entrega al total
         $totalMonto += $metodoEntrega->cost;
 
@@ -312,6 +309,7 @@ class CartController {
             header('Location: /cart');
             exit;
         }
+
         $fecha = date('Y-m-d H:i:s');
         $pedido = new Sale([
             'descripcion' => 'Pago pendiente',
@@ -341,7 +339,11 @@ class CartController {
                     'price' => $productoEnCarrito->price,
                 ]);
 
-                //ProductController::createInventory($productID,$productoEnCarrito->quantity,'Pedido',0);
+                $productoReal = Product::find($productID);
+
+                if($productoReal->encargo == 0){
+                    ProductController::createInventory($productID,$productoEnCarrito->quantity,'Pedido Realizado',0);
+                }
                 $saleItem->guardar();
                 $productoEnCarrito->deleteFromCart($productID, $carrito->id);
             }

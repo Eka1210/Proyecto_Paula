@@ -8,6 +8,7 @@
                 <th scope="col" class="table__th">Descripción</th>
                 <th scope="col" class="table__th">Cantidad</th>
                 <th scope="col" class="table__th">Precio Unitario</th>
+                <th scope="col" class="table__th">Subtotal</th>
             </tr>
         </thead>
         <tbody class="table__tbody">
@@ -24,6 +25,9 @@
                     </td>
                     <td class="table__td">
                         ₡<?php echo number_format($producto->unitPrice, 2); ?>
+                    </td>
+                    <td class="table__td">
+                        ₡<?php echo number_format(($producto->unitPrice * $producto->quantity), 2); ?>
                     </td>
                 </tr>
             <?php } ?>

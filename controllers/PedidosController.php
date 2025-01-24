@@ -60,7 +60,6 @@ class PedidosController{
                             $producto->productName = 'Producto no encontrado';
                             $producto->unitPrice = 0.00;
                             $producto->description = 'Sin descripción';
-                            $producto->categoryName = 'Sin categoría';
                         }
                     }
                 } else {
@@ -84,11 +83,22 @@ class PedidosController{
         $id = $_POST['id'] ?? null;
         $descripcion = $_POST['descripcion'] ?? null;
 
+
+
         if ($id && $descripcion) {
             $pedido = Sale::find($id);
             if ($pedido) {
                 $pedido->descripcion = $descripcion;
                 $pedido->guardar();
+            }
+            // Si el pedido es cancelado, devuelve las cantidades al inventario
+            if ($descripcion == 'cancelado'){
+                $productos = Productxsale::allSale($id);
+                if($productos){
+                    foreach($productos as $producto){
+                        ProductController::createInventory($producto->productID,$producto->quantity,'Pedido Cancelado',1);
+                    }
+                }
             }
         }
         header('Location: /pedidosAdmin');

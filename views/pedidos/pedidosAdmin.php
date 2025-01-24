@@ -60,6 +60,9 @@
                                         <option value="entregado" <?php echo $pedido->descripcion === 'entregado' ? 'selected' : ''; ?>>
                                             Entregado
                                         </option>
+                                        <option value="cancelado" <?php echo $pedido->descripcion === 'cancelado' ? 'selected' : ''; ?>>
+                                            Cancelado
+                                        </option>
                                     </select>
                                     <button type="submit" class="categoryCard__view">
                                         <i class="fa-solid fa-save"></i>
