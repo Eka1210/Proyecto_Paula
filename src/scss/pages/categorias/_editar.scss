@@ -115,6 +115,34 @@
     }
 }
 
+.detalle3{
+    padding: 2rem 2rem auto 2rem;
+    @include m.shadow;
+    background-color: v.$blanco;
+    border-radius: 1rem;
+    padding: 2rem;
+    margin: 2rem 20rem auto 20rem;
+    
+
+    &__main{
+        display: flex;
+        justify-content: space-between;
+        &__title{
+            color: v.$dorado;
+            margin: 1rem 0;
+            font-size: 3.5rem;
+            
+        }
+
+        &__comment{
+            display: flex;
+            gap: 1rem;
+            color: v.$vinoC;
+            font-weight: v.$bold;
+        }
+    }
+}
+
 .edit-category{
     display: flex;
     flex-direction: column;
