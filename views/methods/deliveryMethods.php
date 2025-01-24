@@ -27,10 +27,10 @@
                             <td class="table__td">
                                 <?php echo $metodoEntrega->name; ?>
                             </td>
-                            <td class="table__td">|
+                            <td class="table__td">
                                 <?php echo $metodoEntrega->description; ?>
                             </td>
-                            <td class="table__td">|
+                            <td class="table__td">
                                 <?php echo $metodoEntrega->cost; ?>
                             </td>
                             <td class="table__td">

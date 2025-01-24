@@ -346,7 +346,7 @@ class CartController {
         ]);
             exit;
         }
-
+        date_default_timezone_set('America/Costa_Rica');
         $fecha = date('Y-m-d H:i:s');
         $pedido = new Sale([
             'descripcion' => 'Pago pendiente',
