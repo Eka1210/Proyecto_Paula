@@ -34,7 +34,7 @@
                                 <?php echo $metodoEntrega->cost; ?>
                             </td>
                             <td class="table__td">
-                                <a href="/editMetodoEntrega?id=<?php echo $metodoEntrega->name;?>" class="categoryCard__view">
+                                <a href="/admin/editMetodoEntrega?id=<?php echo $metodoEntrega->name;?>" class="categoryCard__view">
                                     <i class="fa-solid fa-pen-to-square"></i>
                                     Editar
                                 </a>

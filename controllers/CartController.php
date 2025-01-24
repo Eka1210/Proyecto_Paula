@@ -20,6 +20,7 @@ use Controllers\ProductController;
 class CartController {
 
     public static function ver(Router $router) {
+        $alertas=[];
         $userId = $_SESSION['userId'] ?? null;
     
         if ($userId) {
@@ -51,7 +52,10 @@ class CartController {
                     }
                 }
             }
+            $alertas= Sale::getAlertas();
+
             $router->render('ventas/cart', [
+                'alertas'=>$alertas,
                 'productos' => $productosEnCarrito,
             ]);
         } else {
@@ -280,7 +284,6 @@ class CartController {
         $metodosEntrega = DeliveryMethod::all();
 
         $productosEnCarrito = self::calcularDescuento($productosEnCarrito);
-
         $router->render('ventas/checkout', [
             'productos' => $productosEnCarrito,
             'totalMonto' => $totalMonto,
@@ -291,6 +294,7 @@ class CartController {
     }
 
     public static function confirmOrder(Router $router) {
+        $alertas=[];
 
         $userId = $_SESSION['userId'] ?? null;
         $totalMonto = $_POST['totalMonto'] ?? null;
@@ -304,9 +308,42 @@ class CartController {
         $totalMonto += $metodoEntrega->cost;
 
         $cliente = Client::find4($userId);
-        if(is_null($cliente->name)){
-            echo "<script>alert('Debe actualizar sus datos para realizar el pedido.');</script>";
-            header('Location: /cart');
+        
+        if(is_null($cliente->name) or $cliente->name==' '){
+            $alertas =[];
+            $alertas = Sale::setAlerta('error', 'Debe actualizar sus datos personales para realizar el pedido');
+            $alertas = Sale::getAlertas();
+            $userId = $_SESSION['userId'] ?? null;
+        $totalMonto = $_POST['totalMonto'] ?? null;
+
+        $carrito = Cart::where('userId', $userId);
+        $productosEnCarrito = [];
+
+        if ($carrito) {
+            $productosxCart = Productsxcart::allCart($carrito->id);
+
+            foreach ($productosxCart as $productoEnCarrito) {
+                $producto = Product::find($productoEnCarrito->productID);
+
+                if ($producto) {
+                    $producto->quantity = $productoEnCarrito->quantity;
+                    $productosEnCarrito[] = $producto;
+                }
+            }
+        }
+
+        $metodosPago = PaymentMethod::all();
+        $metodosEntrega = DeliveryMethod::all();
+
+        $productosEnCarrito = self::calcularDescuento($productosEnCarrito);
+        $router->render('ventas/checkout', [
+            'alertas' => $alertas,
+            'productos' => $productosEnCarrito,
+            'totalMonto' => $totalMonto,
+            'descuento' => array_sum(array_column($productosEnCarrito, 'discount')), // Suma total de descuentos
+            'metodosPago' => $metodosPago,
+            'metodosEntrega' => $metodosEntrega
+        ]);
             exit;
         }
 
@@ -351,6 +388,7 @@ class CartController {
 
         // Renderizar la página de éxito
         $router->render('ventas/success', [
+            'alertas'=> $alertas,
             'orderId' => $orderId,
             'totalAmount' => $totalMonto,
         ]);

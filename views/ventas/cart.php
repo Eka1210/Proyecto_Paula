@@ -1,3 +1,6 @@
+<?php
+include_once __DIR__ . "/../templates/alerts.php";
+?>
 <h1 style="text-align: center;">Carrito</h1>
 
 <?php if (!empty($productos)) : ?>

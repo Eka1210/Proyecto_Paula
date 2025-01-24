@@ -34,7 +34,7 @@ class DeliveryMethodsController {
                 $metodoEntrega->create_time = date('Y-m-d H:i:s');
                 $metodoEntrega->guardar();
                 DeliveryMethod::setAlerta('success', 'Metodo de Entrega Creado');
-                header('Location: /metodosEntrega');
+                header('Location: /admin/metodosEntrega');
             }
         }
 
@@ -63,7 +63,7 @@ class DeliveryMethodsController {
             if(empty($alertas)){
                 $metodoEntrega->guardar();
                 DeliveryMethod::setAlerta('success', 'Método de Entrega editado');
-                header('Location: /metodosEntrega');
+                header('Location: /admin/metodosEntrega');
             }
         }
         $alertas = DeliveryMethod::getAlertas();
@@ -88,7 +88,7 @@ class DeliveryMethodsController {
             $id = $_POST['id'];
             $metodoEntrega = DeliveryMethod::find($id);
             $metodoEntrega->eliminar();
-            header('Location: /metodosEntrega');
+            header('Location: /admin/metodosEntrega');
             exit;
         }
         $alertas = DeliveryMethod::getAlertas();

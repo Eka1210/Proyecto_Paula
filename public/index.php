@@ -40,7 +40,7 @@ $router->get('/cuenta/eliminar', [LoginController::class, 'eliminarCuenta']);
 
 // Rutas Define
 $router->get('/', [PagesController::class, 'index']);
-$router->get('/admin', [PagesController::class, 'index']);
+$router->get('/admin', [PagesController::class, 'index'], true);
 
 // Rutas Categorías
 $router->get('/admin/categorias', [CategoryController::class, 'ver']);
@@ -127,10 +127,10 @@ $router->get('/admin/inventario/crear', [ProductController::class, 'crearlog']);
 $router->post('/admin/inventario/crear', [ProductController::class, 'crearlog']);
 
 //Rutas de pedidos Admin
-$router->get('/pedidosAdmin', [PedidosController::class, 'verAdmin']);
-$router->post('/pedidosAdmin/guardarEstado', [PedidosController::class, 'editPedido']);
-$router->post('/pedidos/verProductosPedido', [PedidosController::class, 'verProductosPedido']);
-$router->get('/pedidos/verProductosPedido', [PedidosController::class, 'verProductosPedido']);
+$router->get('/admin/pedidos', [PedidosController::class, 'verAdmin']);
+$router->post('admin/pedidos/guardarEstado', [PedidosController::class, 'editPedido']);
+$router->post('/admin/pedidos/verProductosPedido', [PedidosController::class, 'verProductosPedido']);
+$router->get('/admin/pedidos/verProductosPedido', [PedidosController::class, 'verProductosPedido']);
 $router->get('/pedidos', [PedidosController::class, 'verCliente']);
 
 //Rutas de WishList
@@ -140,22 +140,22 @@ $router->get('/like', [ProductController::class, 'like']);
 $router->post('/like', [ProductController::class, 'like']);
 
 //Rutas de Métodos de Pago
-$router->get('/metodosPago', [PaymentMethodsController::class, 'verPaymentMethods']);
-$router->post('/addMetodoPago', [PaymentMethodsController::class, 'addMetodoPago']);
-$router->get('/addMetodoPago', [PaymentMethodsController::class, 'addMetodoPago']);
-$router->post('/editMetodoPago', [PaymentMethodsController::class, 'editMetodoPago']);
-$router->get('/editMetodoPago', [PaymentMethodsController::class, 'editMetodoPago']);
-$router->post('/removeMetodoPago', [PaymentMethodsController::class, 'removeMetodoPago']);
-$router->get('/removeMetodoPago', [PaymentMethodsController::class, 'removeMetodoPago']);
+$router->get('/admin/metodosPago', [PaymentMethodsController::class, 'verPaymentMethods']);
+$router->post('/admin/addMetodoPago', [PaymentMethodsController::class, 'addMetodoPago']);
+$router->get('/admin/addMetodoPago', [PaymentMethodsController::class, 'addMetodoPago']);
+$router->post('/admin/editMetodoPago', [PaymentMethodsController::class, 'editMetodoPago']);
+$router->get('/admin/editMetodoPago', [PaymentMethodsController::class, 'editMetodoPago']);
+$router->post('/admin/removeMetodoPago', [PaymentMethodsController::class, 'removeMetodoPago']);
+$router->get('/admin/removeMetodoPago', [PaymentMethodsController::class, 'removeMetodoPago']);
 
 // Rutas de Métodos de Entrega
-$router->get('/metodosEntrega', [DeliveryMethodsController::class, 'verDeliveryMethods']);
-$router->post('/addMetodoEntrega', [DeliveryMethodsController::class, 'addMetodoEntrega']);
-$router->get('/addMetodoEntrega', [DeliveryMethodsController::class, 'addMetodoEntrega']);
-$router->post('/editMetodoEntrega', [DeliveryMethodsController::class, 'editMetodoEntrega']);
-$router->get('/editMetodoEntrega', [DeliveryMethodsController::class, 'editMetodoEntrega']);
-$router->post('/removeMetodoEntrega', [DeliveryMethodsController::class, 'removeMetodoEntrega']);
-$router->get('/removeMetodoEntrega', [DeliveryMethodsController::class, 'removeMetodoEntrega']);
+$router->get('/admin/metodosEntrega', [DeliveryMethodsController::class, 'verDeliveryMethods']);
+$router->post('/admin/addMetodoEntrega', [DeliveryMethodsController::class, 'addMetodoEntrega']);
+$router->get('/admin/addMetodoEntrega', [DeliveryMethodsController::class, 'addMetodoEntrega']);
+$router->post('/admin/editMetodoEntrega', [DeliveryMethodsController::class, 'editMetodoEntrega']);
+$router->get('/admin/editMetodoEntrega', [DeliveryMethodsController::class, 'editMetodoEntrega']);
+$router->post('/admin/removeMetodoEntrega', [DeliveryMethodsController::class, 'removeMetodoEntrega']);
+$router->get('/admin/removeMetodoEntrega', [DeliveryMethodsController::class, 'removeMetodoEntrega']);
 
 // Comprueba y valida las rutas, que existan y les asigna las funciones del Controlador
 $router->comprobarRutas();

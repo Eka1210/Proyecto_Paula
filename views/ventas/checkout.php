@@ -1,7 +1,12 @@
+<?php
+include_once __DIR__ . "/../templates/alerts.php";
+?>
+
+
 <h1 style="text-align: center;">Checkout</h1>
 
 <div class="checkout">
-    <h2 class="checkout-title">Resumen del Carrito</h2>
+    <h2 class="checkout-title" style="margin-left: 10px;">Resumen del Carrito</h2>
 
     <?php if (!empty($productos)) : ?>
         <table class="products checkout">
@@ -36,8 +41,8 @@
         </table>
 
         <form method="POST" action="/cart/confirmOrder" onsubmit="return confirm('¿Está seguro de confirmar el pedido?')">
-            <h2 ><span>Métodos de Pago</span></h2>
-            <div class="payment-methods">
+            <h2  style="margin-left: 10px;"><span>Métodos de Pago</span></h2>
+            <div class="payment-methods" style="margin-left: 10px;">
                 <?php foreach ($metodosPago as $metodo) : ?>
                     <div>
                         <input 
@@ -55,8 +60,8 @@
                 <?php endforeach; ?>
             </div>
 
-            <h2 class="checkout-title">Métodos de Entrega</h2>
-            <div class="delivery-methods">
+            <h2 class="checkout-title"  style="margin-left: 10px;">Métodos de Entrega</h2>
+            <div class="delivery-methods" style="margin-left: 10px;">
                 <?php foreach ($metodosEntrega as $metodo) : ?>
                     <div>
                         <input 

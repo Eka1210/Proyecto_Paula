@@ -30,7 +30,7 @@
                                 <?php echo $metodoPago->description; ?>
                             </td>
                             <td class="table__td">
-                                <a href="/editMetodoPago?id=<?php echo $metodoPago->name;?>" class="categoryCard__view">
+                                <a href="/admin/editMetodoPago?id=<?php echo $metodoPago->name;?>" class="categoryCard__view">
                                     <i class="fa-solid fa-pen-to-square"></i>
                                     Editar
                                 </a>

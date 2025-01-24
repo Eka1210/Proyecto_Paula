@@ -134,7 +134,7 @@ verificarAccesoAdmin();
         <?php if (isset($_SESSION['admin'])) { ?>
             <a <?php if ($page == 'admin') {
                     echo 'class="active"';
-                } ?> href="/pedidosAdmin">
+                } ?> href="/admin/pedidos">
                 Pedidos</a>
         <?php } elseif (isset($_SESSION['login'])){ ?>
             <a <?php if ($page == 'Mis pedidos') {
@@ -145,13 +145,13 @@ verificarAccesoAdmin();
         <?php if (isset($_SESSION['admin'])) { ?>
             <a <?php if ($page == 'admin') {
                     echo 'class="active"';
-                } ?> href="/metodosPago">
+                } ?> href="/admin/metodosPago">
                 Métodos de Pago</a>
         <?php } ?>
         <?php if (isset($_SESSION['admin'])) { ?>
             <a <?php if ($page == 'admin') {
                     echo 'class="active"';
-                } ?> href="/metodosEntrega">
+                } ?> href="/admin/metodosEntrega">
                 Métodos de Entrega</a>
         <?php } ?>
         <?php if (isset($_SESSION['admin'])) { ?>

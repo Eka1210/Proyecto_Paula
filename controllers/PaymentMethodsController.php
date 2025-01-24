@@ -32,7 +32,7 @@ class PaymentMethodsController {
                 $metodoPago->create_time = date('Y-m-d H:i:s');
                 $metodoPago->guardar();
                 PaymentMethod::setAlerta('success', 'Metodo de Pago Creado');
-                header('Location: /metodosPago');
+                header('Location: /admin/metodosPago');
             }
         }
 
@@ -60,7 +60,7 @@ class PaymentMethodsController {
             if(empty($alertas)){
                 $metodoPago->guardar();
                 PaymentMethod::setAlerta('success', 'Método de pago editado');
-                header('Location: /metodosPago');
+                header('Location: /admin/metodosPago');
             }
         }
         $alertas = PaymentMethod::getAlertas();
@@ -84,7 +84,7 @@ class PaymentMethodsController {
             $id = $_POST['id'];
             $metodoPago = PaymentMethod::find($id);
             $metodoPago->eliminar();
-            header('Location: /metodosPago');
+            header('Location: /admin/metodosPago');
             exit;
         }
         $alertas = PaymentMethod::getAlertas();
