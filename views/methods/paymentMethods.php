@@ -3,7 +3,7 @@
 ?>
 
 <div style="display: flex; justify-content: space-between; align-items: center; margin: 0 20px;">
-    <a href="/addMetodoPago" class="form__submit--orange">
+    <a href="/admin/addMetodoPago" class="form__submit--orange">
         Crear Método de Pago
     </a>
 </div>
@@ -36,7 +36,7 @@
                                 </a>
                             </td>
                             <td class="table__td">
-                                <form action="/removeMetodoPago" method="POST" onsubmit="return confirm('Está seguro que quiere eliminar este método?')">
+                                <form action="/admin/removeMetodoPago" method="POST" onsubmit="return confirm('Está seguro que quiere eliminar este método?')">
                                     <input type="hidden" name="id" value="<?php echo $metodoPago->id; ?>">
                                     <button type="submit" class="categoryCard__view">
                                         <i class="fa-solid fa-trash"></i>

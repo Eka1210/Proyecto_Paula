@@ -19,11 +19,13 @@ class ProductController
 {
     public static function admin(Router $router)
     {
+        isAdmin();
         $router->render('ProductsSpects/gestionProductos');
     }
 
     public static function crear(Router $router)
     {
+        isAdmin();
         $producto = new Product();
         $alertas = [];
         $categorias = Category::all();
@@ -67,6 +69,7 @@ class ProductController
     }
     public static function ver(Router $router)
     {
+        isAdmin();
         $alertas = [];
         $products = Product::all();
         $productos = [];
@@ -85,6 +88,7 @@ class ProductController
 
     public static function deshabilitados(Router $router)
     {
+        isAdmin();
         $alertas = [];
         $products = Product::all();
         $productos = [];
@@ -103,7 +107,7 @@ class ProductController
 
     public static function editar(Router $router)
     {
-        //isAdmin();
+        isAdmin();
         $alertas = [];
         $producto = $_GET['id'] ?? null;
         $productoID = Product::find3($producto);
@@ -173,7 +177,7 @@ class ProductController
 
     public static function aar(Router $router)
     {
-        //isAdmin();
+        isAdmin();
         $alertas = [];
         $producto = $_GET['id'] ?? null;
         $productoID = Product::find3($producto);
@@ -232,6 +236,7 @@ class ProductController
 
     public static function activo(Router $router)
     {
+        isAdmin();
         $alertas = [];
         $productos = Product::all();
 
@@ -262,6 +267,7 @@ class ProductController
 
     public static function activo2(Router $router)
     {
+        isAdmin();
         $alertas = [];
         $productos = Product::all();
 
@@ -292,6 +298,7 @@ class ProductController
 
     public static function imagenes(Router $router)
     {
+        isAdmin();
         $alertas = [];
         $productos = Product::all();
         $categorias = Category::all();
@@ -395,6 +402,7 @@ class ProductController
 
     public static function personalizar(Router $router)
     {
+        isAdmin();
         $productId = $_GET['id'] ?? null;
 
         $producto = Product::find($productId);
@@ -422,6 +430,7 @@ class ProductController
 
     public static function crearOpcion(Router $router)
     {
+        isAdmin();
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $productId = $_GET['id'] ?? '';
             $optionData = $_POST['nombre'];
@@ -439,6 +448,7 @@ class ProductController
 
     public static function editarOpcion(Router $router)
     {
+        isAdmin();
         $optionID = $_GET['id'] ?? null;
 
         $option = Option::find($optionID);
@@ -468,6 +478,7 @@ class ProductController
 
     public static function eliminarOpcion(Router $router)
     {
+        
         $alertas = [];
         $productos = Product::all();
 
@@ -534,7 +545,7 @@ class ProductController
 
     public static function inventario(Router $router)
     {
-
+        isAdmin();
         $alertas = [];
         $productos = Product::all();
 
@@ -554,7 +565,7 @@ class ProductController
 
     public static function log(Router $router)
     {
-
+        isAdmin();
         $alertas = [];
         $logTotales = Inventorylog::all();
         $logs = [];
@@ -579,6 +590,7 @@ class ProductController
 
     public static function crearlog(Router $router)
     {
+        isAdmin();
         $inventario = new Inventorylog();
         $alertas = [];
         $productos = Product::all();
@@ -674,6 +686,7 @@ class ProductController
 
     public static function mostrarproducto(Router $router)
     {
+        
         $alertas = [];
         $producto = $_GET['nombre'] ?? null;
         $productoID = Product::find3($producto);

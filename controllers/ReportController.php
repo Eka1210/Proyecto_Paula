@@ -16,6 +16,7 @@ class ReportController
 {
     public static function reporte(Router $router)
     {
+        isAdmin();
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $startDate = $_POST['start_time'];
             $endDate = $_POST['end_time'];

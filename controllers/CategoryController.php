@@ -23,14 +23,12 @@ class CategoryController {
 
     public static function admin(Router $router)
     {
-        /*if (!isAdmin()) {
-            header('Location: /');
-        }*/
+        isAdmin();
         $router->render('ProductsSpects/gestionCategorias');
     }
     
     public static function crear(Router $router){
-        //isAdmin();
+        isAdmin();
         $categoria = new Category();
         $alertas = [];
         
@@ -49,6 +47,7 @@ class CategoryController {
     }
 
     public static function ver(Router $router){
+        isAdmin();
         $alertas = [];
         $categorias = Category::all();
 
@@ -66,7 +65,7 @@ class CategoryController {
     }
 
     public static function editar(Router $router){
-        //isAdmin();
+        isAdmin();
         $alertas = [];
         $categoria = $_GET['id'] ?? null;
         $categoriaID = Category::find2($categoria);
@@ -97,6 +96,7 @@ class CategoryController {
     }
 
     public static function eliminar(Router $router){
+        isAdmin();
         $alertas = [];
         $categorias = Category::all();
 
@@ -130,6 +130,7 @@ class CategoryController {
     }
 
     public static function subirImagen() {
+        isAdmin();
         $response = ['success' => false, 'message' => ''];
     
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -185,6 +186,7 @@ class CategoryController {
     }
 
     public static function eliminarImagen(Router $router){
+        isAdmin();
         $response = ['success' => false, 'message' => ''];
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {

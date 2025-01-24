@@ -75,6 +75,7 @@ class AdminController {
     }
 
     public static function ver(Router $router){
+        isAdmin();
         $alertas = [];
         $router->render('permisos/permisos', [
             'alertas' =>$alertas

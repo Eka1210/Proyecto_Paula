@@ -8,6 +8,7 @@ use Model\PaymentMethod;
 class PaymentMethodsController {
 
     public static function verPaymentMethods(Router $router){
+        isAdmin();
         $metodosPago = PaymentMethod::all();
 
         foreach ($metodosPago as $metodoPago) {
@@ -22,6 +23,7 @@ class PaymentMethodsController {
     }
 
     public static function addMetodoPago(Router $router){
+        isAdmin();
 
         $metodoPago = new PaymentMethod();
 
@@ -44,6 +46,7 @@ class PaymentMethodsController {
     }
 
     public static function editMetodoPago(Router $router){
+        isAdmin();
         $alertas = [];
         $metodoPago = $_GET['id'] ?? null;
         $metodoPagoID = PaymentMethod::find3($metodoPago);
@@ -72,6 +75,7 @@ class PaymentMethodsController {
     }
 
     public static function removeMetodoPago(Router $router){
+        isAdmin();
         $alertas = [];
         $metodosPago = PaymentMethod::all();
 

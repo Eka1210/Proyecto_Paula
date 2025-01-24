@@ -15,6 +15,7 @@ use Model\CategoryXProduct;
 class PedidosController{
     // Funcion para que el admin vea todos los pedidos
     public static function verAdmin(Router $router){
+        isAdmin();
         $pedidos = Sale::all();
 
         foreach ($pedidos as $pedido) {
@@ -35,6 +36,7 @@ class PedidosController{
 
     public static function verProductosPedido(Router $router)
     {
+        isAdmin();
         $pedidoId = $_GET['id'] ?? null;
     
         if ($pedidoId) {
@@ -80,6 +82,7 @@ class PedidosController{
         ]);
     }
     public static function editPedido(Router $router){
+        isAdmin();
         $id = $_POST['id'] ?? null;
         $descripcion = $_POST['descripcion'] ?? null;
 

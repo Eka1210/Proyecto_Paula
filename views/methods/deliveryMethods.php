@@ -3,7 +3,7 @@
 ?>
 
 <div style="display: flex; justify-content: space-between; align-items: center; margin: 0 20px;">
-    <a href="/addMetodoEntrega" class="form__submit--orange">
+    <a href="/admin/addMetodoEntrega" class="form__submit--orange">
         Crear Método de Entrega
     </a>
 </div>
@@ -40,7 +40,7 @@
                                 </a>
                             </td>
                             <td class="table__td">
-                                <form action="/removeMetodoEntrega" method="POST" onsubmit="return confirm('Está seguro que quiere eliminar este método?')">
+                                <form action="/admin/removeMetodoEntrega" method="POST" onsubmit="return confirm('Está seguro que quiere eliminar este método?')">
                                     <input type="hidden" name="id" value="<?php echo $metodoEntrega->id; ?>">
                                     <button type="submit" class="categoryCard__view">
                                         <i class="fa-solid fa-trash"></i>

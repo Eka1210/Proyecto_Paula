@@ -9,6 +9,7 @@ use Model\DeliveryMethod;
 class DeliveryMethodsController {
 
     public static function verDeliveryMethods(Router $router){
+        isAdmin();
         $metodosEntrega = DeliveryMethod::all();
 
         foreach ($metodosEntrega as $metodoEntrega) {
@@ -24,7 +25,7 @@ class DeliveryMethodsController {
     }
 
     public static function addMetodoEntrega(Router $router){
-
+        isAdmin();
         $metodoEntrega = new DeliveryMethod();
 
         if($_SERVER['REQUEST_METHOD'] === 'POST'){
@@ -46,6 +47,7 @@ class DeliveryMethodsController {
     }
 
     public static function editMetodoEntrega(Router $router){
+        isAdmin();
         $alertas = [];
         $metodoEntrega = $_GET['id'] ?? null;
         $metodoEntregaID = DeliveryMethod::find3($metodoEntrega);
@@ -76,6 +78,7 @@ class DeliveryMethodsController {
     }
 
     public static function removeMetodoEntrega(Router $router){
+        isAdmin();
         $alertas = [];
         $metodosEntrega = DeliveryMethod::all();
 

@@ -19,6 +19,7 @@ class PromotionController
 
     public static function ver(Router $router)
     {
+        isAdmin();
         $alertas = [];
         $promociones = Promotion::all();
 
@@ -38,6 +39,7 @@ class PromotionController
 
     public static function crear(Router $router)
     {
+        isAdmin();
         $promocion = new Promotion();
         $alertas = [];
         $productos = Product::all();
@@ -77,7 +79,7 @@ class PromotionController
 
     public static function editar(Router $router)
     {
-        //isAdmin();
+        isAdmin();
         $alertas = [];
         $promocion = Promotion::find($_GET['id']);
         $promocion->percentage = $promocion->percentage;
@@ -134,6 +136,7 @@ class PromotionController
 
     public static function eliminar(Router $router)
     {
+        isAdmin();
         $alertas = [];
         $promociones = Promotion::all();
 
