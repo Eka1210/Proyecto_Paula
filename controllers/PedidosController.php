@@ -36,7 +36,6 @@ class PedidosController{
 
     public static function verProductosPedido(Router $router)
     {
-        isAdmin();
         $pedidoId = $_GET['id'] ?? null;
     
         if ($pedidoId) {

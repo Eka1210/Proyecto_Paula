@@ -220,8 +220,8 @@ class CartController {
         }
     }
     
-    private static function obtenerPromocionesDelProducto(int $productID, array $promocionesActivas): Promotion {
-        $promocionMayor = 0;
+    private static function obtenerPromocionesDelProducto(int $productID, array $promocionesActivas): ?Promotion {
+        $promocionMayor = null;
         $promocionesDelProducto = [];
 
         foreach ($promocionesActivas as $promocion) {
@@ -252,9 +252,10 @@ class CartController {
 
             $promocionesDelProducto = self::obtenerPromocionesDelProducto($producto->id, $promocionesActivas);
 
-            $producto->discount += self::aplicarDescuentoPorPromocion($producto, $promocionesDelProducto);
-            $producto->discountPercentage += $promocionesDelProducto->percentage; // Último porcentaje aplicado
-
+            if($promocionesDelProducto){
+                $producto->discount += self::aplicarDescuentoPorPromocion($producto, $promocionesDelProducto);
+                $producto->discountPercentage += $promocionesDelProducto->percentage; // Último porcentaje aplicado
+            }
         }
 
         return $productos;
