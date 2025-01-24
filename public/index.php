@@ -126,11 +126,12 @@ $router->post('/admin/inventario/log', [ProductController::class, 'log']);
 $router->get('/admin/inventario/crear', [ProductController::class, 'crearlog']);
 $router->post('/admin/inventario/crear', [ProductController::class, 'crearlog']);
 
-//Rutas de pedidos
+//Rutas de pedidos Admin
 $router->get('/pedidosAdmin', [PedidosController::class, 'verAdmin']);
-$router->post('/pedidosAdmin/verProductosPedido', [PedidosController::class, 'verProductosPedido']);
-$router->get('/pedidosAdmin/verProductosPedido', [PedidosController::class, 'verProductosPedido']);
 $router->post('/pedidosAdmin/guardarEstado', [PedidosController::class, 'editPedido']);
+$router->post('/pedidos/verProductosPedido', [PedidosController::class, 'verProductosPedido']);
+$router->get('/pedidos/verProductosPedido', [PedidosController::class, 'verProductosPedido']);
+$router->get('/pedidos', [PedidosController::class, 'verCliente']);
 
 //Rutas de WishList
 $router->get('/wishlist', [WishListController::class, 'list']);

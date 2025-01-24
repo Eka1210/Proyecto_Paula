@@ -80,13 +80,11 @@ class PedidosController{
             'pedidoId' => $pedidoId
         ]);
     }
-
     public static function editPedido(Router $router){
         $id = $_POST['id'] ?? null;
         $descripcion = $_POST['descripcion'] ?? null;
-    
-        if ($id && $descripcion) {
 
+        if ($id && $descripcion) {
             $pedido = Sale::find($id);
             if ($pedido) {
                 $pedido->descripcion = $descripcion;
@@ -95,6 +93,29 @@ class PedidosController{
         }
         header('Location: /pedidosAdmin');
         exit;
+    }
+    public static function verCliente(Router $router){
+        $userId = $_SESSION['userId'] ?? null;
+        $clientId = Client::find4($userId)->id;
+        $pedidos = Sale::find5($clientId);
+
+        if($pedidos){
+            foreach ($pedidos as $pedido) {
+                $pedido->id = $pedido->id;
+                $pedido->$descripcion = $pedido->$descripcion;
+                $pedido->$monto = $pedido->$monto;
+                $pedido->$fecha = $pedido->$fecha;
+                $pedido->$discount = $pedido->$discount;
+                $pedido->cliente = Client::find($pedido->userId)->name . ' ' . Client::find($pedido->userId)->surname ?? 'Desconocido'; // Nombre del cliente
+                $pedido->metodoPago = PaymentMethod::find($pedido->paymentMethodId)->name ?? 'Desconocido'; // Nombre del método de pago
+                $pedido->metodoPagoDesc = PaymentMethod::find($pedido->paymentMethodId)->description ?? 'Desconocido'; // Nombre del método de pago
+                $pedido->metodoEntrega = DeliveryMethod::find($pedido->deliveryMethodId)->name ?? 'Desconocido'; // Nombre del método de entrega
+            }
+        }
+
+        $router->render('pedidos/pedidosClient', [
+            'pedidos' => $pedidos
+        ]);
     }
 
 }
