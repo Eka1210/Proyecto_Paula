@@ -7,9 +7,9 @@
             <label for="name" class="create-category__form__label">Nombre del método</label>
             <input type="text" name="name" id="name" class="create-category__form__input" required>
         </div>
-        <div class="create-category__form__field">
-            <label for="cost" class="create-category__form__label">Costo</label>
-            <input type="text" name="cost" id="cost" class="create-category__form__input" required>
+        <div class="create-product_form_field">
+            <label for="price" class="create-product_form_label">Costo</label>
+            <input class="form__input" type="number" step="0.01" placeholder="Precio del Método" id="cost" name="cost"; ?>
         </div>
         <div class="create-category__form__field">
             <label for="description" class="create-category__form__label">Descripción</label>
