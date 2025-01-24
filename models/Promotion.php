@@ -43,6 +43,10 @@ class Promotion extends ActiveRecord
         if (!$this->end_time) {
             self::setAlerta('error', 'La fecha de finalización es obligatorio');
         }
+
+        if ($this->doesNameExist()) {
+            self::setAlerta('error', 'La promoción con ese nombre ya existe');
+        }
         return self::$alertas;
     }
 
@@ -62,5 +66,22 @@ class Promotion extends ActiveRecord
 
         $resultado = self::consultarSQL($query);
         return $resultado;
+    }
+
+    public function doesNameExist()
+    {
+        $query = "SELECT EXISTS (
+            SELECT 1 
+            FROM " . self::$tabla . " 
+            WHERE name = ? AND id != ?
+        ) AS exists_with_same_name";
+
+        $stmt = self::$db->prepare($query);
+        $stmt->bind_param('si', $this->name, $this->id);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $row = $result->fetch_assoc();
+
+        return $row['exists_with_same_name'] == 1;
     }
 }

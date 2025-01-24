@@ -144,13 +144,17 @@ class ProductController
             $cantidadOriginal = $producto->cantidad;
             $cantidad = intval($_POST['cantidad']);
             $producto->sincronizar($_POST);
+            $alertasInventorio = [];
+            if ($cantidadOriginal < $cantidad) {
+                $alertasInventorio = ProductController::createInventoryOnly($producto->id, $cantidad - $cantidadOriginal, 'Modificación de admin', true);
+            } else if ($cantidadOriginal > $cantidad) {
+                $alertasInventorio = ProductController::createInventoryOnly($producto->id, $cantidadOriginal - $cantidad, 'Modificación de admin', false);
+            }
+            $alertas = array_merge($alertas, $alertasInventorio);
+
             $alertas = $producto->validate();
             if (empty($alertas)) {
-                if ($cantidadOriginal < $cantidad) {
-                    ProductController::createInventoryOnly($producto->id, $cantidad - $cantidadOriginal, 'Modificación de admin', true);
-                } else if ($cantidadOriginal > $cantidad) {
-                    ProductController::createInventoryOnly($producto->id, $cantidadOriginal - $cantidad, 'Modificación de admin', false);
-                }
+
                 $producto->guardar();
                 Product::setAlerta('success', 'Producto Editada');
 
@@ -579,9 +583,17 @@ class ProductController
         $alertas = [];
         $productos = Product::all();
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            ProductController::createInventory($_POST['product'], $_POST['quantity'], $_POST['action'], $_POST['isIncrementing']);
-            header('Location: /admin/inventario');
-            exit;
+
+            if ($_POST['quantity'] != null) {
+                $alertas = ProductController::createInventory($_POST['product'], $_POST['quantity'], $_POST['action'], $_POST['isIncrementing']);
+                if (empty($alertas)) {
+                    header('Location: /admin/inventario');
+                    exit;
+                }
+            } else {
+                Product::setAlerta('error', 'Cantidad no válida');
+                $alertas = Product::getAlertas();
+            }
         }
         $router->render('/inventario/crear', [
             'inventario' => $inventario,
@@ -619,6 +631,7 @@ class ProductController
         if (empty($alertas)) {
             $inventario->guardar();
         }
+        return $alertas;
     }
 
 
@@ -654,6 +667,7 @@ class ProductController
             $product->sincronizar($product);
             $product->guardar();
         }
+        return $alertas;
     }
 
 

@@ -102,5 +102,21 @@ class Product extends ActiveRecord
     }
 
 
-    
+
+    public static function doesProductExist($id)
+    {
+        $query = "SELECT EXISTS (
+       SELECT 1 
+       FROM " . self::$tabla . " 
+       WHERE id = ?
+   ) AS product_exists";
+
+        $stmt = self::$db->prepare($query);
+        $stmt->bind_param('i', $id);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        $row = $result->fetch_assoc();
+        return (bool) $row['product_exists'];
+    }
 }

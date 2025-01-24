@@ -1,3 +1,7 @@
+<?php
+include_once __DIR__ . "/../templates/alerts.php";
+?>
+
 <div class="create-category">
     <h1 class="create-category__title">Editar Promoción</h1>
     <p class="create-category__description">Llena el siguiente formulario para editar</p>
@@ -5,11 +9,11 @@
     <form method="POST" class="create-category__form">
         <div class="create-category__form__field">
             <label for="name" class="create-category__form__label">Nombre del descuento</label>
-            <input type="text" name="name" id="name" class="create-category__form__input" value="<?php echo $promocion->name ?? ''; ?>" required>
+            <input type="text" name="name" id="name" class="create-category__form__input" value="<?php echo $promocion->name ?? ''; ?>" maxlength="44" required>
         </div>
         <div class="create-category__form__field">
             <label for="description" class="create-category__form__label">Descripción</label>
-            <textarea name="description" id="description" class="create-category__form__textarea" required><?php echo $promocion->description; ?></textarea>
+            <input name="description" id="description" class="create-category__form__input" maxlength="49" value="<?php echo $promocion->description ?? ''; ?>" required>
         </div>
         <div class="create-category__form__field">
             <label for="percentage" class="create-category__form__label">Porcentaje del descuento</label>

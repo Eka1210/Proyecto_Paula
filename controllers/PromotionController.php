@@ -43,8 +43,8 @@ class PromotionController
         $productos = Product::all();
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $promocion = new Promotion($_POST);
-            $alertas = $promocion->validate();
             $promocion->active = 1;
+            $alertas = $promocion->validate();
             if (empty($alertas)) {
                 $datos = $promocion->guardar();
 

@@ -83,7 +83,11 @@ class PagesController
         $productos = [];
 
         foreach ($productosC as $producto) {
-            $productos[] = Product::find($producto->productID);
+            $productoFinal = Product::find($producto->productID);
+            $discount = Promotion::getDiscount($productoFinal->id)[0] ?? null;
+            $productoFinal->discountPercentage = $discount ? $discount->percentage : 0;
+
+            $productos[] = $productoFinal;
         }
 
         $router->render('profile/categoria', [

@@ -51,7 +51,7 @@
                                 <label for="quantity">Cantidad:</label>
                                 <select id="quantity" name="quantity">
                                     <?php
-                                    for ($i = 1; $i <= 100; $i++) {
+                                    for ($i = 1; $i <= $producto->cantidad; $i++) {
                                         echo '<option value="' . htmlspecialchars($i) . '">' . htmlspecialchars($i) . '</option>';
                                     }
                                     ?>
