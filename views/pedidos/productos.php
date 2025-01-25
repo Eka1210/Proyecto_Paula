@@ -1,7 +1,9 @@
-<h1 class="section__heading"><span> Productos del Pedido #<?php echo htmlspecialchars($pedidoId); ?> </span></h1>
 
-<?php if (!empty($productos)) { ?>
-    <table class="table">
+
+<div class='detalle'>
+    <h1 class="section__heading"><span> Productos del Pedido #<?php echo htmlspecialchars($pedidoId); ?> </span></h1>
+    <?php if (!empty($productos)) { ?>
+    <table class="table" >
         <thead class="table__thead">
             <tr>
                 <th scope="col" class="table__th">Producto</th>
@@ -36,3 +38,4 @@
 <?php } else { ?>
     <p class="admins__empty">No hay productos asociados a este pedido.</p>
 <?php } ?>
+</div>

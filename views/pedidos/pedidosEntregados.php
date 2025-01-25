@@ -2,17 +2,13 @@
     include_once __DIR__ . "/../templates/alerts.php";
 ?>
 <div style="display: flex; justify-content: space-between; align-items: center; margin: 0 20px;">
-    <a href="/admin/pedidos/cancelados" class="form__submit--orange">
-        Pedidos Cancelados
+    <a href="/admin/pedidos" class="form__submit--orange">
+        Pedidos
     </a>    
-    <a href="/admin/pedidos/entregados" class="form__submit--orange">
-        Pedidos Entregados
-    </a>
-    
 </div>
 
-<div class="detalle" style="margin-bottom: 2rem;">   
-    <h1 class="section__heading"><span> Historial de Pedidos </span></h1>
+<div class="detalle"style="margin-bottom: 2rem;">   
+    <h1 class="section__heading"><span> Historial de Pedidos Entregados</span></h1>
     <?php if(!empty($pedidos)){ ?>
             <table class="table">
                 <thead class="table__thead">

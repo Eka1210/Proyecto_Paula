@@ -9,7 +9,7 @@ include_once __DIR__ . "/../templates/alerts.php";
     <h2 class="checkout-title" style="margin-left: 10px;">Resumen del Carrito</h2>
 
     <?php if (!empty($productos)) : ?>
-        <table class="products checkout">
+        <table class="products checkout" style="margin-bottom: 3rem; border-spacing: 0 20px;">
             <thead>
                 <tr>
                     <th>Producto</th>
@@ -41,7 +41,7 @@ include_once __DIR__ . "/../templates/alerts.php";
         </table>
 
         <form method="POST" action="/cart/confirmOrder" onsubmit="return confirm('¿Está seguro de confirmar el pedido?')">
-            <h2  style="margin-left: 10px;"><span>Métodos de Pago</span></h2>
+            <h2  style="margin-left: 10px; margin-top: 2rem;"><span>Métodos de Pago</span></h2>
             <div class="payment-methods" style="margin-left: 10px;">
                 <?php foreach ($metodosPago as $metodo) : ?>
                     <div>
@@ -51,6 +51,7 @@ include_once __DIR__ . "/../templates/alerts.php";
                             name="paymentMethod" 
                             value="<?php echo $metodo->id; ?>" 
                             required
+                            style='margin-bottom:2rem;'
                         >
                         <label for="payment-<?php echo $metodo->id; ?>">
                             <strong><?php echo htmlspecialchars($metodo->name); ?></strong>: 
@@ -71,6 +72,7 @@ include_once __DIR__ . "/../templates/alerts.php";
                             value="<?php echo $metodo->id; ?>" 
                             required
                             onchange="updateTotal(<?php echo $metodo->cost; ?>)"
+                            style='margin-bottom:2rem;'
                         >
                         <label for="delivery-<?php echo $metodo->id; ?>">
                             <strong><?php echo htmlspecialchars($metodo->name); ?></strong>: 

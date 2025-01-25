@@ -51,7 +51,7 @@ verificarAccesoAdmin();
 
 <body>
     <header class="header section">
-        <a href="/" class="logo" style="width: 70px; height: auto;">
+        <a href="/" class="logo" style="width: 100px; height: auto;">
             <img src="/images/logo.png">
         </a>
         
@@ -231,8 +231,7 @@ window.addEventListener('resize', checkOverflow);
 // Verificar el estado inicial
 checkOverflow();
 
-
-
 </script>
 
 </html>
+

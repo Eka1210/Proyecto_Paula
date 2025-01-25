@@ -2,7 +2,7 @@
     include_once __DIR__ . "/../templates/alerts.php";
 ?>
 
-<div class="detalle3">   
+<div class="detalle3" style='margin-bottom: 2rem;'>   
     <h1 class="section__heading"><span> Pedidos </span></h1>
     <?php if(!empty($pedidos)){ ?>
             <table class="table">

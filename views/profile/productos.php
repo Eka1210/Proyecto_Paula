@@ -117,4 +117,35 @@
             xhr.send();
         });
     });
+
+    document.addEventListener('DOMContentLoaded', () => {
+    const cartButtons = document.querySelectorAll('.cart-button');
+    const cartCountElement = document.getElementById('cart-count');
+
+    cartButtons.forEach(button => {
+        button.addEventListener('click', async (event) => {
+            event.preventDefault(); // Evita la recarga de página
+            const productId = button.dataset.product; // ID del producto
+            const quantity = button.closest('form').querySelector('#quantity').value;
+
+            // Llamada a PHP para agregar al carrito
+            const response = await fetch('cart/AddToCart', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: `producto=${productId}&quantity=${quantity}`
+            });
+
+            if (response.ok) {
+                // Simula obtener el total de productos en el carrito
+                const data = await response.json();
+                cartCountElement.textContent = data.totalItems; // Actualiza la burbuja
+            } else {
+                alert('No se pudo agregar el producto al carrito');
+            }
+        });
+    });
+});
+
 </script>

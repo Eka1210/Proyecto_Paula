@@ -5,7 +5,7 @@
 </div>
 
 
-<div class="detalle">
+<div class="detalle" style='margin-bottom: 2rem;'>
     <h1 class="section__heading"><span> Inventario </span></h1>
     <?php if (!empty($productos)) { ?>
         <table class="table">

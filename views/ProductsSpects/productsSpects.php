@@ -48,7 +48,7 @@
                     }
                     ?>
                     <h2>Cantidad</h2>
-                    <input type="number" name="quantity" min="1" max="<?php echo htmlspecialchars($producto->cantidad); ?>" value="1" required>
+                    <input type="number" name="quantity" min="1" value="1" required>
                 </div>
 
                 <!-- Botón para agregar al carrito -->

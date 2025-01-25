@@ -17,8 +17,15 @@ class PedidosController{
     public static function verAdmin(Router $router){
         isAdmin();
         $pedidos = Sale::all();
+        $sales = [];
 
         foreach ($pedidos as $pedido) {
+            if ($pedido->descripcion != 'cancelado' and $pedido->descripcion != 'entregado' ) {
+                $sales[] = $pedido;
+            }
+        }
+
+        foreach ($sales as $pedido) {
             $pedido->id = $pedido->id;
             $pedido->$descripcion = $pedido->$descripcion;
             $pedido->$monto = $pedido->$monto;
@@ -37,7 +44,75 @@ class PedidosController{
         }
 
         $router->render('pedidos/pedidosAdmin', [
-            'pedidos' => $pedidos
+            'pedidos' => $sales
+        ]);
+    }
+
+    public static function cancelados(Router $router){
+        isAdmin();
+        $pedidos = Sale::all();
+        $sales = [];
+
+        foreach ($pedidos as $pedido) {
+            if ($pedido->descripcion == 'cancelado') {
+                $sales[] = $pedido;
+            }
+        }
+
+        foreach ($sales as $pedido) {
+            $pedido->id = $pedido->id;
+            $pedido->$descripcion = $pedido->$descripcion;
+            $pedido->$monto = $pedido->$monto;
+            $pedido->$fecha = $pedido->$fecha;
+            $pedido->$discount = $pedido->$discount;
+
+            $cliente= Client::find($pedido->userId);
+            if($cliente){
+                $pedido->cliente = $cliente->name . ' ' . $cliente->surname ?? 'Desconocido'; // Nombre del cliente
+                $pedido->phone = $cliente->phone;
+                $pedido->address = $cliente->address;
+            }
+
+            $pedido->metodoPago = PaymentMethod::find($pedido->paymentMethodId)->name ?? 'Desconocido'; // Nombre del método de pago
+            $pedido->metodoEntrega = DeliveryMethod::find($pedido->deliveryMethodId)->name ?? 'Desconocido'; // Nombre del método de entrega
+        }
+
+        $router->render('pedidos/pedidosCancelados', [
+            'pedidos' => $sales
+        ]);
+    }
+
+    public static function entregados(Router $router){
+        isAdmin();
+        $pedidos = Sale::all();
+        $sales = [];
+
+        foreach ($pedidos as $pedido) {
+            if ($pedido->descripcion == 'entregado') {
+                $sales[] = $pedido;
+            }
+        }
+
+        foreach ($sales as $pedido) {
+            $pedido->id = $pedido->id;
+            $pedido->$descripcion = $pedido->$descripcion;
+            $pedido->$monto = $pedido->$monto;
+            $pedido->$fecha = $pedido->$fecha;
+            $pedido->$discount = $pedido->$discount;
+
+            $cliente= Client::find($pedido->userId);
+            if($cliente){
+                $pedido->cliente = $cliente->name . ' ' . $cliente->surname ?? 'Desconocido'; // Nombre del cliente
+                $pedido->phone = $cliente->phone;
+                $pedido->address = $cliente->address;
+            }
+
+            $pedido->metodoPago = PaymentMethod::find($pedido->paymentMethodId)->name ?? 'Desconocido'; // Nombre del método de pago
+            $pedido->metodoEntrega = DeliveryMethod::find($pedido->deliveryMethodId)->name ?? 'Desconocido'; // Nombre del método de entrega
+        }
+
+        $router->render('pedidos/pedidosEntregados', [
+            'pedidos' => $sales
         ]);
     }
 
@@ -105,6 +180,7 @@ class PedidosController{
                 $productos = Productxsale::allSale($id);
                 if($productos){
                     foreach($productos as $producto){
+                        echo $producto->name;
                         $productoReal = Product::find($producto->productID);
                         if($productoReal->encargo == 0){
                             ProductController::createInventory($producto->productID,$producto->quantity,'Pedido Cancelado',1);
@@ -113,21 +189,7 @@ class PedidosController{
                 }
             }
         }
-        $pedidos = Sale::all();
-        foreach ($pedidos as $pedido) {
-            $pedido->id = $pedido->id;
-            $pedido->$descripcion = $pedido->$descripcion;
-            $pedido->$monto = $pedido->$monto;
-            $pedido->$fecha = $pedido->$fecha;
-            $pedido->$discount = $pedido->$discount;
-            $pedido->cliente = Client::find($pedido->userId)->name . ' ' . Client::find($pedido->userId)->surname ?? 'Desconocido'; // Nombre del cliente
-            $pedido->metodoPago = PaymentMethod::find($pedido->paymentMethodId)->name ?? 'Desconocido'; // Nombre del método de pago
-            $pedido->metodoEntrega = DeliveryMethod::find($pedido->deliveryMethodId)->name ?? 'Desconocido'; // Nombre del método de entrega
-        }
-
-        $router->render('pedidos/pedidosAdmin', [
-            'pedidos' => $pedidos
-        ]);
+        header('Location: /admin/pedidos');
         exit;
     }
     public static function verCliente(Router $router){
@@ -153,5 +215,4 @@ class PedidosController{
             'pedidos' => $pedidos
         ]);
     }
-
 }

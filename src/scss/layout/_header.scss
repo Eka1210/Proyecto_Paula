@@ -39,29 +39,36 @@
             margin: 1rem;
             text-align: center;
         }
-        .carrito{
-            background-color: v.$vino;
-            border-radius: 5rem;
-            height: 5rem;
-            width: 12rem;
-            color: v.$blanco;
-            background-image: url('../img/cart.png');
-            background-size: 40%;
-            background-repeat: no-repeat;
-            background-position: center;
-        }
-
-        .carrito{
-            background-color: v.$vino;
-            border-radius: 5rem;
-            height: 5rem;
-            width: 12rem;
-            color: v.$blanco;
-            background-image: url('../img/cart.png');
-            background-size: 40%;
-            background-repeat: no-repeat;
-            background-position: center;
-        }
+        .carrito {
+          background-color: v.$vino;
+          border-radius: 5rem;
+          height: 5rem;
+          width: 12rem;
+          color: v.$blanco;
+          background-image: url('../img/cart.png');
+          background-size: 40%;
+          background-repeat: no-repeat;
+          background-position: center;
+          position: relative; // Para posicionar la burbuja dentro del contenedor
+      
+          .cart-count {
+              position: absolute;
+              top: -0.5rem;
+              right: -0.5rem;
+              background: v.$dorado;
+              color: v.$blanco;
+              font-size: 1rem;
+              font-weight: bold;
+              width: 2rem;
+              height: 2rem;
+              border-radius: 50%;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
+          }
+      }
+      
 
         .wishlist{
             background-color: v.$vino;

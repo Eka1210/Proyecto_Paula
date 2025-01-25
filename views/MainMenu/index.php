@@ -1,5 +1,8 @@
-<div class="publicidad" style="justify-content: center;">
-    <p class="flecha" style="color: #693334; justify-content: center; font-size: 7rem; ">Productos Hechos a Mano </p>
+<div class="publicidad" style="display: flex; flex-direction: column; align-items: center;">
+    <p style="color: #693334; font-size: 6rem; font-weight: bold; margin-bottom:0.5rem;">¿Qué es PJ Solutions?</p>
+    <p style="color: #693334; font-size: 3rem; text-align: center; margin:2rem 10rem 0rem 10rem">Diseñamos emociones en papel.</p>
+    <p style="color: #693334; font-size: 3rem; text-align: center; margin:1rem 10rem 0rem 10rem">Especialistas en tarjetas, agendas y detalles únicos para regalos inolvidables.</p>
+    <p style="color: #693334; font-size: 3rem; text-align: center; margin:1rem 10rem 3rem 10rem">Personalizamos cada momento con amor y creatividad</p>
 </div>
 
 
@@ -28,7 +31,7 @@
                         <?php
                         } else {
                         ?>
-                            <p class="precio">₡<?php echo number_format($producto->price, 2); ?> I.V.A.I</p>
+                            <p class="precio"style="margin-bottom: 2rem;">₡<?php echo number_format($producto->price, 2); ?> I.V.A.I</p>
                         <?php
                         }
                         ?>
