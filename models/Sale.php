@@ -36,4 +36,10 @@ class Sale extends ActiveRecord{
             'id' => self::$db->insert_id
         ];
     }
+
+    public function removeUser(){
+        $query = "UPDATE " . static::$tabla . " SET userId = null WHERE id = " . $this->id;
+        $result = self::$db->query($query);
+        return $result;
+    }
 }

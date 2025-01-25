@@ -188,4 +188,5 @@ class Usuario extends ActiveRecord{
         return self::$alertas;
     }
 
+
 }

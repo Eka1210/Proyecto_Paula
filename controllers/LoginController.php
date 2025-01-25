@@ -325,6 +325,7 @@ class LoginController {
         isAuth();
         $id = $_SESSION['userId'];
         $user = Usuario::find($id);
+        $sales = Usuario::sales();
         $client = Client::findClient($id);
 
         $cart = Cart::where('userId', $id);
