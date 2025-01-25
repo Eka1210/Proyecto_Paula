@@ -12,6 +12,8 @@
                         <th scope="col" class="table__th">Monto</th>
                         <th scope="col" class="table__th">Fecha</th>
                         <th scope="col" class="table__th">Cliente</th>
+                        <th scope="col" class="table__th">Telefono</th>
+                        <th scope="col" class="table__th">Direccion</th>
                         <th scope="col" class="table__th">Método de Pago</th>
                         <th scope="col" class="table__th">Método de Entrega</th>
                         <th scope="col" class="table__th">Estado</th>
@@ -33,6 +35,12 @@
                             </td>
                             <td class="table__td">
                                 <?php echo $pedido->cliente; ?>
+                            </td>
+                            <td class="table__td">
+                                <?php echo $pedido->phone; ?>
+                            </td>
+                            <td class="table__td">
+                                <?php echo $pedido->address; ?>
                             </td>
                             <td class="table__td">
                                 <?php echo $pedido->metodoPago; ?>

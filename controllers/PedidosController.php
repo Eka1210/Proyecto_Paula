@@ -24,7 +24,14 @@ class PedidosController{
             $pedido->$monto = $pedido->$monto;
             $pedido->$fecha = $pedido->$fecha;
             $pedido->$discount = $pedido->$discount;
-            $pedido->cliente = Client::find($pedido->userId)->name . ' ' . Client::find($pedido->userId)->surname ?? 'Desconocido'; // Nombre del cliente
+
+            $cliente= Client::find($pedido->userId);
+            if($cliente){
+                $pedido->cliente = $cliente->name . ' ' . $cliente->surname ?? 'Desconocido'; // Nombre del cliente
+                $pedido->phone = $cliente->phone;
+                $pedido->address = $cliente->address;
+            }
+
             $pedido->metodoPago = PaymentMethod::find($pedido->paymentMethodId)->name ?? 'Desconocido'; // Nombre del método de pago
             $pedido->metodoEntrega = DeliveryMethod::find($pedido->deliveryMethodId)->name ?? 'Desconocido'; // Nombre del método de entrega
         }
