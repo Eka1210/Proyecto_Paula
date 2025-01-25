@@ -79,7 +79,7 @@ $router->post('/admin/eliminar/option', [ProductController::class, 'eliminarOpci
 $router->get('/mostrarproducto', [ProductController::class, 'mostrarproducto']);
 $router->post('/mostrarproducto', [ProductController::class, 'mostrarproducto']);
 $router->get('/admin/productos/deshabilitados', [ProductController::class, 'deshabilitados']);
-
+$router->post('/reviews/add', [ProductController::class, 'addReview']);
 
 //Rutas permisos de admin
 $router->get('/admin/permisos', [AdminController::class, 'ver']);

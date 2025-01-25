@@ -12,6 +12,7 @@ use Model\OptionsXProduct;
 use Model\Inventorylog;
 use Model\Wishlist;
 use Model\Promotion;
+use Model\Review;
 
 use Controllers\CartController;
 
@@ -682,7 +683,23 @@ class ProductController
         return $alertas;
     }
 
+    public static function addReview(Router $router) {
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $review = new Review($_POST);
+            date_default_timezone_set('America/Costa_Rica');
+            $review->create_time = date('Y-m-d H:i:s'); // Fecha actual
 
+            $alertas = $review->validate();
+            if (empty($alertas)) {
+                $review->guardar();
+                Review::setAlerta('success', 'Reseña publicada correctamente.');
+            }
+
+            $router->render('product/reviews', [
+                'alertas' => Review::getAlertas()
+            ]);
+        }
+    }
 
     public static function mostrarproducto(Router $router)
     {
@@ -691,7 +708,6 @@ class ProductController
         $producto = $_GET['nombre'] ?? null;
         $productoID = Product::find3($producto);
         $resultado = $productoID->fetch_assoc()['id'];
-
         $producto = Product::find($resultado);
         $options = OptionsXProduct::all2($resultado);
 
@@ -706,6 +722,7 @@ class ProductController
         } else {
             $producto->liked = false;
         }
+
 
         $producto->name = $producto->name;
         $producto->id = $producto->id;
@@ -742,13 +759,20 @@ class ProductController
             exit;
         }
 
+
+        $reviews = Review::all2(22);
+        if(empty($reviews)){
+            header("Location: /productos ");
+        }
+
         $discount = Promotion::getDiscount($producto->id)[0] ?? null;
         $producto->discountPercentage = $discount ? $discount->percentage : 0;
         $router->render('ProductsSpects/productsSpects', [
             'producto' => $producto,
             'recomendados' => $recomendados,
             'options' => $options,
-            'productId' => $resultado
+            'productId' => $resultado,
+            'reviews' => $reviews
         ]);
     }
 

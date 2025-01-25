@@ -21,4 +21,16 @@ class Review extends ActiveRecord
         $this->productID = $args['productID'] ?? null;
         $this->rating = $args['rating'] ?? null;
     }
+    public function validate() {
+        if (!$this->review) {
+            self::setAlerta('error', 'El comentario no puede estar vacío.');
+        }
+        if (!$this->rating) {
+            self::setAlerta('error', 'La calificación es obligatoria.');
+        }
+        if (!$this->productID) {
+            self::setAlerta('error', 'El producto no es válido.');
+        }
+        return self::$alertas;
+    }
 }

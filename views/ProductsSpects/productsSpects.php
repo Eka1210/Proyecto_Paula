@@ -48,7 +48,7 @@
                     }
                     ?>
                     <h2>Cantidad</h2>
-                    <input type="number" name="quantity" min="1" value="1" required>
+                    <input type="number" name="quantity" min="1" max="<?php echo htmlspecialchars($producto->cantidad); ?>" value="1" required>
                 </div>
 
                 <!-- Botón para agregar al carrito -->
@@ -58,61 +58,59 @@
         </div>
     </div>
 
-    <?php if (!empty($recomendados)) {
-    ?>
-        <div class="recomendations">
-            <h2>Recomendados</h2>
-            <div class="products-list">
-                <?php foreach ($recomendados as $producto) { ?>
-                    <div class="product">
-                        <div>
-                            <a href="/mostrarproducto?nombre=<?php echo $producto->name; ?>">
-                                <div class="product-image">
-                                    <img src="<?php echo htmlspecialchars($producto->imagen); ?>" alt="Imagen del Anuncio" style="display: block; margin: 0 auto;">
-                                </div>
-                            </a>
-
-                        </div>
-
-                        <div class="contenido-anuncio" style="justify-content: center;">
-                            <p> <?php echo $producto->name; ?> </p>
-                            <div style="justify-content: flex-start;">
-                                <?php
-                                if ($producto->discountPercentage > 0) {
-                                    $discountedPrice = $producto->price - ($producto->price * $producto->discountPercentage / 100);
-                                ?>
-                                    <p class="precio" style="color: green;">₡<?php echo number_format($discountedPrice, 2); ?> I.V.A.I</p>
-                                    <p class="precio" style="text-decoration: line-through; font-size: 1em;">₡<?php echo number_format($producto->price, 2); ?></p>
-                                <?php
-                                } else {
-                                ?>
-                                    <p class="precio">₡<?php echo number_format($producto->price, 2); ?> I.V.A.I</p>
-                                <?php
-                                }
-                                ?>
-
+    <div class="recomendations">
+        <h2>Recomendados</h2>
+        <div class="products-list">
+            <?php foreach ($recomendados as $producto) { ?>
+                <div class="product">
+                    <div>
+                        <a href="/mostrarproducto?nombre=<?php echo $producto->name; ?>">
+                            <div class="product-image">
+                                <img src="<?php echo htmlspecialchars($producto->imagen); ?>" alt="Imagen del Anuncio" style="display: block; margin: 0 auto;">
                             </div>
+                        </a>
+
+                    </div>
+
+                    <div class="contenido-anuncio">
+                        <p> <?php echo $producto->name; ?> </p>
+                        <div style="justify-content: flex-start;">
+                            <?php
+                            if ($producto->discountPercentage > 0) {
+                                $discountedPrice = $producto->price - ($producto->price * $producto->discountPercentage / 100);
+                            ?>
+                                <p class="precio" style="color: green;">₡<?php echo number_format($discountedPrice, 2); ?> I.V.A.I</p>
+                                <p class="precio" style="text-decoration: line-through; font-size: 1em;">₡<?php echo number_format($producto->price, 2); ?></p>
+                            <?php
+                            } else {
+                            ?>
+                                <p class="precio">₡<?php echo number_format($producto->price, 2); ?> I.V.A.I</p>
+                            <?php
+                            }
+                            ?>
 
                         </div>
-                    </div>
-                <?php } ?>
 
-            </div>
+                    </div>
+                </div>
+            <?php } ?>
 
         </div>
-    <?php } ?>
+
+    </div>
 
 
     <div class="comments">
         <div class="comment-section">
             <h2>Comentarios</h2>
             <!-- Comment Form -->
-            <form class="comment-form">
-                <textarea placeholder="Escribe tu comentario..."></textarea>
+            <form  method="POST" action="/reviews/add" class="comment-form">
+                <textarea name="review" placeholder="Escribe tu comentario..." required></textarea>
+                <input type="hidden" name="productID" value="<?php echo htmlspecialchars($producto->id); ?>">
                 <div class="rating">
                     <span>Tu calificación:</span>
                     <div class="stars">
-                        <input type="radio" id="star5" name="rating" value="5">
+                        <input type="radio" id="star5" name="rating" value="5" required>
                         <label for="star5">★</label>
                         <input type="radio" id="star4" name="rating" value="4">
                         <label for="star4">★</label>
@@ -128,45 +126,29 @@
             </form>
 
             <!-- Static Comments -->
-            <div class="comments-container">
-                <!-- Comment 1 -->
-                <div class="comment">
-                    <div class="comment-header">
-                        <span class="user-name">Maria García</span>
-                        <div class="rating-display">
-                            <span class="star filled">★</span>
-                            <span class="star filled">★</span>
-                            <span class="star filled">★</span>
-                            <span class="star filled">★</span>
-                            <span class="star">★</span>
+            <?php if (!empty($reviews)) { ?>
+                <div class="comments-container">
+                    <?php foreach ($reviews as $review) { ?>
+                        <div class="comment">
+                            <div class="comment-header">
+                                <span class="user-name">Usuario Anónimo</span>
+                                <div class="rating-display">
+                                    <?php for ($i = 1; $i <= 5; $i++) {
+                                        echo $i <= $review->rating ? '<span class="star filled">★</span>' : '<span class="star">★</span>';
+                                    } ?>
+                                </div>
+                                <span class="date"><?php echo date('d/m/Y', strtotime($review->create_time)); ?></span>
+                            </div>
+                            <div class="comment-text">
+                                <?php echo htmlspecialchars($review->review); ?>
+                            </div>
                         </div>
-                        <span class="date">20/01/2025</span>
-                    </div>
-                    <div class="comment-text">
-                        Excelente libro de historia, muy detallado y bien investigado.
-                    </div>
+                    <?php } ?>
                 </div>
-
-                <!-- Comment 2 -->
-                <div class="comment">
-                    <div class="comment-header">
-                        <span class="user-name">Carlos Rodríguez</span>
-                        <div class="rating-display">
-                            <span class="star filled">★</span>
-                            <span class="star filled">★</span>
-                            <span class="star filled">★</span>
-                            <span class="star filled">★</span>
-                            <span class="star filled">★</span>
-                        </div>
-                        <span class="date">19/01/2025</span>
-                    </div>
-                    <div class="comment-text">
-                        La narrativa es fascinante, no podía dejar de leerlo.
-                    </div>
-                </div>
-            </div>
+            <?php } else { ?>
+                <p>No hay comentarios para este producto.</p>
+            <?php } ?>
         </div>
-
     </div>
 </div>
 
@@ -186,7 +168,7 @@
             <path d="M225.8 468.2l-2.5-2.3L48.1 303.2C17.4 274.7 0 234.7 0 192.8l0-3.3c0-70.4 50-130.8 119.2-144C158.6 37.9 198.9 47 231 69.6c9 6.4 17.4 13.8 25 22.3c4.2-4.8 8.7-9.2 13.5-13.3c3.7-3.2 7.5-6.2 11.5-9c0 0 0 0 0 0C313.1 47 353.4 37.9 392.8 45.4C462 58.6 512 119.1 512 189.5l0 3.3c0 41.9-17.4 81.9-48.1 110.4L288.7 465.9l-2.5 2.3c-8.2 7.6-19 11.9-30.2 11.9s-22-4.2-30.2-11.9zM239.1 145c-.4-.3-.7-.7-1-1.1l-17.8-20-.1-.1s0 0 0 0c-23.1-25.9-58-37.7-92-31.2C81.6 101.5 48 142.1 48 189.5l0 3.3c0 28.5 11.9 55.8 32.8 75.2L256 430.7 431.2 268c20.9-19.4 32.8-46.7 32.8-75.2l0-3.3c0-47.3-33.6-88-80.1-96.9c-34-6.5-69 5.4-92 31.2c0 0 0 0-.1 .1s0 0-.1 .1l-17.8 20c-.3 .4-.7 .7-1 1.1c-4.5 4.5-10.6 7-16.9 7s-12.4-2.5-16.9-7z" />
                                 </svg>`;
 
-    const heartContainers = document.querySelectorAll('button[data-product-id]');
+    const heartContainers = document.querySelectorAll('.display-heart');
 
     heartContainers.forEach(container => {
         const productId = container.dataset.productId;
