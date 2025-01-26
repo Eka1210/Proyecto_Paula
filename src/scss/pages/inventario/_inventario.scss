@@ -53,3 +53,36 @@
         }
     }
 }
+
+.inventoryCard{
+    color: v.$vino;
+    padding: 2rem;
+    border-radius: 2rem;
+    @include m.shadow;
+   
+    &--inactiva{
+        background-color: lighten(v.$negro, 80%);
+        .activityCard__name,
+        .activityCard__view{
+            color: lighten(v.$negro, 40%);
+        }
+        .activityCard__info__content{
+            color: lighten(v.$negro, 50%);
+        }
+    }
+
+    &__container{
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 2rem;
+    }
+
+    &__view{
+        color: v.$vinoC;
+        // align to bottom
+        align-self: flex-end;
+        font-size: 1.5rem;
+    }
+
+}

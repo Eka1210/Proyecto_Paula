@@ -26,7 +26,7 @@
                             <?php echo htmlspecialchars($producto->cantidad); ?>
                         </td>
                         <td class="table__td">
-                            <a href="/admin/inventario/log?id=<?php echo $producto->id; ?>" class="categoryCard__view">
+                            <a href="/admin/inventario/log?id=<?php echo $producto->id; ?>" class="inventoryCard__view">
                                 <i class="fa-solid fa-pen-to-square"></i>
                                 Ver Historial
                             </a>
