@@ -65,9 +65,16 @@ class PagesController
         $categorias = Category::all();
         $productos = Product::all();
         foreach ($productos as $producto) {
+            if (isset($_SESSION['userId'])) {
+                $producto->liked = Wishlist::isLiked($producto->id, $_SESSION['userId']);
+            } else {
+                $producto->liked = false;
+            }
+
             $discount = Promotion::getDiscount($producto->id)[0] ?? null;
             $producto->discountPercentage = $discount ? $discount->percentage : 0;
         }
+
         $router->render('profile/categorias', [
             'categorias' => $categorias,
             'productos' => $productos,
@@ -88,8 +95,16 @@ class PagesController
             $discount = Promotion::getDiscount($productoFinal->id)[0] ?? null;
             $productoFinal->discountPercentage = $discount ? $discount->percentage : 0;
 
+            if (isset($_SESSION['userId'])) {
+                $productoFinal->liked = Wishlist::isLiked($productoFinal->id, $_SESSION['userId']);
+            } else {
+                $productoFinal->liked = false;
+            }
+
             $productos[] = $productoFinal;
         }
+
+
 
         $router->render('profile/categoria', [
             'categoria' => $categoria,
