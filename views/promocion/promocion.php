@@ -24,7 +24,7 @@ include_once __DIR__ . "/../templates/alerts.php";
                 <?php foreach ($promociones as $promocion) { ?>
                     <tr class="table__tr">
                         <td class="table__td">
-                            <?php echo $promocion->name; ?>
+                            <?php echo htmlspecialchars($promocion->name); ?>
                         </td>
                         <td class="table__td">
                             <a href="/admin/editar/promocion?id=<?php echo $promocion->id; ?>" class="categoryCard__view">

@@ -42,7 +42,7 @@ class PromotionController
         isAdmin();
         $promocion = new Promotion();
         $alertas = [];
-        $productos = Product::all();
+        $productos = Product::allActiveProducts();
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $promocion = new Promotion($_POST);
             $promocion->active = 1;
@@ -63,8 +63,10 @@ class PromotionController
                         ]);
                         $prodXPromotion->guardar();
                     }
-
                 }
+
+                header('Location: /admin/promocion');
+                exit;
             }
         }
 
@@ -88,7 +90,7 @@ class PromotionController
         $promocion->start_time = $promocion->start_time;
         $promocion->end_time = $promocion->end_time;
 
-        $productos = Product::all();
+        $productos = Product::allActiveProducts();
 
 
         $productXpromo = ProductxPromotion::all();
@@ -105,18 +107,19 @@ class PromotionController
             $promocion->sincronizar($_POST);
             $alertas = $promocion->validate();
 
-            $prodSeleccionadas = $_POST['listaProductos'] ?? [];
-            $promocionId =  $promocion->id;
-
-            foreach ($prodSeleccionadas as $productoId) {
-                $prodXPromotion = new ProductxPromotion([
-                    'promotionID' => $promocionId,
-                    'productID' => $productoId
-                ]);
-                $prodXPromotion->guardar();
-            }
-
             if (empty($alertas)) {
+
+                $prodSeleccionadas = $_POST['listaProductos'] ?? [];
+                $promocionId =  $promocion->id;
+
+                foreach ($prodSeleccionadas as $productoId) {
+                    $prodXPromotion = new ProductxPromotion([
+                        'promotionID' => $promocionId,
+                        'productID' => $productoId
+                    ]);
+                    $prodXPromotion->guardar();
+                }
+
                 $promocion->guardar();
                 Promotion::setAlerta('success', 'Promoción Editada');
                 header('Location: /admin/promocion');

@@ -1,5 +1,5 @@
 <div>
-    <h1 class="section__heading"><span> Historial de<?php echo $product->name ?> </span></h1>
+    <h1 class="section__heading"><span> Historial de<?php echo htmlspecialchars($product->name) ?> </span></h1>
 
     <?php if (!empty($logs)) { ?>
         <table class="table">
@@ -23,19 +23,19 @@
                     <tr class="table__tr">
 
                         <td class="table__td">
-                            <?php echo $log->date; ?>
+                            <?php echo htmlspecialchars($log->date); ?>
                         </td>
                         <td class="table__td">
-                            <?php echo $log->action; ?>
+                            <?php echo htmlspecialchars($log->action); ?>
                         </td>
                         <td class="table__td">
-                            <?php echo $log->quantity; ?>
+                            <?php echo htmlspecialchars($log->quantity); ?>
                         </td>
                         <td class="table__td">
-                            <?php echo $log->old_value; ?>
+                            <?php echo htmlspecialchars($log->old_value); ?>
                         </td>
                         <td class="table__td">
-                            <?php echo $log->new_value; ?>
+                            <?php echo htmlspecialchars($log->new_value); ?>
                         </td>
                         <?php if ($log->new_value > $log->old_value) { ?>
                             <td class="table__td" style="color: green;">

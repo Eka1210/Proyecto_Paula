@@ -46,8 +46,11 @@ class Promotion extends ActiveRecord
         if (!$this->end_time) {
             self::setAlerta('error', 'La fecha de finalización es obligatorio');
         }
+        if ($this->start_time > $this->end_time) {
+            self::setAlerta('error', 'La fecha de inicio no puede ser mayor a la fecha de finalización');
+        }
+        
         return self::$alertas;
-
     }
 
 
@@ -70,12 +73,12 @@ class Promotion extends ActiveRecord
 
     public function doesNameExist()
     {
-        $query = "SELECT * FROM " . self::$tabla . " WHERE TRIM(name) = '" . trim($this->name) . "' LIMIT 1";
+        $query = "SELECT * FROM " . self::$tabla . " WHERE TRIM(name) = '" . trim($this->name) . "' AND id != " . $this->id . " LIMIT 1";
         $result = self::$db->query($query);
 
         if ($result && $result->fetch_assoc()) {
             return true;
-        }else{
+        } else {
             return false;
         }
     }

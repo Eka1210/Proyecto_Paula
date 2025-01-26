@@ -5,7 +5,7 @@ namespace Model;
 class Product extends ActiveRecord
 {
     protected static $tabla = 'products';
-    protected static $columnasDB = ['id', 'name', 'description', 'price', 'cantidad', 'imagen', 'encargo', 'activo','customization'];
+    protected static $columnasDB = ['id', 'name', 'description', 'price', 'cantidad', 'imagen', 'encargo', 'activo', 'customization'];
 
     public $id;
     public $name;
@@ -40,12 +40,12 @@ class Product extends ActiveRecord
     {
         if (!$this->name) {
             self::setAlerta('error', 'El nombre es obligatorio');
-        }elseif (strlen($this->name) > 45) {
+        } elseif (strlen($this->name) > 45) {
             self::setAlerta('error', 'El nombre no puede exceder los 45 caracteres');
         }
         if (!$this->description) {
             self::setAlerta('error', 'La descripcion es obligatoria');
-        }elseif (strlen($this->description) > 45) {
+        } elseif (strlen($this->description) > 45) {
             self::setAlerta('error', 'La descripción no puede exceder los 45 caracteres');
         }
         if (!$this->price) {
@@ -89,24 +89,54 @@ class Product extends ActiveRecord
 
     public function recomended()
     {
-        // Get the current product's ID
-        $productId = $this->id;
+        $resultado = $this->getProducRecommendedCat();
 
-        // SQL query to find products that share at least one category with the given product
+        if (count($resultado) < 4) {
+            $currentIds = array_column($resultado, 'id');
+            $currentIds[] = $this->id;
+            $needed = 4 - count($resultado);
+
+            $additionalProducts = $this->getRandomProducts($needed, $currentIds);
+            $resultado = array_merge($resultado, $additionalProducts);
+        }
+
+        return $resultado;
+    }
+
+    public function getProducRecommendedCat()
+    {
         $query = "SELECT p.* 
-        FROM products p
-        INNER JOIN categoriesxproduct ppc1 ON ppc1.productID = p.id
-        INNER JOIN categoriesxproduct ppc2 ON ppc1.categoryID = ppc2.categoryID
-        WHERE ppc2.productID = $productId
-        AND p.id != $productId
-        AND p.activo = 1
-        GROUP BY p.id
-        ORDER BY RAND()
-        LIMIT 4";
+            FROM products p
+            INNER JOIN categoriesxproduct ppc1 ON ppc1.productID = p.id
+            INNER JOIN categoriesxproduct ppc2 ON ppc1.categoryID = ppc2.categoryID
+            WHERE ppc2.productID = $this->id
+            AND p.id != $this->id
+            AND p.activo = 1
+            GROUP BY p.id
+            ORDER BY RAND()
+            LIMIT 4";
 
         $resultado = self::consultarSQL($query);
         return $resultado;
     }
+
+    private function getRandomProducts($limit, $excludedIds = [])
+    {
+        $excludedIdsList = implode(',', $excludedIds);
+        $excludedCondition = !empty($excludedIds) ? "AND p.id NOT IN ($excludedIdsList)" : "";
+
+        $query = "SELECT p.*
+            FROM products p
+            WHERE p.activo = 1
+            AND p.id != $this->id
+            $excludedCondition
+            ORDER BY RAND()
+            LIMIT $limit";
+
+        $resultado = self::consultarSQL($query);
+        return $resultado;
+    }
+
 
 
 
@@ -125,5 +155,12 @@ class Product extends ActiveRecord
 
         $row = $result->fetch_assoc();
         return (bool) $row['product_exists'];
+    }
+
+    public static function allActiveProducts()
+    {
+        $query = "SELECT * FROM " . static::$tabla . " WHERE activo = 1";
+        $resultado = self::consultarSQL($query);
+        return $resultado;
     }
 }

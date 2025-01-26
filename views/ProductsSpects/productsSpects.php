@@ -17,7 +17,7 @@
 
         <!-- Opciones de personalización -->
         <div class="customization-options">
-            <h1 class="section__heading"><span>Personaliza <?php echo $producto->name; ?> </span></h1>
+            <h1 class="section__heading"><span>Personaliza <?php echo htmlspecialchars($producto->name); ?> </span></h1>
             <form method="POST">
                 <?php foreach ($options as $option): ?>
                     <div class="customization-option">
@@ -64,7 +64,7 @@
             <?php foreach ($recomendados as $recomendado) { ?>
                 <div class="product">
                     <div>
-                        <a href="/mostrarproducto?nombre=<?php echo $recomendado->name; ?>">
+                        <a href="/mostrarproducto?nombre=<?php echo htmlspecialchars($recomendado->name); ?>">
                             <div class="product-image">
                                 <img src="<?php echo htmlspecialchars($recomendado->imagen); ?>" alt="Imagen del Anuncio" style="display: block; margin: 0 auto;">
                             </div>
@@ -73,7 +73,7 @@
                     </div>
 
                     <div class="contenido-anuncio">
-                        <p> <?php echo $recomendado->name; ?> </p>
+                        <p> <?php echo htmlspecialchars($recomendado->name); ?> </p>
                         <div style="justify-content: flex-start;">
                             <?php
                             if ($recomendado->discountPercentage > 0) {
@@ -104,7 +104,7 @@
         <div class="comment-section">
             <h2>Comentarios</h2>
             <!-- Comment Form -->
-            <form  method="POST" action="/reviews/add" class="comment-form">
+            <form method="POST" action="/reviews/add" class="comment-form">
                 <textarea name="review" placeholder="Escribe tu comentario..." required></textarea>
                 <input type="hidden" name="productID" value="<?php echo htmlspecialchars($producto->id); ?>">
                 <div class="rating">

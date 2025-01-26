@@ -3,11 +3,7 @@
 namespace Controllers;
 
 use MVC\Router;
-use Model\Sale;
-use Model\Usuario;
-use Model\client;
-use Model\Product;
-use Model\Productxsale;
+use Model\ReportProxy;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
@@ -17,96 +13,78 @@ class ReportController
     public static function reporte(Router $router)
     {
         isAdmin();
+
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $startDate = $_POST['start_time'];
-            $endDate = $_POST['end_time'];
 
-            $sales = Sale::getSales($startDate, $endDate);
+            if (
+                !isset($_POST['start_time']) ||
+                !isset($_POST['end_time']) ||
+                !self::isValidMysqlDatetime($_POST['start_time']) ||
+                !self::isValidMysqlDatetime($_POST['end_time'])
+            ) {
+                $alertas['error'][] = 'Las fechas son obligatorias y deben estar en el formato correcto (YYYY-MM-DD)';
+                $router->render('/reportes/reporte', ['alertas' => $alertas]);
+                return;
+            } else {
+                $startDate = $_POST['start_time'];
+                $endDate = date('Y-m-d', strtotime($_POST['end_time'] . ' +1 day'));
 
-            // Create and populate the spreadsheet
-            $spreadsheet = new Spreadsheet();
-            $sheet = $spreadsheet->getActiveSheet();
 
-            // Set main headers
-            $sheet->setCellValue('A1', 'ID')
-                ->setCellValue('B1', 'Description')
-                ->setCellValue('C1', 'Total Amount')
-                ->setCellValue('D1', 'Date')
-                ->setCellValue('E1', 'Discount')
-                ->setCellValue('F1', 'Username')
-                ->setCellValue('G1', 'Products');
+                $reporte = new ReportProxy();
+                $salesData = $reporte->getReport($startDate, $endDate);
 
-            // Style headers
-            $headerStyle = [
-                'font' => ['bold' => true],
-                'alignment' => ['horizontal' => Alignment::HORIZONTAL_CENTER]
-            ];
-            $sheet->getStyle('A1:G1')->applyFromArray($headerStyle);
+                $spreadsheet = new Spreadsheet();
+                $sheet = $spreadsheet->getActiveSheet();
 
-            $rowNumber = 2;
-            foreach ($sales as $sale) {
-                $user = client::find($sale->userId);
+                // Add headers
+                $sheet->setCellValue('A1', 'ID')
+                    ->setCellValue('B1', 'Estado')
+                    ->setCellValue('C1', 'Monto Total')
+                    ->setCellValue('D1', 'Fecha')
+                    ->setCellValue('E1', 'Descuento')
+                    ->setCellValue('F1', 'Usuario')
+                    ->setCellValue('G1', 'Método de Pago')
+                    ->setCellValue('H1', 'Método de Envío')
+                    ->setCellValue('I1', 'Costo de Envío')
+                    ->setCellValue('J1', 'Productos');
 
-                $productsxsale = Productxsale::whereAll('salesID', $sale->id);
+                $headerStyle = [
+                    'font' => ['bold' => true],
+                    'alignment' => ['horizontal' => Alignment::HORIZONTAL_CENTER],
+                ];
+                $sheet->getStyle('A1:J1')->applyFromArray($headerStyle);
 
-                // Build products string
-                $productsDetail = [];
-                $totalItems = 0;
-
-                foreach ($productsxsale as $pxs) {
-                    $product = Product::find($pxs->productID);
-                    $productsDetail[] = sprintf(
-                        "%s (Cantidad: %d Total: $%.2f)",
-                        $product->name,
-                        $pxs->quantity,
-                        $pxs->price
-                    );
-                    $totalItems += $pxs->quantity;
+                $rowNumber = 2;
+                foreach ($salesData as $data) {
+                    $sheet->fromArray($data, null, 'A' . $rowNumber);
+                    $sheet->getStyle('J' . $rowNumber)->getAlignment()
+                        ->setWrapText(true)
+                        ->setVertical(Alignment::VERTICAL_TOP);
+                    $rowNumber++;
                 }
 
-                // Format date
-                $fecha = date('Y-m-d H:i', strtotime($sale->fecha));
+                foreach (range('A', 'J') as $col) {
+                    $sheet->getColumnDimension($col)->setAutoSize(true);
+                }
 
-                // Set values
-                $sheet->setCellValue('A' . $rowNumber, $sale->id)
-                    ->setCellValue('B' . $rowNumber, $sale->description)
-                    ->setCellValue('C' . $rowNumber, '$' . number_format($sale->monto, 2))
-                    ->setCellValue('D' . $rowNumber, $fecha)
-                    ->setCellValue('E' . $rowNumber, '$' . number_format($sale->discount, 2))
-                    ->setCellValue('F' . $rowNumber, $user->name)
-                    ->setCellValue('G' . $rowNumber, implode("\n", $productsDetail));
+                header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+                header('Content-Disposition: attachment;filename="sales_report.xlsx"');
+                header('Cache-Control: max-age=0');
 
-                // Adjust row height for products list
-                $sheet->getRowDimension($rowNumber)->setRowHeight(-1);
+                ob_end_clean();
 
-                // Set text wrapping for products column
-                $sheet->getStyle('G' . $rowNumber)
-                    ->getAlignment()
-                    ->setWrapText(true)
-                    ->setVertical(Alignment::VERTICAL_TOP);
-
-                $rowNumber++;
+                $writer = new Xlsx($spreadsheet);
+                $writer->save('php://output');
+                exit;
             }
-
-            // Auto-size columns
-            foreach (range('A', 'G') as $col) {
-                $sheet->getColumnDimension($col)->setAutoSize(true);
-            }
-
-            // Set headers for file download
-            header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-            header('Content-Disposition: attachment;filename="sales_report.xlsx"');
-            header('Cache-Control: max-age=0');
-
-            // Clear any previous output
-            ob_end_clean();
-
-            // Save the Excel file to output
-            $writer = new Xlsx($spreadsheet);
-            $writer->save('php://output');
-            exit;
         }
 
         $router->render('/reportes/reporte');
+    }
+
+    public static function isValidMysqlDatetime($datetime)
+    {
+        $regex = '/^\d{4}-\d{2}-\d{2}$/';
+        return preg_match($regex, $datetime) === 1;
     }
 }

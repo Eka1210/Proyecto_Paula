@@ -20,10 +20,10 @@
                 <?php foreach ($productos as $producto) { ?>
                     <tr class="table__tr">
                         <td class="table__td">
-                            <?php echo $producto->name; ?>
+                            <?php echo htmlspecialchars($producto->name); ?>
                         </td>
                         <td class="table__td">
-                            <?php echo $producto->cantidad; ?>
+                            <?php echo htmlspecialchars($producto->cantidad); ?>
                         </td>
                         <td class="table__td">
                             <a href="/admin/inventario/log?id=<?php echo $producto->id; ?>" class="categoryCard__view">
