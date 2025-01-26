@@ -13,6 +13,8 @@ use Model\Inventorylog;
 use Model\Wishlist;
 use Model\Promotion;
 use Model\Review;
+use Model\Client;
+use Model\Sale;
 
 use Controllers\CartController;
 
@@ -685,17 +687,40 @@ class ProductController
 
     public static function addReview(Router $router) {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $review = new Review($_POST);
-            date_default_timezone_set('America/Costa_Rica');
-            $review->create_time = date('Y-m-d H:i:s'); // Fecha actual
+            // Obtener datos de la sesión y del formulario
+            $userId = $_SESSION['userId'] ?? null;
+            $productID = $_POST['productID'] ?? null;
+    
+            if (is_null($userId)) {
+                    Review::setAlerta('error', 'No se pudo identificar al cliente');
+            } else {
+                $client = Client::find4($userId);
 
-            $alertas = $review->validate();
-            if (empty($alertas)) {
-                $review->guardar();
-                Review::setAlerta('success', 'Reseña publicada correctamente.');
+                if(!$client){
+                    Review::setAlerta('error', 'No se pudo identificar al cliente');
+                }else{
+                    // Verificar si el cliente ha comprado el producto
+                    $compraValida = Sale::isClientBuy($client->id, $productID);
+
+                    if (!$compraValida) {
+                        Review::setAlerta('error', 'Solo puedes reseñar productos que has comprado.');
+                    } else {
+                        // Crear y guardar la reseña
+                        $review = new Review($_POST);
+                        date_default_timezone_set('America/Costa_Rica');
+                        $review->create_time = date('Y-m-d H:i:s'); // Fecha actual
+        
+                        $alertas = $review->validate();
+                        if (empty($alertas)) {
+                            $review->guardar();
+                            Review::setAlerta('success', 'Reseña publicada correctamente.');
+                        }
+                    }
+                }
             }
-
-            $router->render('product/reviews', [
+    
+            // Renderizar la vista con las alertas
+            $router->render('/product/reviews', [
                 'alertas' => Review::getAlertas()
             ]);
         }
@@ -760,10 +785,8 @@ class ProductController
         }
 
 
-        $reviews = Review::all2(22);
-        if(empty($reviews)){
-            header("Location: /productos ");
-        }
+        $reviews = Review::all2(intval($producto->id));
+
 
         $discount = Promotion::getDiscount($producto->id)[0] ?? null;
         $producto->discountPercentage = $discount ? $discount->percentage : 0;

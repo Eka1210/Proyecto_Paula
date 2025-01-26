@@ -61,30 +61,30 @@
     <div class="recomendations">
         <h2>Recomendados</h2>
         <div class="products-list">
-            <?php foreach ($recomendados as $producto) { ?>
+            <?php foreach ($recomendados as $recomendado) { ?>
                 <div class="product">
                     <div>
-                        <a href="/mostrarproducto?nombre=<?php echo $producto->name; ?>">
+                        <a href="/mostrarproducto?nombre=<?php echo $recomendado->name; ?>">
                             <div class="product-image">
-                                <img src="<?php echo htmlspecialchars($producto->imagen); ?>" alt="Imagen del Anuncio" style="display: block; margin: 0 auto;">
+                                <img src="<?php echo htmlspecialchars($recomendado->imagen); ?>" alt="Imagen del Anuncio" style="display: block; margin: 0 auto;">
                             </div>
                         </a>
 
                     </div>
 
                     <div class="contenido-anuncio">
-                        <p> <?php echo $producto->name; ?> </p>
+                        <p> <?php echo $recomendado->name; ?> </p>
                         <div style="justify-content: flex-start;">
                             <?php
-                            if ($producto->discountPercentage > 0) {
-                                $discountedPrice = $producto->price - ($producto->price * $producto->discountPercentage / 100);
+                            if ($recomendado->discountPercentage > 0) {
+                                $discountedPrice = $recomendado->price - ($recomendado->price * $recomendado->discountPercentage / 100);
                             ?>
                                 <p class="precio" style="color: green;">₡<?php echo number_format($discountedPrice, 2); ?> I.V.A.I</p>
-                                <p class="precio" style="text-decoration: line-through; font-size: 1em;">₡<?php echo number_format($producto->price, 2); ?></p>
+                                <p class="precio" style="text-decoration: line-through; font-size: 1em;">₡<?php echo number_format($recomendado->price, 2); ?></p>
                             <?php
                             } else {
                             ?>
-                                <p class="precio">₡<?php echo number_format($producto->price, 2); ?> I.V.A.I</p>
+                                <p class="precio">₡<?php echo number_format($recomendado->price, 2); ?> I.V.A.I</p>
                             <?php
                             }
                             ?>

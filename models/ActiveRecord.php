@@ -410,6 +410,18 @@ class ActiveRecord
         return  $resultado;
     }
 
+    public static function isClientBuy($clientID,$productID)
+    {
+        $query = "
+            SELECT sales.id
+            FROM sales
+            INNER JOIN productsxsale ON sales.id = productsxsale.salesID
+            WHERE sales.userId = " . $clientID . "  AND productsxsale.productID = " . $productID ." LIMIT 1";
+        $resultado = self::consultarSQL($query);
+        return $resultado;
+    }
+
+
     // Funciones Carrito
 
     public static function allCart($cartId)
