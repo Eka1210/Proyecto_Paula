@@ -48,6 +48,7 @@ class PromotionController
             $promocion->active = 1;
             $promocion->name = trim($promocion->name);
             $alertas = $promocion->validate();
+
             if (empty($alertas)) {
                 $datos = $promocion->guardar();
 
@@ -63,9 +64,6 @@ class PromotionController
                         $prodXPromotion->guardar();
                     }
 
-                    // Redirigir con mensaje de éxito
-                    header('Location: /admin/promocion');
-                    exit;
                 }
             }
         }

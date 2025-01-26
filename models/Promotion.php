@@ -31,6 +31,9 @@ class Promotion extends ActiveRecord
         if (!$this->name) {
             self::setAlerta('error', 'El nombre es obligatorio');
         }
+        if ($this->doesNameExist()) {
+            self::setAlerta('error', 'La promoción ya existe');
+        }
         if (!$this->description) {
             self::setAlerta('error', 'La descripcion es obligatoria');
         }
@@ -43,10 +46,8 @@ class Promotion extends ActiveRecord
         if (!$this->end_time) {
             self::setAlerta('error', 'La fecha de finalización es obligatorio');
         }
+        return self::$alertas;
 
-        if (!$this->doesNameExist()) {
-            self::setAlerta('error', 'La promoción ya existe');
-        }
     }
 
 
@@ -69,12 +70,13 @@ class Promotion extends ActiveRecord
 
     public function doesNameExist()
     {
-        $query = "SELECT * FROM " . self::$tabla . " WHERE TRIM(name) = '" . trim($this->name) . "' AND id <> '" . $this->id . "' LIMIT 1";
+        $query = "SELECT * FROM " . self::$tabla . " WHERE TRIM(name) = '" . trim($this->name) . "' LIMIT 1";
         $result = self::$db->query($query);
 
-        if ($result->num_rows) {
+        if ($result && $result->fetch_assoc()) {
             return true;
+        }else{
+            return false;
         }
-        return false;
     }
 }
