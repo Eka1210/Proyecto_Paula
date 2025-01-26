@@ -1,9 +1,11 @@
-<?php 
+<?php
+
 namespace Model;
 
-class Sale extends ActiveRecord{
+class Sale extends ActiveRecord
+{
     protected static $tabla = 'sales';
-    protected static $columnasDB = ['id', 'descripcion', 'monto', 'fecha', 'discount', 'userId', 'paymentMethodId', 'deliveryMethodId'];
+    protected static $columnasDB = ['id', 'descripcion', 'monto', 'fecha', 'discount', 'userId', 'paymentMethodId', 'deliveryMethodId', 'deliveryCost'];
 
     public $id;
     public $descripcion;
@@ -13,8 +15,11 @@ class Sale extends ActiveRecord{
     public $userId;
     public $paymentMethodId;
     public $deliveryMethodId;
+    public $deliveryCost;
 
-    public function __construct($args = []) {
+
+    public function __construct($args = [])
+    {
         $this->id = $args['id'] ?? null;
         $this->descripcion = $args['descripcion'] ?? '';
         $this->monto = $args['monto'] ?? null;
@@ -23,11 +28,13 @@ class Sale extends ActiveRecord{
         $this->userId = $args['userId'] ?? null;
         $this->paymentMethodId = $args['paymentMethodId'] ?? null;
         $this->deliveryMethodId = $args['deliveryMethodId'] ?? null;
+        $this->deliveryCost = $args['deliveryCost'] ?? null;
     }
-    public function crearSale() {
+    public function crearSale()
+    {
         $fechaActual = date('Y-m-d H:i:s');
-        $query = "INSERT INTO sales (descripcion, monto, fecha, discount, userId, paymentMethodId, deliveryMethodId) VALUES
-        ('$this->descripcion', $this->monto, '$this->fecha', $this->discount, $this->userId, $this->paymentMethodId, $this->deliveryMethodId)";
+        $query = "INSERT INTO sales (descripcion, monto, fecha, discount, userId, paymentMethodId, deliveryMethodId, deliveryCost) VALUES
+        ('$this->descripcion', $this->monto, '$this->fecha', $this->discount, $this->userId, $this->paymentMethodId, $this->deliveryMethodId, $this->deliveryCost)";
 
         // Resultado de la consulta
         $resultado = self::$db->query($query);
@@ -37,7 +44,8 @@ class Sale extends ActiveRecord{
         ];
     }
 
-    public function removeUser(){
+    public function removeUser()
+    {
         $query = "UPDATE " . static::$tabla . " SET userId = null WHERE id = " . $this->id;
         $result = self::$db->query($query);
         return $result;

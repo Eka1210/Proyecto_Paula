@@ -30,12 +30,16 @@ class Promotion extends ActiveRecord
     {
         if (!$this->name) {
             self::setAlerta('error', 'El nombre es obligatorio');
+        } elseif (strlen($this->name) > 45) {
+            self::setAlerta('error', 'El nombre no puede exceder los 45 caracteres');
         }
         if ($this->doesNameExist()) {
             self::setAlerta('error', 'La promoción ya existe');
         }
         if (!$this->description) {
-            self::setAlerta('error', 'La descripcion es obligatoria');
+            self::setAlerta('error', 'La descripción es obligatoria');
+        } elseif (strlen($this->description) > 50) {
+            self::setAlerta('error', 'La descripción no puede exceder los 45 caracteres');
         }
         if (!$this->percentage) {
             self::setAlerta('error', 'El porcentaje es obligatorio');
@@ -49,7 +53,7 @@ class Promotion extends ActiveRecord
         if ($this->start_time > $this->end_time) {
             self::setAlerta('error', 'La fecha de inicio no puede ser mayor a la fecha de finalización');
         }
-        
+
         return self::$alertas;
     }
 

@@ -1,5 +1,5 @@
 <div>
-    <h1 class="section__heading"><span> WishList </span></h1>
+    <h1 class="section__heading"><span> Lista de favoritos </span></h1>
 
     <?php if (!empty($productList)) { ?>
 

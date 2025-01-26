@@ -1,6 +1,7 @@
 <?php
 
 namespace Controllers;
+
 use MVC\Router;
 use Model\cart;
 use Model\Product;
@@ -17,25 +18,27 @@ use Model\ProductXPromotion;
 use Model\Client;
 use Controllers\ProductController;
 
-class CartController {
+class CartController
+{
 
-    public static function ver(Router $router) {
-        $alertas=[];
+    public static function ver(Router $router)
+    {
+        $alertas = [];
         $userId = $_SESSION['userId'] ?? null;
-    
+
         if ($userId) {
             $carrito = Cart::where('userId', $userId);
             $productosEnCarrito = [];
-    
+
             if ($carrito) {
                 $productosxCart = Productsxcart::allCart($carrito->id);
-    
+
                 foreach ($productosxCart as $productoEnCarrito) {
                     $producto = Product::find($productoEnCarrito->productID);
 
                     if ($producto) {
                         $producto->quantity = $productoEnCarrito->quantity;
-                        
+
                         // Obtener las categorías del producto
                         $categoryIDs = CategoryxProduct::all2($producto->id);
                         $categorias = [];
@@ -45,17 +48,17 @@ class CartController {
                                 $categorias[] = $categoria;
                             }
                         }
-    
+
                         // Almacenamos las categorías en el producto
                         $producto->categories = $categorias;
                         $productosEnCarrito[] = $producto;
                     }
                 }
             }
-            $alertas= Sale::getAlertas();
+            $alertas = Sale::getAlertas();
 
             $router->render('ventas/cart', [
-                'alertas'=>$alertas,
+                'alertas' => $alertas,
                 'productos' => $productosEnCarrito,
             ]);
         } else {
@@ -64,18 +67,19 @@ class CartController {
         }
     }
 
-    public static function AddToCart(Router $router) {
+    public static function AddToCart(Router $router)
+    {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $productoId = $_POST['producto'] ?? null;
             $price = floatval($_POST['price'] ?? 0);
             $quantity = intval($_POST['quantity'] ?? 1);
-    
+
             if (!$productoId || $price <= 0 || $quantity <= 0) {
                 echo "<script>alert('Datos inválidos para añadir al carrito.');</script>";
                 header('Location: ' . $_SERVER['HTTP_REFERER']);
                 exit;
             }
-    
+
             // Obtener el ID de usuario desde la sesión
             $userId = $_SESSION['userId'] ?? null;
             if (!$userId) {
@@ -83,41 +87,42 @@ class CartController {
                 header('Location: ' . $_SERVER['HTTP_REFERER']);
                 exit;
             }
-    
+
             // Procesar lógica de agregar al carrito
             $resultado = self::processAddToCart($productoId, $quantity, $price, $userId);
-    
+
             // Mostrar alertas basadas en el resultado
             if ($resultado['success']) {
                 echo "<script>alert('¡Producto añadido al carrito exitosamente!');</script>";
             } else {
                 echo "<script>alert('{$resultado['message']}');</script>";
             }
-    
+
             // Redirigir a la página anterior
             header('Location: ' . $_SERVER['HTTP_REFERER']);
             exit;
         }
     }
-    
+
     /**
      * Procesa la lógica de agregar un producto al carrito
      */
-    public static function processAddToCart($productoId, $quantity, $price, $userId) {
+    public static function processAddToCart($productoId, $quantity, $price, $userId)
+    {
         // Obtener el carrito del usuario
         $carrito = Cart::where('userId', $userId);
-    
+
         if (!$carrito) {
             return [
                 'success' => false,
                 'message' => 'No se encontró un carrito para este usuario.',
             ];
         }
-    
+
         // Verificar si el producto está en la base de datos
         $producto = Product::find($productoId);
         $isEncargo = false;
-        if ($producto->encargo == 1){
+        if ($producto->encargo == 1) {
             $isEncargo = true;
         }
         if (!$producto) {
@@ -127,34 +132,33 @@ class CartController {
             ];
         }
 
-        if(!$isEncargo){
-            if($producto->cantidad <= 0){
+        if (!$isEncargo) {
+            if ($producto->cantidad <= 0) {
                 return [
                     'success' => false,
                     'message' => 'El producto no está disponible.',
                 ];
             }
         }
-    
+
         // Verificar si el producto ya está en el carrito
         $existingItem = Productsxcart::findProductInCart($productoId, $carrito->id);
         if (!is_null($existingItem)) {
             // Actualizar cantidad y precio si ya existe
-            if ($isEncargo){
+            if ($isEncargo) {
                 $existingItem->quantity += $quantity;
                 $existingItem->price = $price * $existingItem->quantity;
                 $resultado = $existingItem->actualizarProductInCart();
-            }elseif ($producto->cantidad >= ($existingItem->quantity + $quantity)){
+            } elseif ($producto->cantidad >= ($existingItem->quantity + $quantity)) {
                 $existingItem->quantity += $quantity;
                 $existingItem->price = $price * $existingItem->quantity;
                 $resultado = $existingItem->actualizarProductInCart();
-            }else{
+            } else {
                 return [
                     'success' => false,
                     'message' => 'Cantidad no disponible',
                 ];
             }
-
         } else {
             // Agregar un nuevo registro si no existe
             $cartItem = new Productsxcart([
@@ -165,7 +169,7 @@ class CartController {
             ]);
             $resultado = $cartItem->guardar();
         }
-    
+
         if ($resultado['resultado']) {
             return [
                 'success' => true,
@@ -178,14 +182,15 @@ class CartController {
         }
     }
 
-    public static function removeFromCart(Router $router) {
+    public static function removeFromCart(Router $router)
+    {
         // Verificamos que el usuario esté autenticado
         $userId = $_SESSION['userId'] ?? null;
-    
+
         if ($userId) {
             // Obtener el productID que se quiere eliminar
             $productId = $_POST['productID'] ?? null;
-    
+
             if (!is_null($productId)) {
                 // Buscar el carrito del usuario
                 $carrito = Cart::where('userId', $userId);
@@ -193,14 +198,14 @@ class CartController {
                 if (!is_null($carrito)) {
                     // Buscar el producto en el carrito
                     $productoEnCarrito = Productsxcart::findProductInCart($productId, $carrito->id);
-                    
+
                     if ($productoEnCarrito) {
                         // Eliminar el producto del carrito
-                        if($productoEnCarrito->quantity > 1){
+                        if ($productoEnCarrito->quantity > 1) {
                             $productoEnCarrito->quantity -= 1;
                             $productoEnCarrito->price = $price * $productoEnCarrito->quantity;
                             $productoEnCarrito->actualizarProductInCart();
-                        }else{
+                        } else {
                             $productoEnCarrito->deleteFromCart($productId, $carrito->id);
                         }
                     } else {
@@ -219,16 +224,17 @@ class CartController {
             exit;
         }
     }
-    
-    private static function obtenerPromocionesDelProducto(int $productID, array $promocionesActivas): ?Promotion {
+
+    private static function obtenerPromocionesDelProducto(int $productID, array $promocionesActivas): ?Promotion
+    {
         $promocionMayor = null;
         $promocionesDelProducto = [];
 
         foreach ($promocionesActivas as $promocion) {
             // Verificar si el producto está asociado con la promoción
-            $productoEnPromocion = ProductXPromotion::isProductPromotion($productID,$promocion->id);
+            $productoEnPromocion = ProductXPromotion::isProductPromotion($productID, $promocion->id);
             if ($productoEnPromocion) {
-                if ($promocion->percentage >= $promocionMayor->percentage){
+                if ($promocion->percentage >= $promocionMayor->percentage) {
                     $promocionMayor = $promocion;
                 }
             }
@@ -237,13 +243,15 @@ class CartController {
         return $promocionMayor;
     }
 
-    private static function aplicarDescuentoPorPromocion(object $producto, object $promocion): float {
+    private static function aplicarDescuentoPorPromocion(object $producto, object $promocion): float
+    {
         // El descuento es un porcentaje sobre el precio del producto
         $descuentoPorProducto = $producto->price * ($promocion->percentage / 100);
         return $descuentoPorProducto * $producto->quantity; // Descuento total por cantidad
     }
 
-    private static function calcularDescuento(array $productos): array {
+    private static function calcularDescuento(array $productos): array
+    {
         $promocionesActivas = Promotion::getActivePromotions();
 
         foreach ($productos as $producto) {
@@ -252,7 +260,7 @@ class CartController {
 
             $promocionesDelProducto = self::obtenerPromocionesDelProducto($producto->id, $promocionesActivas);
 
-            if($promocionesDelProducto){
+            if ($promocionesDelProducto) {
                 $producto->discount += self::aplicarDescuentoPorPromocion($producto, $promocionesDelProducto);
                 $producto->discountPercentage += $promocionesDelProducto->percentage; // Último porcentaje aplicado
             }
@@ -261,7 +269,8 @@ class CartController {
         return $productos;
     }
 
-    public static function checkout(Router $router) {
+    public static function checkout(Router $router)
+    {
         $userId = $_SESSION['userId'] ?? null;
         $totalMonto = $_POST['totalMonto'] ?? null;;
 
@@ -294,8 +303,9 @@ class CartController {
         ]);
     }
 
-    public static function confirmOrder(Router $router) {
-        $alertas=[];
+    public static function confirmOrder(Router $router)
+    {
+        $alertas = [];
 
         $userId = $_SESSION['userId'] ?? null;
         $totalMonto = $_POST['totalMonto'] ?? null;
@@ -309,42 +319,42 @@ class CartController {
         $totalMonto += $metodoEntrega->cost;
 
         $cliente = Client::find4($userId);
-        
-        if(is_null($cliente->name) or $cliente->name==' '){
-            $alertas =[];
+
+        if (is_null($cliente->name) or $cliente->name == ' ') {
+            $alertas = [];
             $alertas = Sale::setAlerta('error', 'Debe actualizar sus datos personales para realizar el pedido');
             $alertas = Sale::getAlertas();
             $userId = $_SESSION['userId'] ?? null;
-        $totalMonto = $_POST['totalMonto'] ?? null;
+            $totalMonto = $_POST['totalMonto'] ?? null;
 
-        $carrito = Cart::where('userId', $userId);
-        $productosEnCarrito = [];
+            $carrito = Cart::where('userId', $userId);
+            $productosEnCarrito = [];
 
-        if ($carrito) {
-            $productosxCart = Productsxcart::allCart($carrito->id);
+            if ($carrito) {
+                $productosxCart = Productsxcart::allCart($carrito->id);
 
-            foreach ($productosxCart as $productoEnCarrito) {
-                $producto = Product::find($productoEnCarrito->productID);
+                foreach ($productosxCart as $productoEnCarrito) {
+                    $producto = Product::find($productoEnCarrito->productID);
 
-                if ($producto) {
-                    $producto->quantity = $productoEnCarrito->quantity;
-                    $productosEnCarrito[] = $producto;
+                    if ($producto) {
+                        $producto->quantity = $productoEnCarrito->quantity;
+                        $productosEnCarrito[] = $producto;
+                    }
                 }
             }
-        }
 
-        $metodosPago = PaymentMethod::all();
-        $metodosEntrega = DeliveryMethod::all();
+            $metodosPago = PaymentMethod::all();
+            $metodosEntrega = DeliveryMethod::all();
 
-        $productosEnCarrito = self::calcularDescuento($productosEnCarrito);
-        $router->render('ventas/checkout', [
-            'alertas' => $alertas,
-            'productos' => $productosEnCarrito,
-            'totalMonto' => $totalMonto,
-            'descuento' => array_sum(array_column($productosEnCarrito, 'discount')), // Suma total de descuentos
-            'metodosPago' => $metodosPago,
-            'metodosEntrega' => $metodosEntrega
-        ]);
+            $productosEnCarrito = self::calcularDescuento($productosEnCarrito);
+            $router->render('ventas/checkout', [
+                'alertas' => $alertas,
+                'productos' => $productosEnCarrito,
+                'totalMonto' => $totalMonto,
+                'descuento' => array_sum(array_column($productosEnCarrito, 'discount')), // Suma total de descuentos
+                'metodosPago' => $metodosPago,
+                'metodosEntrega' => $metodosEntrega
+            ]);
             exit;
         }
         date_default_timezone_set('America/Costa_Rica');
@@ -357,6 +367,7 @@ class CartController {
             'userId' => $cliente->id,
             'paymentMethodId' => $metodoPago->id,
             'deliveryMethodId' => $metodoEntrega->id,
+            'deliveryCost' => $metodoEntrega->cost,
         ]);
         $resultado = $pedido->crearSale();
         $orderId = $resultado['id'];
@@ -364,7 +375,7 @@ class CartController {
         // Limpiar el carrito y crear registros en ProductxSale
 
         $carrito = Cart::where('userId', $userId);
-        
+
         if ($carrito) {
             $productosxCart = Productsxcart::allCart($carrito->id);
             foreach ($productosxCart as $productoEnCarrito) {
@@ -379,8 +390,8 @@ class CartController {
 
                 $productoReal = Product::find($productID);
 
-                if($productoReal->encargo == 0){
-                    ProductController::createInventory($productID,$productoEnCarrito->quantity,'Pedido Realizado',0);
+                if ($productoReal->encargo == 0) {
+                    ProductController::createInventory($productID, $productoEnCarrito->quantity, 'Pedido Realizado', 0);
                 }
                 $saleItem->guardar();
                 $productoEnCarrito->deleteFromCart($productID, $carrito->id);
@@ -389,7 +400,7 @@ class CartController {
 
         // Renderizar la página de éxito
         $router->render('ventas/success', [
-            'alertas'=> $alertas,
+            'alertas' => $alertas,
             'orderId' => $orderId,
             'totalAmount' => $totalMonto,
         ]);

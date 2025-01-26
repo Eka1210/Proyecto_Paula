@@ -47,9 +47,6 @@ class Inventorylog extends ActiveRecord
             self::setAlerta('error', 'El producto es obligatorio');
         }
 
-        // if (!is_numeric($this->quantity) || intval($this->quantity) <= 0) {
-        //     self::setAlerta('error', 'La cantidad debe ser un número entero positivo');
-        // }
 
         if (!is_numeric($this->new_value) || intval($this->new_value) < 0 || intval($this->new_value) > 2147483647) {
             self::setAlerta('error', 'El nuevo valor debe ser un número entero positivo y dentro del rango permitido');

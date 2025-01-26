@@ -1,6 +1,7 @@
 <?php
 
 namespace Model;
+
 use Model\Sale;
 use Model\Usuario;
 use Model\client;
@@ -29,23 +30,23 @@ class Report implements ReportInterface
             foreach ($productsxsale as $pxs) {
                 $product = Product::find($pxs->productID);
                 $productsDetail[] = sprintf(
-                    "%s (Cantidad: %d Total: $%.2f)",
+                    "%s (Cantidad: %d Total: ₡%s)",
                     $product->name,
                     $pxs->quantity,
-                    $pxs->price
+                    number_format($pxs->price, 2, '.', ',')
                 );
             }
 
             $formattedData[] = [
                 $sale->id,
                 $sale->descripcion,
-                '$' . number_format($sale->monto, 2),
+                '₡' . number_format($sale->monto, 2),
                 date('Y-m-d H:i', strtotime($sale->fecha)),
-                '$' . number_format($sale->discount, 2),
+                '₡' . number_format($sale->discount, 2),
                 $user->name,
                 $paymentMethod->name,
                 $deliveryMethod->name,
-                '$' . number_format($deliveryMethod->cost, 2),
+                '₡' . number_format($sale->deliveryCost, 2),
                 implode("\n", $productsDetail),
             ];
         }
