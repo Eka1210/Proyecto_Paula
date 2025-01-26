@@ -46,6 +46,7 @@ class PromotionController
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $promocion = new Promotion($_POST);
             $promocion->active = 1;
+            $promocion->name = trim($promocion->name);
             $alertas = $promocion->validate();
             if (empty($alertas)) {
                 $datos = $promocion->guardar();

@@ -9,7 +9,8 @@ include_once __DIR__ . "/../templates/alerts.php";
     <form method="POST" class="create-category__form">
         <div class="create-category__form__field">
             <label for="name" class="create-category__form__label">Nombre del descuento</label>
-            <input type="text" name="name" id="name" class="create-category__form__input" maxlength="44" required>
+            <input type="text" name="name" id="name" class="create-category__form__input" maxlength="44" required
+                oninput="this.value = this.value.trim()">
         </div>
         <div class="create-category__form__field">
             <label for="description" class="create-category__form__label">Descripción</label>

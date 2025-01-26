@@ -44,10 +44,9 @@ class Promotion extends ActiveRecord
             self::setAlerta('error', 'La fecha de finalización es obligatorio');
         }
 
-        if ($this->doesNameExist()) {
-            self::setAlerta('error', 'La promoción con ese nombre ya existe');
+        if (!$this->doesNameExist()) {
+            self::setAlerta('error', 'La promoción ya existe');
         }
-        return self::$alertas;
     }
 
 
@@ -70,18 +69,12 @@ class Promotion extends ActiveRecord
 
     public function doesNameExist()
     {
-        $query = "SELECT EXISTS (
-            SELECT 1 
-            FROM " . self::$tabla . " 
-            WHERE name = ? AND id != ?
-        ) AS exists_with_same_name";
+        $query = "SELECT * FROM " . self::$tabla . " WHERE TRIM(name) = '" . trim($this->name) . "' AND id <> '" . $this->id . "' LIMIT 1";
+        $result = self::$db->query($query);
 
-        $stmt = self::$db->prepare($query);
-        $stmt->bind_param('si', $this->name, $this->id);
-        $stmt->execute();
-        $result = $stmt->get_result();
-        $row = $result->fetch_assoc();
-
-        return $row['exists_with_same_name'] == 1;
+        if ($result->num_rows) {
+            return true;
+        }
+        return false;
     }
 }
