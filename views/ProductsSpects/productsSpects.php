@@ -48,7 +48,12 @@
                     }
                     ?>
                     <h2>Cantidad</h2>
-                    <input type="number" name="quantity" min="1" max="<?php echo htmlspecialchars($producto->cantidad); ?>" value="1" required>
+                    <?php
+                    if ($producto->encargo == 0) { ?>
+                        <input type="number" name="quantity" min="1" max="<?php echo htmlspecialchars($producto->cantidad); ?>" value="1" required>
+                    <?php } else{ ?>
+                        <input type="number" name="quantity" min="1" value="1" required>
+                    <?php } ?>
                 </div>
 
                 <!-- Botón para agregar al carrito -->
@@ -175,8 +180,8 @@
 
         container.addEventListener('click', function() {
             if (!isLoggedIn) {
-                console.log('User not logged in. Action not allowed.');
-                return;
+                alert('Debes iniciar sesión para agregar productos a favoritos');
+                return; 
             }
 
             let xhr = new XMLHttpRequest();
@@ -199,4 +204,5 @@
             xhr.send();
         });
     });
+    
 </script>

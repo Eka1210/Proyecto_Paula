@@ -73,29 +73,17 @@ verificarAccesoAdmin();
     ?>
     <nav class="navegacion">
         <?php if (isset($_SESSION['admin'])) { ?>
-            <a <?php if ($page == 'inicio') {
+            <a <?php if ($page == 'admin') {
                     echo 'class="active"';
-                } ?> href="/admin">
-                Inicio</a>
-        <?php } else { ?>
+                } ?> href="/admin/permisos">
+                Admin</a>
+        <?php } ?>
+        <?php if (!isset($_SESSION['admin'])) { ?>
             <a <?php if ($page == 'inicio') {
                     echo 'class="active"';
                 } ?> href="/">
                 Inicio</a>
-        <?php } ?>
-
-        <?php if (isset($_SESSION['admin'])) { ?>
-            <a <?php if ($page == 'productos') {
-                    echo 'class="active"';
-                } ?> href="/admin/productos">
-                Productos</a>
-        <?php } else { ?>
-            <a <?php if ($page == 'productos') {
-                    echo 'class="active"';
-                } ?> href="/productos">
-                Productos</a>
-        <?php } ?>
-
+        <?php }?>
         <?php if (isset($_SESSION['admin'])) { ?>
             <a <?php if ($page == 'categorias') {
                     echo 'class="active"';
@@ -105,14 +93,22 @@ verificarAccesoAdmin();
             <a <?php if ($page == 'categorias') {
                     echo 'class="active"';
                 } ?> href="/categorias">
-                Categorías</a>
+                Productos</a>
         <?php } ?>
+
+        <?php if (isset($_SESSION['admin'])) { ?>
+            <a <?php if ($page == 'productos') {
+                    echo 'class="active"';
+                } ?> href="/admin/productos">
+                Productos</a>
+        <?php }?>
         <?php if (isset($_SESSION['admin'])) { ?>
             <a <?php if ($page == 'admin') {
                     echo 'class="active"';
-                } ?> href="/admin/permisos">
-                Admin</a>
+                } ?> href="/admin/inventario">
+                Inventario</a>
         <?php } ?>
+        
         <?php if (isset($_SESSION['admin'])) { ?>
             <a <?php if ($page == 'admin') {
                     echo 'class="active"';
@@ -125,12 +121,7 @@ verificarAccesoAdmin();
                 } ?> href="/admin/reporte">
                 Reporte</a>
         <?php } ?>
-        <?php if (isset($_SESSION['admin'])) { ?>
-            <a <?php if ($page == 'admin') {
-                    echo 'class="active"';
-                } ?> href="/admin/inventario">
-                Inventario</a>
-        <?php } ?>
+        
         <?php if (isset($_SESSION['admin'])) { ?>
             <a <?php if ($page == 'admin') {
                     echo 'class="active"';
@@ -234,4 +225,3 @@ checkOverflow();
 </script>
 
 </html>
-

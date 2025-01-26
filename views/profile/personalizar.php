@@ -22,7 +22,12 @@
             <!-- Selección de cantidad -->
             <div class="quantity-selection">
                 <h2>Cantidad</h2>
-                <input type="number" name="quantity" min="1" value="1" required>
+                <?php
+                    if ($producto->encargo == 0) { ?>
+                        <input type="number" name="quantity" min="1" max="<?php echo htmlspecialchars($producto->cantidad); ?>" value="1" required>
+                    <?php } else{ ?>
+                        <input type="number" name="quantity" min="1" value="1" required>
+                    <?php } ?>
             </div>
 
             <!-- Botón para agregar al carrito -->
