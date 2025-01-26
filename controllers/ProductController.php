@@ -534,7 +534,7 @@ class ProductController
             $resultado = CartController::processAddToCart($productId, $quantity, $product->price, $userId);
 
             // Redirigir a la página de resumen
-            header("Location: /productos ");
+            header("Location: /categorias ");
             exit;
         }
 
@@ -774,13 +774,18 @@ class ProductController
             $selectedOptions = $_POST['options'] ?? [];
             $quantity = $_POST['quantity'] ?? 1;
             $userId = $_SESSION['userId'] ?? null;
+            if ($userId == null) {
+                echo '<script>alert("Debes iniciar sesión para agregar productos al carrito");window.location.href = "login";</script>';
+                exit;
+            }
+            
 
 
             // Lógica para añadir al carrito
             $resultado = CartController::processAddToCart($resultado, $quantity, $product->price, $userId);
 
             // Redirigir a la página de resumen
-            header("Location: /productos ");
+            header("Location: /categorias ");
             exit;
         }
 
