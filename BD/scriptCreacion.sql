@@ -220,6 +220,7 @@ CREATE TABLE `products` (
   `imagen` varchar(255) DEFAULT NULL,
   `encargo` tinyint NOT NULL DEFAULT '0',
   `activo` tinyint NOT NULL DEFAULT '1',
+  `customization` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `productID_UNIQUE` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;

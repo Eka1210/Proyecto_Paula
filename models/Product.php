@@ -5,7 +5,7 @@ namespace Model;
 class Product extends ActiveRecord
 {
     protected static $tabla = 'products';
-    protected static $columnasDB = ['id', 'name', 'description', 'price', 'cantidad', 'imagen', 'encargo', 'activo'];
+    protected static $columnasDB = ['id', 'name', 'description', 'price', 'cantidad', 'imagen', 'encargo', 'activo','customization'];
 
     public $id;
     public $name;
@@ -17,9 +17,11 @@ class Product extends ActiveRecord
     public $quantity;
     public $categories;
     public $activo;
+    public $customization;
     public $liked;
     public $discount;
     public $discountPercentage;
+
 
     public function __construct($args = [])
     {
@@ -31,6 +33,7 @@ class Product extends ActiveRecord
         $this->imagen = $args['imagen'] ?? '';
         $this->encargo = $args['encargo'] ?? 0;
         $this->activo = $args['activo'] ?? 1;
+        $this->customization = $args['customization'] ?? NULL;
     }
 
     public function validate()
