@@ -78,12 +78,12 @@ verificarAccesoAdmin();
                 } ?> href="/admin/permisos">
                 Admin</a>
         <?php } ?>
-        <?php  ?>
+        <?php if (!isset($_SESSION['admin'])) { ?>
             <a <?php if ($page == 'inicio') {
                     echo 'class="active"';
                 } ?> href="/">
                 Inicio</a>
-        <?php  ?>
+        <?php }?>
         <?php if (isset($_SESSION['admin'])) { ?>
             <a <?php if ($page == 'categorias') {
                     echo 'class="active"';

@@ -303,8 +303,14 @@ class ProductController
     {
         isAdmin();
         $alertas = [];
-        $productos = Product::all();
+        $products = Product::all();
+        $productos =[];
         $categorias = Category::all();
+        foreach ($products as $producto) {
+            if ($producto->activo == 1) {
+                $productos[] = $producto;
+            }
+        }
 
         foreach ($productos as $producto) {
             $producto->name = $producto->name;
