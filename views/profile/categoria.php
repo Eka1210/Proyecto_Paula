@@ -3,12 +3,18 @@
 </head>
 <div class="categorias-wrapper">
     <div class="categorias">
-        <?php foreach ($categorias as $categoria) { ?>
-            <div class="categoria">
-                <a href="/categoria?id=<?php echo $categoria->id; ?>">
-                    <div class="categoria-imagen" style="background-image: url('<?php echo $categoria->imagen; ?>');"></div>
+    <div class="categoria">
+                <a href="/productos">
+                    <div class="categoria-imagen" style="background-image: url('images/plus.png');"></div>
                 </a>
-                <p><?php echo $categoria->nombre; ?></p>
+                <p>Ver todos</p>
+            </div>
+        <?php foreach ($categorias as $category) { ?>
+            <div class="categoria">
+                <a href="/categoria?id=<?php echo $category->id; ?>">
+                    <div class="categoria-imagen" style="background-image: url('<?php echo $category->imagen; ?>');"></div>
+                </a>
+                <p><?php echo $category->nombre; ?></p>
             </div>
         <?php } ?>
     </div>

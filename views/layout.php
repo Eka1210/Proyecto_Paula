@@ -92,7 +92,7 @@ verificarAccesoAdmin();
         <?php } else { ?>
             <a <?php if ($page == 'categorias') {
                     echo 'class="active"';
-                } ?> href="/categorias">
+                } ?> href="/productos">
                 Productos</a>
         <?php } ?>
 
