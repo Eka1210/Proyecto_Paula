@@ -220,10 +220,9 @@ CREATE TABLE `products` (
   `imagen` varchar(255) DEFAULT NULL,
   `encargo` tinyint NOT NULL DEFAULT '0',
   `activo` tinyint NOT NULL DEFAULT '1',
-  `customization` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `productID_UNIQUE` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=27 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=28 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -238,6 +237,7 @@ CREATE TABLE `productsxcart` (
   `productID` int NOT NULL,
   `quantity` int NOT NULL,
   `price` decimal(10,2) NOT NULL,
+  `customization` varchar(255) DEFAULT NULL,
   KEY `fk_cart_has_products_products1_idx` (`productID`),
   KEY `fk_cart_has_products_cart1_idx` (`cartID`),
   CONSTRAINT `fk_cart_has_products_cart1` FOREIGN KEY (`cartID`) REFERENCES `cart` (`id`),
@@ -257,6 +257,7 @@ CREATE TABLE `productsxsale` (
   `productID` int NOT NULL,
   `quantity` int NOT NULL,
   `price` decimal(10,2) NOT NULL,
+  `customization` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`salesID`,`productID`),
   KEY `fk_sales_has_products_products1_idx` (`productID`),
   KEY `fk_sales_has_products_sales1_idx` (`salesID`),
