@@ -65,7 +65,7 @@ $router->get('/admin/productos/activo', [ProductController::class, 'activo']);
 $router->post('/admin/productos/activo', [ProductController::class, 'activo']);
 $router->get('/admin/productos/activo2', [ProductController::class, 'activo2']);
 $router->post('/admin/productos/activo2', [ProductController::class, 'activo2']);
-$router->get('/productos', [PagesController::class, 'productos']);
+$router->get('/productos', [PagesController::class, 'categorias']);
 $router->get('/admin/personalizacion/producto', [ProductController::class, 'personalizar']);
 $router->post('/admin/personalizacion/producto', [ProductController::class, 'personalizar']);
 $router->get('/admin/opcion/crear', [ProductController::class, 'crearOpcion']);

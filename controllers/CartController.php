@@ -73,6 +73,11 @@ class CartController
             $productoId = $_POST['producto'] ?? null;
             $price = floatval($_POST['price'] ?? 0);
             $quantity = intval($_POST['quantity'] ?? 1);
+            $userId = $_SESSION['userId'] ?? null;
+            if ($userId == null) {
+                echo '<script>alert("Debes iniciar sesión para agregar productos al carrito");window.location.href = "/login";</script>';
+                exit;
+            }
 
             if (!$productoId || $price <= 0 || $quantity <= 0) {
                 echo "<script>alert('Datos inválidos para añadir al carrito.');</script>";
