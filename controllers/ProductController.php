@@ -529,7 +529,7 @@ class ProductController
             $selectedOptions = $_POST['options'] ?? [];
             $quantity = $_POST['quantity'] ?? 1;
             $userId = $_SESSION['userId'] ?? null;
-
+            
             if (!$userId) {
                 echo "<script>alert('No se encontró un usuario en la sesión.');</script>";
                 header('Location: /admin/personalizacion/producto?id=' . $productId);
@@ -780,15 +780,15 @@ class ProductController
             $selectedOptions = $_POST['options'] ?? [];
             $quantity = $_POST['quantity'] ?? 1;
             $userId = $_SESSION['userId'] ?? null;
+            $customization = $_POST['customization'] ?? null;
+
             if ($userId == null) {
                 echo '<script>alert("Debes iniciar sesión para agregar productos al carrito");window.location.href = "login";</script>';
                 exit;
             }
-            
-
 
             // Lógica para añadir al carrito
-            $resultado = CartController::processAddToCart($resultado, $quantity, $product->price, $userId);
+            $resultado = CartController::processAddToCart($resultado, $quantity, $producto->price, $userId,$customization);
 
             // Redirigir a la página de resumen
             header("Location: /categorias ");

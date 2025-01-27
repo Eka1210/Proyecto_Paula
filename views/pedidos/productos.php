@@ -8,6 +8,7 @@
             <tr>
                 <th scope="col" class="table__th">Producto</th>
                 <th scope="col" class="table__th">Descripción</th>
+                <th scope="col" class="table__th">Opciones de Personalización</th>
                 <th scope="col" class="table__th">Cantidad</th>
                 <th scope="col" class="table__th">Precio Unitario</th>
                 <th scope="col" class="table__th">Subtotal</th>
@@ -21,6 +22,16 @@
                     </td>
                     <td class="table__td">
                         <?php echo htmlspecialchars($producto->description); ?>
+                    </td>
+                    <td>
+                        <?php 
+                            $customization = json_decode($producto->customization, true); // Decodificar el JSON
+                            if (is_array($customization)) {
+                                echo htmlspecialchars(implode(", ", $customization)); // Mostrar solo los valores separados por comas
+                            } else {
+                                echo "N/A"; // Si no es un JSON válido, muestra "N/A"
+                            }
+                        ?>
                     </td>
                     <td class="table__td">
                         <?php echo htmlspecialchars($producto->quantity); ?>

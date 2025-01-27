@@ -19,10 +19,13 @@
         <div class="customization-options">
             <h1 class="section__heading"><span>Personaliza <?php echo htmlspecialchars($producto->name); ?> </span></h1>
             <form method="POST">
+                <input type="hidden" name="customization" id="customizationInput" value="{}">
                 <?php foreach ($options as $option): ?>
                     <div class="customization-option">
                         <h2><?= htmlspecialchars($option->name); ?></h2>
-                        <select name="options[<?= $option->optionID; ?>]" required>
+                        <select name="options[<?= $option->optionID; ?>]" 
+                                data-option-id="<?= $option->optionID; ?>" 
+                                class="customization-select" required>
                             <option value="" disabled selected>Seleccionar...</option>
                             <?php foreach ($option->decodedValues as $value): ?>
                                 <option value="<?= htmlspecialchars($value); ?>"><?= htmlspecialchars($value); ?></option>
@@ -157,8 +160,27 @@
     </div>
 </div>
 
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const customizationInput = document.getElementById('customizationInput');
+        const selects = document.querySelectorAll('.customization-select');
+        const customizationData = {};
 
+        // Escuchar cambios en cada <select> y actualizar el JSON
+        selects.forEach(select => {
+            select.addEventListener('change', (event) => {
+                const optionId = event.target.dataset.optionId;
+                const selectedValue = event.target.value;
 
+                // Actualizar los datos de personalización
+                customizationData[optionId] = selectedValue;
+
+                // Convertir a JSON y actualizar el input oculto
+                customizationInput.value = JSON.stringify(customizationData);
+            });
+        });
+    });
+</script>
 
 <script>
     const isLoggedIn = <?php echo isset($_SESSION['userId']) ? 'true' : 'false'; ?>;

@@ -13,6 +13,7 @@ include_once __DIR__ . "/../templates/alerts.php";
                 <th>Cantidad</th>
                 <th>Subtotal</th>
                 <th>Categorías</th>
+                <th>Opciones</th>
                 <th>Acciones</th>
             </tr>
         </thead>
@@ -49,16 +50,28 @@ include_once __DIR__ . "/../templates/alerts.php";
                         ?>
                     </td>
                     <td>
-                        <form method="POST" action="/cart/AddToCart" class="w-100">
-                            <input type="hidden" value="<?php echo $producto->id; ?>" id="producto" name="producto">
-                            <input type="hidden" value="<?php echo $producto->price; ?>" id="price" name="price">
-                            <input type="hidden" value="<?php echo 1; ?>" id="quantity" name="quantity">
-                            <button type="submit" class="icon-update" title="Añadir al carrito">+</button>
-                        </form>
-                        <form method="POST" action="/cart/removeFromCart" class="w-100">
-                            <input type="hidden" name="productID" value="<?php echo htmlspecialchars($producto->id); ?>">
-                            <button type="submit" class="icon-delete" title="Eliminar del carrito">-</button>
-                        </form>
+                        <?php 
+                            $customization = json_decode($producto->customization, true); // Decodificar el JSON
+                            if (is_array($customization)) {
+                                echo htmlspecialchars(implode(", ", $customization)); // Mostrar solo los valores separados por comas
+                            } else {
+                                echo "N/A"; // Si no es un JSON válido, muestra "N/A"
+                            }
+                        ?>
+                    </td>
+                    <td>
+                        <?php if ($producto->encargo == 0): ?>
+                            <form method="POST" action="/cart/AddToCart" class="w-100">
+                                <input type="hidden" value="<?php echo $producto->productID; ?>" id="producto" name="producto">
+                                <input type="hidden" value="<?php echo $producto->price; ?>" id="price" name="price">
+                                <input type="hidden" value="<?php echo 1; ?>" id="quantity" name="quantity">
+                                <button type="submit" class="icon-update" title="Añadir al carrito">+</button>
+                            </form>
+                            <form method="POST" action="/cart/removeFromCart" class="w-100">
+                                <input type="hidden" name="productID" value="<?php echo htmlspecialchars($producto->productID); ?>">
+                                <button type="submit" class="icon-delete" title="Eliminar del carrito">-</button>
+                            </form>
+                        <?php endif; ?>
                     </td>
                 </tr>
             <?php } ?>

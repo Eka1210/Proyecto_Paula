@@ -439,6 +439,18 @@ class ActiveRecord
         return array_shift($resultado);
     }
 
+    public static function findCustomProductInCart($productId, $cartId, $customization)
+    {
+        // Escapar el JSON para evitar problemas de inyección SQL
+        $customizationEscaped = addslashes($customization);
+        $customization = json_encode($customizationArray);
+
+        $query = "SELECT * FROM " . static::$tabla . " WHERE cartID = " . $cartId . " AND productID = " . $productId . " AND customization = " . self::$db->escape_string($customization);
+        $resultado = self::consultarSQL($query);
+    
+        return array_shift($resultado);
+    }
+
     public function actualizarProductInCart()
     {
         // Sanitizar los datos
@@ -463,6 +475,41 @@ class ActiveRecord
             " LIMIT 1";
         // Ejecutar la consulta
         $resultado = self::$db->query($query);
+        // Retornar el resultado
+        return $resultado;
+    }
+
+    public function actualizarCustomProductInCart()
+    {
+        // Sanitizar los datos
+        $atributos = $this->sanitizarAtributos();
+    
+        // Iterar para agregar cada campo y valor
+        $valores = [];
+        foreach ($atributos as $key => $value) {
+            $valores[] = "{$key}='" . self::$db->escape_string($value) . "'";
+        }
+    
+        // Validar que existan valores para actualizar
+        if (empty($valores)) {
+            throw new \Exception("No hay valores para actualizar el registro.");
+        }
+    
+        // Validar que cartID, productID y customization estén configurados
+        if (empty($this->cartID) || empty($this->productID)) {
+            throw new \Exception("cartID o productID no están configurados.");
+        }
+    
+        // Construir la consulta SQL
+        $query = "UPDATE " . static::$tabla . " SET " . join(', ', $valores) .
+            " WHERE cartID = '" . self::$db->escape_string($this->cartID) . "'" .
+            " AND productID = '" . self::$db->escape_string($this->productID) . "'" .
+            " AND customization = '" . self::$db->escape_string($this->customization) . "'" .
+            " LIMIT 1";
+    
+        // Ejecutar la consulta
+        $resultado = self::$db->query($query);
+    
         // Retornar el resultado
         return $resultado;
     }

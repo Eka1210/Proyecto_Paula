@@ -34,25 +34,30 @@ class CartController
                 $productosxCart = Productsxcart::allCart($carrito->id);
 
                 foreach ($productosxCart as $productoEnCarrito) {
+
                     $producto = Product::find($productoEnCarrito->productID);
 
                     if ($producto) {
-                        $producto->quantity = $productoEnCarrito->quantity;
-
-                        // Obtener las categorías del producto
-                        $categoryIDs = CategoryxProduct::all2($producto->id);
-                        $categorias = [];
-                        foreach ($categoryIDs as $categoryID) {
-                            $categoria = Category::find($categoryID->categoryID);
-                            if ($categoria) {
-                                $categorias[] = $categoria;
-                            }
-                        }
-
-                        // Almacenamos las categorías en el producto
-                        $producto->categories = $categorias;
-                        $productosEnCarrito[] = $producto;
+                        $productoEnCarrito->name = $producto->name;
+                        $productoEnCarrito->encargo = $producto->encargo;
+                    }else{
+                        $productoEncarrito->name = 'Producto Deshabilitado';
                     }
+
+                    // Obtener las categorías del producto
+                    $categoryIDs = CategoryxProduct::all2($productoEnCarrito->productID);
+                    $categorias = [];
+                    foreach ($categoryIDs as $categoryID) {
+                        $categoria = Category::find($categoryID->categoryID);
+                        if ($categoria) {
+                            $categorias[] = $categoria;
+                        }
+                    }
+
+                    // Almacenamos las categorías en el producto
+                    $productoEnCarrito->categories = $categorias;
+                    $productosEnCarrito[] = $productoEnCarrito;
+                    
                 }
             }
             $alertas = Sale::getAlertas();
@@ -73,7 +78,9 @@ class CartController
             $productoId = $_POST['producto'] ?? null;
             $price = floatval($_POST['price'] ?? 0);
             $quantity = intval($_POST['quantity'] ?? 1);
+            $customization = $_POST['customization'] ?? null;
             $userId = $_SESSION['userId'] ?? null;
+
             if ($userId == null) {
                 echo '<script>alert("Debes iniciar sesión para agregar productos al carrito");window.location.href = "/login";</script>';
                 exit;
@@ -94,7 +101,7 @@ class CartController
             }
 
             // Procesar lógica de agregar al carrito
-            $resultado = self::processAddToCart($productoId, $quantity, $price, $userId);
+            $resultado = self::processAddToCart($productoId, $quantity, $price, $userId,$customization);
 
             // Mostrar alertas basadas en el resultado
             if ($resultado['success']) {
@@ -112,7 +119,7 @@ class CartController
     /**
      * Procesa la lógica de agregar un producto al carrito
      */
-    public static function processAddToCart($productoId, $quantity, $price, $userId)
+    public static function processAddToCart($productoId, $quantity, $price, $userId,$customization)
     {
         // Obtener el carrito del usuario
         $carrito = Cart::where('userId', $userId);
@@ -148,15 +155,20 @@ class CartController
 
         // Verificar si el producto ya está en el carrito
         $existingItem = Productsxcart::findProductInCart($productoId, $carrito->id);
+
         if (!is_null($existingItem)) {
-            // Actualizar cantidad y precio si ya existe
             if ($isEncargo) {
-                $existingItem->quantity += $quantity;
-                $existingItem->price = $price * $existingItem->quantity;
-                $resultado = $existingItem->actualizarProductInCart();
+                $cartItem = new Productsxcart([
+                    'productID' => $productoId,
+                    'quantity' => $quantity,
+                    'cartID' => $carrito->id,
+                    'price' => $price * $quantity,
+                    'customization' => $customization
+                ]);
+                $resultado = $cartItem->guardar();
+
             } elseif ($producto->cantidad >= ($existingItem->quantity + $quantity)) {
                 $existingItem->quantity += $quantity;
-                $existingItem->price = $price * $existingItem->quantity;
                 $resultado = $existingItem->actualizarProductInCart();
             } else {
                 return [
@@ -164,6 +176,7 @@ class CartController
                     'message' => 'Cantidad no disponible',
                 ];
             }
+
         } else {
             // Agregar un nuevo registro si no existe
             $cartItem = new Productsxcart([
@@ -171,6 +184,7 @@ class CartController
                 'quantity' => $quantity,
                 'cartID' => $carrito->id,
                 'price' => $price * $quantity,
+                'customization' => $customization
             ]);
             $resultado = $cartItem->guardar();
         }
@@ -208,7 +222,6 @@ class CartController
                         // Eliminar el producto del carrito
                         if ($productoEnCarrito->quantity > 1) {
                             $productoEnCarrito->quantity -= 1;
-                            $productoEnCarrito->price = $price * $productoEnCarrito->quantity;
                             $productoEnCarrito->actualizarProductInCart();
                         } else {
                             $productoEnCarrito->deleteFromCart($productId, $carrito->id);
@@ -263,8 +276,13 @@ class CartController
             $producto->discount = 0;
             $producto->discountPercentage = 0;
 
-            $promocionesDelProducto = self::obtenerPromocionesDelProducto($producto->id, $promocionesActivas);
-
+            if($producto->productID){
+                $promocionesDelProducto = self::obtenerPromocionesDelProducto($producto->productID, $promocionesActivas);
+            }elseif($producto->id){
+                $promocionesDelProducto = self::obtenerPromocionesDelProducto($producto->id, $promocionesActivas);
+            }else{
+                return null;
+            }
             if ($promocionesDelProducto) {
                 $producto->discount += self::aplicarDescuentoPorPromocion($producto, $promocionesDelProducto);
                 $producto->discountPercentage += $promocionesDelProducto->percentage; // Último porcentaje aplicado
@@ -287,11 +305,12 @@ class CartController
 
             foreach ($productosxCart as $productoEnCarrito) {
                 $producto = Product::find($productoEnCarrito->productID);
-
-                if ($producto) {
-                    $producto->quantity = $productoEnCarrito->quantity;
-                    $productosEnCarrito[] = $producto;
+                if ($producto){
+                    $productoEnCarrito->name = $producto->name;
+                }else{
+                    $productoEnCarrito->name = 'Producto Deshabilitado';
                 }
+                $productosEnCarrito[] = $productoEnCarrito;
             }
         }
 
@@ -362,6 +381,7 @@ class CartController
             ]);
             exit;
         }
+
         date_default_timezone_set('America/Costa_Rica');
         $fecha = date('Y-m-d H:i:s');
         $pedido = new Sale([
@@ -391,6 +411,7 @@ class CartController
                     'productID' => $productID,
                     'quantity' => $productoEnCarrito->quantity,
                     'price' => $productoEnCarrito->price,
+                    'customization' => $productoEnCarrito->customization
                 ]);
 
                 $productoReal = Product::find($productID);
