@@ -268,6 +268,13 @@ class ActiveRecord
         return  $resultado;
     }
 
+    public static function deleteCustomFromCart($productId, $cartId, $values)
+    {
+        $query = "DELETE FROM productsxcart WHERE productID = $productId AND cartID = $cartId AND customization = '" . $values . "'" ;
+        $resultado = self::$db->query($query);
+        return  $resultado;
+    }
+
     public static function where($column, $value)
     {
         $query = "SELECT * FROM " . static::$tabla . " WHERE $column = '$value'";
@@ -448,6 +455,17 @@ class ActiveRecord
         return array_shift($resultado);
     }
 
+    public static function findProductInCart3($productId, $cartId, $values)
+    {
+        $values = addslashes($values);
+        $query = "SELECT * FROM " . static::$tabla . " WHERE cartID = " . $cartId . " AND productID = " . $productId . " AND customization ='" . $values . " '";
+        error_log($query);
+        $resultado = self::consultarSQL($query);
+
+        return array_shift($resultado);
+    }
+
+
     public static function findCustomProductInCart($productId, $cartId, $customization)
     {
         // Escapar el JSON para evitar problemas de inyección SQL
@@ -496,7 +514,9 @@ class ActiveRecord
         // Iterar para agregar cada campo y valor
         $valores = [];
         foreach ($atributos as $key => $value) {
-            $valores[] = "{$key}='" . self::$db->escape_string($value) . "'";
+            if($key != 'customization'){
+                $valores[] = "{$key}='" . self::$db->escape_string($value) . "'";
+            }
         }
     
         // Validar que existan valores para actualizar

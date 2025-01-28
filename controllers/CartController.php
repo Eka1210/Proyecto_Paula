@@ -79,7 +79,7 @@ class CartController
             $productoId = $_POST['producto'] ?? null;
             $price = floatval($_POST['price'] ?? 0);
             $quantity = intval($_POST['quantity'] ?? 1);
-            $customization = $_POST['customization'] ?? null;
+            $values = $_POST['values'] ?? null;
             $userId = $_SESSION['userId'] ?? null;
 
             if ($userId == null) {
@@ -102,7 +102,7 @@ class CartController
             }
 
             // Procesar lógica de agregar al carrito
-            $resultado = self::processAddToCart($productoId, $quantity, $price, $userId,$customization);
+            $resultado = self::processAddToCart($productoId, $quantity, $price, $userId,$values);
 
             // Mostrar alertas basadas en el resultado
             if ($resultado['success']) {
@@ -120,7 +120,7 @@ class CartController
     /**
      * Procesa la lógica de agregar un producto al carrito
      */
-    public static function processAddToCart($productoId, $quantity, $price, $userId,$customization)
+    public static function processAddToCart($productoId, $quantity, $price, $userId,$values)
     {
         // Obtener el carrito del usuario
         $carrito = Cart::where('userId', $userId);
@@ -155,18 +155,16 @@ class CartController
         }
 
         // Verificar si el producto ya está en el carrito
-        $existingItem = Productsxcart::findProductInCart($productoId, $carrito->id);
-
+        if($isEncargo){
+            $existingItem = Productsxcart::findProductInCart3($productoId, $carrito->id,$values);
+        }else{
+            $existingItem = Productsxcart::findProductInCart($productoId, $carrito->id);
+        }
+        error_log($values);
         if (!is_null($existingItem)) {
             if ($isEncargo) {
-                $cartItem = new Productsxcart([
-                    'productID' => $productoId,
-                    'quantity' => $quantity,
-                    'cartID' => $carrito->id,
-                    'price' => $price * $quantity,
-                    'customization' => $customization
-                ]);
-                $resultado = $cartItem->guardar();
+                $existingItem->quantity += $quantity;
+                $resultado = $existingItem->actualizarCustomProductInCart();
 
             } elseif ($producto->cantidad >= ($existingItem->quantity + $quantity)) {
                 $existingItem->quantity += $quantity;
@@ -177,7 +175,6 @@ class CartController
                     'message' => 'Cantidad no disponible',
                 ];
             }
-
         } else {
             // Agregar un nuevo registro si no existe
             $cartItem = new Productsxcart([
@@ -185,7 +182,7 @@ class CartController
                 'quantity' => $quantity,
                 'cartID' => $carrito->id,
                 'price' => $price * $quantity,
-                'customization' => $customization
+                'customization' => $values
             ]);
             $resultado = $cartItem->guardar();
         }
@@ -212,10 +209,6 @@ class CartController
             $productId = $_POST['productID'] ?? null;
             $encargos = $_POST['encargo'] ?? null;
             $values = $_POST['values'] ?? null;
-            
-
-
-            
 
             if (!is_null($productId)) {
                 // Buscar el carrito del usuario
@@ -228,15 +221,22 @@ class CartController
                     } else{
                         $productoEnCarrito = Productsxcart::findProductInCart($productId, $carrito->id);
                     }
-                   
-
                     if ($productoEnCarrito) {
                         // Eliminar el producto del carrito
                         if ($productoEnCarrito->quantity > 1) {
                             $productoEnCarrito->quantity -= 1;
-                            $productoEnCarrito->actualizarProductInCart();
+
+                            if ($encargos == 0){
+                                $productoEnCarrito->actualizarProductInCart();
+                            }else{
+                                $productoEnCarrito->actualizarCustomProductInCart();
+                            }
                         } else {
-                            $productoEnCarrito->deleteFromCart($productId, $carrito->id);
+                            if ($encargos == 0){
+                                $productoEnCarrito->deleteFromCart($productId, $carrito->id);
+                            }else{
+                                $productoEnCarrito->deleteCustomFromCart($productId, $carrito->id,$values);
+                            }
                         }
                     } else {
                         echo "<script>alert('El producto no está en el carrito.');</script>";
