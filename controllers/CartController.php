@@ -210,6 +210,12 @@ class CartController
         if ($userId) {
             // Obtener el productID que se quiere eliminar
             $productId = $_POST['productID'] ?? null;
+            $encargos = $_POST['encargo'] ?? null;
+            $values = $_POST['values'] ?? null;
+            
+
+
+            
 
             if (!is_null($productId)) {
                 // Buscar el carrito del usuario
@@ -217,7 +223,12 @@ class CartController
 
                 if (!is_null($carrito)) {
                     // Buscar el producto en el carrito
-                    $productoEnCarrito = Productsxcart::findProductInCart($productId, $carrito->id);
+                    if ($encargos == 1){
+                        $productoEnCarrito = Productsxcart::findProductInCart2($productId, $carrito->id, $values );
+                    } else{
+                        $productoEnCarrito = Productsxcart::findProductInCart($productId, $carrito->id);
+                    }
+                   
 
                     if ($productoEnCarrito) {
                         // Eliminar el producto del carrito

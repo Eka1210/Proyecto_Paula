@@ -439,6 +439,15 @@ class ActiveRecord
         return array_shift($resultado);
     }
 
+    public static function findProductInCart2($productId, $cartId, $values)
+    {
+        $query = "SELECT * FROM " . static::$tabla . " WHERE cartID = " . $cartId . " AND productID = " . $productId . " AND customization ='" . $values . "'";
+        error_log($query);
+        $resultado = self::consultarSQL($query);
+
+        return array_shift($resultado);
+    }
+
     public static function findCustomProductInCart($productId, $cartId, $customization)
     {
         // Escapar el JSON para evitar problemas de inyección SQL

@@ -67,11 +67,14 @@ include_once __DIR__ . "/../templates/alerts.php";
                                 <input type="hidden" value="<?php echo 1; ?>" id="quantity" name="quantity">
                                 <button type="submit" class="icon-update" title="Añadir al carrito">+</button>
                             </form>
+                        <?php endif;?>
+
                             <form method="POST" action="/cart/removeFromCart" class="w-100">
+                                <input type="hidden" name="encargo" value="<?php echo htmlspecialchars($producto->encargo); ?>">
                                 <input type="hidden" name="productID" value="<?php echo htmlspecialchars($producto->productID); ?>">
+                                <input type="hidden" name="values" value="<?php echo htmlspecialchars($producto->customization); ?>">
                                 <button type="submit" class="icon-delete" title="Eliminar del carrito">-</button>
                             </form>
-                        <?php endif; ?>
                     </td>
                 </tr>
             <?php } ?>
