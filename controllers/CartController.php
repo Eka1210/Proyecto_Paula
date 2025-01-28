@@ -40,6 +40,7 @@ class CartController
                     if ($producto) {
                         $productoEnCarrito->name = $producto->name;
                         $productoEnCarrito->encargo = $producto->encargo;
+                        $productoEnCarrito->imagen = $producto->imagen;
                     }else{
                         $productoEncarrito->name = 'Producto Deshabilitado';
                     }
