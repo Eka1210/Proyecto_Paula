@@ -159,7 +159,7 @@ verificarAccesoAdmin();
             <a href="mailto:pj.solutions.notifications@gmail.com">pj.solutions.notifications@gmail.com</a>
         </p>
         <p class="footer-contact">
-            WhatsApp: <a href="tel:+50687459920">+506 8745 9920</a>
+            WhatsApp: <a href="tel:+50663016703">+506 6301 6703</a>
         </p>
         <p class="footer-location">Cartago, Costa Rica</p>
         <p class="copyright">PJ Solutions &copy; Todos los derechos reservados.</p>
