@@ -546,7 +546,7 @@ class ActiveRecord
     public static function deleteByPromotion($promotionId)
     {
         // Eliminar todas las relaciones de promociones con el producto especificado
-        $query = "DELETE FROM productXpromotion WHERE promotionID = $promotionId";
+        $query = "DELETE FROM productxpromotion WHERE promotionID = $promotionId";
         $resultado = self::$db->query($query);
         return $resultado;
     }
