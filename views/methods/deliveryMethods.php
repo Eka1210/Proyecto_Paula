@@ -18,7 +18,7 @@
                         <th scope="col" class="table__th">Descripción</th>
                         <th scope="col" class="table__th">Costo</th>
                         <th scope="col" class="table__th"></th>
-                        <th scope="col" class="table__th"></th>
+                        <th scope="col" class="table__th">Activo</th>
                     </tr>
                 </thead>
                 <tbody class="table__tbody">
@@ -40,13 +40,14 @@
                                 </a>
                             </td>
                             <td class="table__td">
-                                <form action="/admin/removeMetodoEntrega" method="POST" onsubmit="return confirm('Está seguro que quiere eliminar este método?')">
-                                    <input type="hidden" name="id" value="<?php echo $metodoEntrega->id; ?>">
-                                    <button type="submit" class="categoryCard__view">
-                                        <i class="fa-solid fa-trash"></i>
-                                        Eliminar
-                                    </button>
-                                </form>
+                            <form action="/admin/metodosEntrega/activo" method="POST">
+                                <input type="hidden" name="id" value="<?php echo $metodoEntrega->id; ?>">
+                                <input type="hidden" name="activo" value="<?php echo $metodoEntrega->active ? 0 : 1; ?>">
+                                <button type="submit" class="categoryCard__view">
+                                    <i class="fa-solid <?php echo $metodoEntrega->active ? 'fa-toggle-on' : 'fa-toggle-off'; ?>"></i>
+                                    <?php echo $metodoEntrega->active ? 'Deshabilitar' : 'Habilitar'; ?>
+                                </button>
+                            </form>
                             </td>
                         </tr>
                         
@@ -56,5 +57,12 @@
     <?php } else { ?>
         <p class="admins__empty">No hay métodos de Entrega</p>
     <?php } ?>
+</div>
+
+<div style="display: flex; justify-content: right; align-items: center; margin: 20px 20px;">
+    <a href="/admin/metodosEntrega/deshabilitados" class="form__submit--orange">
+        Métodos de Entrega deshabilitados
+    </a>
+    
 </div>
 

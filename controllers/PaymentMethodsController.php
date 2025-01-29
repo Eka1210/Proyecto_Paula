@@ -10,6 +10,7 @@ class PaymentMethodsController {
     public static function verPaymentMethods(Router $router){
         isAdmin();
         $metodosPago = PaymentMethod::all();
+        $methods = [];
 
         foreach ($metodosPago as $metodoPago) {
             $metodoPago->id = $metodoPago->id;
@@ -17,8 +18,14 @@ class PaymentMethodsController {
             $metodoPago->name = $metodoPago->name;
             $metodoPago->description = $metodoPago->description;
         }
+
+        foreach ($metodosPago as $metodoPago) {
+            if ($metodoPago->active == 1) {
+                $methods[] = $metodoPago;
+            }
+        }
         $router->render('methods/paymentMethods', [
-            'metodosPago' => $metodosPago
+            'metodosPago' => $methods
         ]);
     }
 
@@ -97,4 +104,78 @@ class PaymentMethodsController {
             'metodosPago' => $metodosPago
         ]);
     }
+
+    public static function activoP(Router $router)
+    {
+        isAdmin();
+        $alertas = [];
+        $metodosPago = PaymentMethod::all();
+
+        foreach ($metodosPago as $metodoPago) {
+            $metodoPago->id = $metodoPago->id;
+            $metodoPago->create_time = $metodoPago->create_time;
+            $metodoPago->name = $metodoPago->name;
+            $metodoPago->description = $metodoPago->description;
+        }
+        
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $id = $_POST['id'];
+            $metodosPago = PaymentMethod::find($id);
+            $activo = $_POST['activo'];
+            $metodosPago->updateActivo($activo);
+
+            header('Location: /admin/metodosPago');
+            exit;
+        }
+        $router->render('methods/paymentMethods', [
+            'metodosPago' => $metodosPago
+        ]);
+    }
+
+    public static function activoP2(Router $router)
+    {
+        isAdmin();
+        $alertas = [];
+        $metodosPago = PaymentMethod::all();
+        $methods = [];
+
+        foreach ($metodosPago as $metodoPago) {
+            $metodoPago->id = $metodoPago->id;
+            $metodoPago->create_time = $metodoPago->create_time;
+            $metodoPago->name = $metodoPago->name;
+            $metodoPago->description = $metodoPago->description;
+        }
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $id = $_POST['id'];
+            $metodosPago = PaymentMethod::find($id);
+            $activo = $_POST['activo'];
+            $metodosPago->updateActivo($activo);
+
+            header('Location: /admin/metodosPago/deshabilitados');
+            exit;
+        }
+        $alertas = Category::getAlertas();
+        $router->render('methods/paymentMethods/removePaymentMethod', [
+            'metodosPago' => $metodosPago
+        ]);
+    }
+
+    public static function deshabilitadosP(Router $router)
+    {
+        isAdmin();
+        $alertas = [];
+        $metodosPago = PaymentMethod::all();
+        $methods = [];
+
+        foreach ($metodosPago as $metodo) {
+            if ($metodo->active == 0) {
+                $methods[] = $metodo;
+            }
+        }
+        $router->render('methods/paymentMethods/removePaymentMethod', [
+            'metodosPago' => $methods
+        ]);
+    }
+
+
 }

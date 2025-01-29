@@ -3,7 +3,7 @@
 namespace Controllers;
 
 use MVC\Router;
-use Model\cart;
+use Model\Cart;
 use Model\Product;
 use Model\Productsxcart;
 use Model\Usuario;

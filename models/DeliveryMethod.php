@@ -4,13 +4,14 @@ namespace Model;
 
 class DeliveryMethod extends ActiveRecord{
     protected static $tabla = 'deliverymethods';
-    protected static $columnasDB = ['id','create_time', 'name', 'description', 'cost'];
+    protected static $columnasDB = ['id','create_time', 'name', 'description', 'cost', 'active'];
 
     public $id;
     public $create_time;
     public $name;
     public $description;
     public $cost;
+    public $active;
 
     public function __construct($args = [])
     {
@@ -19,6 +20,7 @@ class DeliveryMethod extends ActiveRecord{
         $this->name = $args['name'] ?? '';
         $this->description = $args['description'] ?? '';
         $this->cost = $args['cost'] ?? null;
+        $this->active = $args['active'] ?? 1;
     }
 
     public function validate()
@@ -33,5 +35,12 @@ class DeliveryMethod extends ActiveRecord{
             self::setAlerta('error', 'El costo es obligatorio');
         }
         return self::$alertas;
+    }
+
+    public function updateActivo($activo)
+    {
+        $query = "UPDATE deliverymethods SET active = " . intval($activo) . " WHERE id = " . intval($this->id);
+        $resultado = self::$db->query($query);
+        return $resultado;
     }
 }

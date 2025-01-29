@@ -17,7 +17,7 @@
                         <th scope="col" class="table__th">Método de Pago</th>
                         <th scope="col" class="table__th">Descripción</th>
                         <th scope="col" class="table__th"></th>
-                        <th scope="col" class="table__th"></th>
+                        <th scope="col" class="table__th">Activo</th>
                     </tr>
                 </thead>
                 <tbody class="table__tbody">
@@ -36,13 +36,14 @@
                                 </a>
                             </td>
                             <td class="table__td">
-                                <form action="/admin/removeMetodoPago" method="POST" onsubmit="return confirm('Está seguro que quiere eliminar este método?')">
-                                    <input type="hidden" name="id" value="<?php echo $metodoPago->id; ?>">
-                                    <button type="submit" class="categoryCard__view">
-                                        <i class="fa-solid fa-trash"></i>
-                                        Eliminar
-                                    </button>
-                                </form>
+                            <form action="/admin/metodosPago/activo" method="POST">
+                                <input type="hidden" name="id" value="<?php echo $metodoPago->id; ?>">
+                                <input type="hidden" name="activo" value="<?php echo $metodoPago->active ? 0 : 1; ?>">
+                                <button type="submit" class="categoryCard__view">
+                                    <i class="fa-solid <?php echo $metodoPago->active ? 'fa-toggle-on' : 'fa-toggle-off'; ?>"></i>
+                                    <?php echo $metodoPago->active ? 'Deshabilitar' : 'Habilitar'; ?>
+                                </button>
+                            </form>
                             </td>
                         </tr>
                         
@@ -54,3 +55,9 @@
     <?php } ?>
 </div>
 
+<div style="display: flex; justify-content: right; align-items: center; margin: 20px 20px;">
+    <a href="/admin/metodosPago/deshabilitados" class="form__submit--orange">
+        Métodos de Pago deshabilitados
+    </a>
+    
+</div>

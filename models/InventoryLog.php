@@ -52,7 +52,7 @@ class Inventorylog extends ActiveRecord
             self::setAlerta('error', 'El nuevo valor debe ser un número entero positivo y dentro del rango permitido');
         }
 
-        if (!is_numeric($this->old_value) || intval($this->old_value) <= 0 || intval($this->old_value) > 2147483647) {
+        if (!is_numeric($this->old_value) || intval($this->old_value) < 0 || intval($this->old_value) > 2147483647) {
             self::setAlerta('error', 'El valor antiguo debe ser un número entero positivo y dentro del rango permitido');
         }
 

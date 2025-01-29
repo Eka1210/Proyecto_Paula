@@ -11,6 +11,7 @@ class DeliveryMethodsController {
     public static function verDeliveryMethods(Router $router){
         isAdmin();
         $metodosEntrega = DeliveryMethod::all();
+        $methods =[];
 
         foreach ($metodosEntrega as $metodoEntrega) {
             $metodoEntrega->id = $metodoEntrega->id;
@@ -19,8 +20,14 @@ class DeliveryMethodsController {
             $metodoEntrega->description = $metodoEntrega->description;
             $metodoEntrega->cost = $metodoEntrega->cost;
         }
+
+        foreach ($metodosEntrega as $metodo) {
+            if ($metodo->active == 1) {
+                $methods[] = $metodo;
+            }
+        }
         $router->render('methods/deliveryMethods', [
-            'metodosEntrega' => $metodosEntrega
+            'metodosEntrega' => $methods
         ]);
     }
 
@@ -98,6 +105,82 @@ class DeliveryMethodsController {
         $router->render('methods/deliveryMethods/removeDeliveryMethod', [
             'alertas' => $alertas,
             'metodosEntrega' => $metodosEntrega
+        ]);
+    }
+
+
+    public static function activoD(Router $router)
+    {
+        isAdmin();
+        $alertas = [];
+        $metodosEntrega = DeliveryMethod::all();
+         $methods =[];
+
+        foreach ($metodosEntrega as $metodoEntrega) {
+            $metodoEntrega->id = $metodoEntrega->id;
+            $metodoEntrega->create_time = $metodoEntrega->create_time;
+            $metodoEntrega->name = $metodoEntrega->name;
+            $metodoEntrega->description = $metodoEntrega->description;
+            $metodoEntrega->cost = $metodoEntrega->cost;
+        }
+        
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $id = $_POST['id'];
+            $metodosEntrega = DeliveryMethod::find($id);
+            $activo = $_POST['activo'];
+            $metodosEntrega->updateActivo($activo);
+
+            header('Location: /admin/metodosEntrega');
+            exit;
+        }
+        $router->render('methods/deliveryMethods', [
+            'metodosEntrega' => $metodosPago
+        ]);
+    }
+
+    public static function activoD2(Router $router)
+    {
+        isAdmin();
+        $alertas = [];
+        $metodosEntrega = DeliveryMethod::all();
+        $methods =[];
+
+        foreach ($metodosEntrega as $metodoEntrega) {
+            $metodoEntrega->id = $metodoEntrega->id;
+            $metodoEntrega->create_time = $metodoEntrega->create_time;
+            $metodoEntrega->name = $metodoEntrega->name;
+            $metodoEntrega->description = $metodoEntrega->description;
+            $metodoEntrega->cost = $metodoEntrega->cost;
+        }
+
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $id = $_POST['id'];
+            $metodoEntrega = DeliveryMethod::find($id);
+            $activo = $_POST['activo'];
+            $metodoEntrega->updateActivo($activo);
+
+            header('Location: /admin/metodosEntrega/deshabilitados');
+            exit;
+        }
+        $router->render('methods/deliveryMethods/removeDeliveryMethod', [
+            'metodoEntrega' => $metodoEntrega
+        ]);
+    }
+
+    public static function deshabilitadosD(Router $router)
+    {
+        isAdmin();
+        $alertas = [];
+        $metodosEntrega = DeliveryMethod::all();
+        $methods =[];
+
+        foreach ($metodosEntrega as $metodo) {
+            if ($metodo->active == 0) {
+                $methods[] = $metodo;
+            }
+        }
+        $router->render('methods/deliveryMethods/removeDeliveryMethod', [
+            'metodosEntrega' => $methods
         ]);
     }
 }

@@ -143,12 +143,17 @@ $router->post('/like', [ProductController::class, 'like']);
 $router->post('/wishlist/eliminar', [WishListController::class, 'eliminar']);
 //Rutas de Métodos de Pago
 $router->get('/admin/metodosPago', [PaymentMethodsController::class, 'verPaymentMethods']);
+$router->get('/admin/metodosPago/activo', [PaymentMethodsController::class, 'activoP']);
+$router->post('/admin/metodosPago/activo', [PaymentMethodsController::class, 'activoP']);
+$router->get('/admin/metodosPago/activoP2', [PaymentMethodsController::class, 'activoP2']);
+$router->post('/admin/metodosPago/activoP2', [PaymentMethodsController::class, 'activoP2']);
 $router->post('/admin/addMetodoPago', [PaymentMethodsController::class, 'addMetodoPago']);
 $router->get('/admin/addMetodoPago', [PaymentMethodsController::class, 'addMetodoPago']);
 $router->post('/admin/editMetodoPago', [PaymentMethodsController::class, 'editMetodoPago']);
 $router->get('/admin/editMetodoPago', [PaymentMethodsController::class, 'editMetodoPago']);
 $router->post('/admin/removeMetodoPago', [PaymentMethodsController::class, 'removeMetodoPago']);
 $router->get('/admin/removeMetodoPago', [PaymentMethodsController::class, 'removeMetodoPago']);
+$router->get('/admin/metodosPago/deshabilitados', [PaymentMethodsController::class, 'deshabilitadosP']);
 
 // Rutas de Métodos de Entrega
 $router->get('/admin/metodosEntrega', [DeliveryMethodsController::class, 'verDeliveryMethods']);
@@ -158,6 +163,11 @@ $router->post('/admin/editMetodoEntrega', [DeliveryMethodsController::class, 'ed
 $router->get('/admin/editMetodoEntrega', [DeliveryMethodsController::class, 'editMetodoEntrega']);
 $router->post('/admin/removeMetodoEntrega', [DeliveryMethodsController::class, 'removeMetodoEntrega']);
 $router->get('/admin/removeMetodoEntrega', [DeliveryMethodsController::class, 'removeMetodoEntrega']);
+$router->get('/admin/metodosEntrega/activo', [DeliveryMethodsController::class, 'activoD']);
+$router->post('/admin/metodosEntrega/activo', [DeliveryMethodsController::class, 'activoD']);
+$router->get('/admin/metodosEntrega/activoD2', [DeliveryMethodsController::class, 'activoD2']);
+$router->post('/admin/metodosEntrega/activoD2', [DeliveryMethodsController::class, 'activoD2']);
+$router->get('/admin/metodosEntrega/deshabilitados', [DeliveryMethodsController::class, 'deshabilitadosD']);
 
 // Comprueba y valida las rutas, que existan y les asigna las funciones del Controlador
 $router->comprobarRutas();
