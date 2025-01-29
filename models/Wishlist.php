@@ -4,7 +4,7 @@ namespace Model;
 
 class Wishlist extends ActiveRecord
 {
-    protected static $tabla = 'wishList';
+    protected static $tabla = 'wishlist';
     protected static $columnasDB = ['create_time', 'userID', 'productID'];
 
     public $create_time;
