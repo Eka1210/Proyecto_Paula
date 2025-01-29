@@ -15,20 +15,30 @@ class AdminController {
             $usuario = $_POST['usuario'] ;
             $accion = $_POST['accion'];
             if(!Usuario::where('username', $usuario) == null){
-                if ($accion === 'otorgar') {
-                    Usuario::makeAdmin('username', $usuario);
-                } elseif ($accion === 'revocar') {
-                    Usuario::unmakeAdmin('username', $usuario);
+                if ($usuario != 'master'){
+                    if ($accion === 'otorgar') {
+                        Usuario::makeAdmin('username', $usuario);
+                    } elseif ($accion === 'revocar') {
+                        Usuario::unmakeAdmin('username', $usuario);
+                    }
+                    Usuario::setAlerta('success', 'Actualizado exitosamente');
                 }
-                Usuario::setAlerta('success', 'Actualizado exitosamente');
+                else{
+                    Usuario::setAlerta('error', 'No se le puede cambiar permisos a ese usuario');
+                }
             }
             elseif(!Usuario::where('email', $usuario) == null){
-                if ($accion === 'otorgar') {
-                    Usuario::makeAdmin('email', $usuario);
-                } elseif ($accion === 'revocar') {
-                    Usuario::unmakeAdmin('email', $usuario);
+                if(Usuario::where('email', $usuario)->username != 'master'){
+                    if ($accion === 'otorgar') {
+                        Usuario::makeAdmin('email', $usuario);
+                    } elseif ($accion === 'revocar') {
+                        Usuario::unmakeAdmin('email', $usuario);
+                    }
+                    Usuario::setAlerta('success', 'Actualizado exitosamente');
                 }
-                Usuario::setAlerta('success', 'Actualizado exitosamente');
+                else{
+                    Usuario::setAlerta('error', 'No se le puede cambiar permisos a ese usuario');
+                }
             }
             else{
                 Usuario::setAlerta('error', 'El usuario no existe');
