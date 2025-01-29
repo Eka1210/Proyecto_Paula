@@ -76,25 +76,23 @@ class Promotion extends ActiveRecord
     }
 
     public function doesNameExist()
-{
-    if (empty(self::$tabla) || empty($this->name)) {
-        return false; // Prevent running an invalid query
+    {
+        if (empty(self::$tabla) || empty($this->name)) {
+            return false; // Prevent running an invalid query
+        }
+
+        $query = "SELECT 1 FROM " . self::$tabla . " WHERE name = ? AND id != ? LIMIT 1";
+
+        $stmt = self::$db->prepare($query);
+        if (!$stmt) {
+            error_log("MySQL Prepare Error: " . self::$db->error);
+            return false; // Log error for debugging
+        }
+
+        $stmt->bind_param("si", $this->name, $this->id);
+        $stmt->execute();
+        $stmt->store_result();
+
+        return $stmt->num_rows > 0;
     }
-
-    $query = "SELECT 1 FROM " . self::$tabla . " WHERE name = ? AND id != ? LIMIT 1";
-    
-    $stmt = self::$db->prepare($query);
-    if (!$stmt) {
-        error_log("MySQL Prepare Error: " . self::$db->error);
-        return false; // Log error for debugging
-    }
-
-    $stmt->bind_param("si", $this->name, $this->id);
-    $stmt->execute();
-    $stmt->store_result();
-
-    return $stmt->num_rows > 0;
-}
-
-}
 }
