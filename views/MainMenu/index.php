@@ -41,8 +41,12 @@
             <?php } ?>
         <?php } ?>
     </div>
-    <a href="productos" class="ver-todos">
+
+    <?php if (!isset($_SESSION['admin'])) { ?>
+        <a href="productos" class="ver-todos">
         <img src="/images/plus.png" alt="Plus Symbol" class="plus-symbol">
         <span>Ver Todos</span>
     </a>
+        <?php } ?>
+   
 </div>
