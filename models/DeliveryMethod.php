@@ -2,10 +2,9 @@
 
 namespace Model;
 
-class DeliveryMethod extends ActiveRecord
-{
+class DeliveryMethod extends ActiveRecord{
     protected static $tabla = 'deliverymethods';
-    protected static $columnasDB = ['id', 'create_time', 'name', 'description', 'cost'];
+    protected static $columnasDB = ['id','create_time', 'name', 'description', 'cost'];
 
     public $id;
     public $create_time;
