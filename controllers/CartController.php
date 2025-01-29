@@ -326,8 +326,24 @@ class CartController
             }
         }
 
-        $metodosPago = PaymentMethod::all();
-        $metodosEntrega = DeliveryMethod::all();
+        $metodsPago = PaymentMethod::all();
+        $metodosPago =[];
+
+        foreach ($metodsPago as $metodo){
+            if ($metodo->active == 1){
+                $metodosPago []= $metodo;
+            }
+        }
+
+        $metodsEntrega = DeliveryMethod::all();
+
+        $metodosEntrega =[];
+
+        foreach ($metodsEntrega as $metodo){
+            if ($metodo->active == 1){
+                $metodosEntrega []= $metodo;
+            }
+        }
 
         $productosEnCarrito = self::calcularDescuento($productosEnCarrito);
         $router->render('ventas/checkout', [
