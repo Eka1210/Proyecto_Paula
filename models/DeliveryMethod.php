@@ -1,9 +1,11 @@
-<?php 
+<?php
+
 namespace Model;
 
-class DeliveryMethod extends ActiveRecord{
-    protected static $tabla = 'deliveryMethods';
-    protected static $columnasDB = ['id','create_time', 'name', 'description', 'cost'];
+class DeliveryMethod extends ActiveRecord
+{
+    protected static $tabla = 'deliverymethods';
+    protected static $columnasDB = ['id', 'create_time', 'name', 'description', 'cost'];
 
     public $id;
     public $create_time;
@@ -11,7 +13,8 @@ class DeliveryMethod extends ActiveRecord{
     public $description;
     public $cost;
 
-    public function __construct($args = []) {
+    public function __construct($args = [])
+    {
         $this->id = $args['id'] ?? null;
         $this->create_time = $args['create_time'] ?? '';
         $this->name = $args['name'] ?? '';
@@ -19,17 +22,17 @@ class DeliveryMethod extends ActiveRecord{
         $this->cost = $args['cost'] ?? null;
     }
 
-    public function validate(){
-        if(!$this->name){
+    public function validate()
+    {
+        if (!$this->name) {
             self::setAlerta('error', 'El nombre es obligatorio');
         }
-        if(!$this->description){
+        if (!$this->description) {
             self::setAlerta('error', 'La descripcion es obligatoria');
         }
-        if($this->cost === null || $this->cost === '') {
+        if ($this->cost === null || $this->cost === '') {
             self::setAlerta('error', 'El costo es obligatorio');
         }
         return self::$alertas;
     }
 }
-
