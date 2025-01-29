@@ -14,7 +14,7 @@ use Model\Productxsale;
 use Model\PaymentMethod;
 use Model\DeliveryMethod;
 use Model\Promotion;
-use Model\ProductXPromotion;
+use Model\ProductxPromotion;
 use Model\Client;
 use Controllers\ProductController;
 
@@ -262,7 +262,7 @@ class CartController
 
         foreach ($promocionesActivas as $promocion) {
             // Verificar si el producto está asociado con la promoción
-            $productoEnPromocion = ProductXPromotion::isProductPromotion($productID, $promocion->id);
+            $productoEnPromocion = ProductxPromotion::isProductPromotion($productID, $promocion->id);
             if ($productoEnPromocion) {
                 if ($promocion->percentage >= $promocionMayor->percentage) {
                     $promocionMayor = $promocion;
