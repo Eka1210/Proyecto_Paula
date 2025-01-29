@@ -207,7 +207,7 @@
             }
 
             let xhr = new XMLHttpRequest();
-            xhr.open("GET", `http://localhost:3000/like?productLiked=${productId}`, true);
+            xhr.open("GET", `/like?productLiked=${productId}`, true);
 
             xhr.onload = () => {
                 if (xhr.readyState === XMLHttpRequest.DONE) {
