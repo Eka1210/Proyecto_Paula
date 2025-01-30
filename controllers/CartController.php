@@ -181,7 +181,7 @@ class CartController
                 'productID' => $productoId,
                 'quantity' => $quantity,
                 'cartID' => $carrito->id,
-                'price' => $price * $quantity,
+                'price' => $price,
                 'customization' => $values
             ]);
             $resultado = $cartItem->guardar();
