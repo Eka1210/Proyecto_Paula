@@ -22,7 +22,7 @@ class ReportController
                 !self::isValidMysqlDatetime($_POST['start_time']) ||
                 !self::isValidMysqlDatetime($_POST['end_time'])
             ) {
-                $alertas['error'][] = 'Las fechas son obligatorias y deben estar en el formato correcto (YYYY-MM-DD)';
+                $alertas['error'][] = 'Las fechas son obligatorias y deben estar en el formato correcto (MM-DD-YYYY)';
                 $router->render('/reportes/reporte', ['alertas' => $alertas]);
                 return;
             } else {
