@@ -25,7 +25,11 @@ class WishListController
                     }
                 }
             }
+        } else {
+            header('Location: /login');
+            exit;
         }
+
 
 
         $router->render('wishlist/wishlist', [
