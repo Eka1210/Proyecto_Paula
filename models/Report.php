@@ -4,7 +4,7 @@ namespace Model;
 
 use Model\Sale;
 use Model\Usuario;
-use Model\client;
+use Model\Client;
 use Model\Product;
 use Model\Productxsale;
 use Model\PaymentMethod;
