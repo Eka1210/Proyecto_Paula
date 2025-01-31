@@ -1,3 +1,7 @@
+<?php
+    include_once __DIR__ . "/../templates/alerts.php";
+?>
+
 <div class="prodpage">
     <div class="product-customization">
         <div class="product-image">

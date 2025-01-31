@@ -696,7 +696,7 @@ class ProductController
             // Obtener datos de la sesión y del formulario
             $userId = $_SESSION['userId'] ?? null;
             $productID = $_POST['productID'] ?? null;
-    
+            $alertas = [];
             if (is_null($userId)) {
                     Review::setAlerta('error', 'No se pudo identificar al cliente');
             } else {
@@ -715,7 +715,6 @@ class ProductController
                         $review = new Review($_POST);
                         date_default_timezone_set('America/Costa_Rica');
                         $review->create_time = date('Y-m-d H:i:s'); // Fecha actual
-        
                         $alertas = $review->validate();
                         if (empty($alertas)) {
                             $review->guardar();
@@ -724,10 +723,56 @@ class ProductController
                     }
                 }
             }
+
+            $producto = Product::find($productID);
+            $options = OptionsXProduct::all2($productID);
     
-            // Renderizar la vista con las alertas
-            $router->render('/product/reviews', [
-                'alertas' => Review::getAlertas()
+            foreach ($options as &$option) {
+                $option->decodedValues = json_decode($option->value, true);
+                $optionC = Option::find($option->optionID);
+                $option->name = $optionC->name;
+            }
+    
+            if (isset($_SESSION['userId'])) {
+                $producto->liked = Wishlist::isLiked($producto->id, $_SESSION['userId']);
+            } else {
+                $producto->liked = false;
+            }
+    
+    
+            $producto->name = $producto->name;
+            $producto->id = $producto->id;
+            $producto->description = $producto->description;
+            $producto->price = $producto->price;
+            $producto->cantidad = $producto->cantidad;
+            $producto->imagen = $producto->imagen;
+            $producto->encargo = $producto->encargo;
+            $recomendados = $producto->recomended();
+    
+            foreach ($recomendados as $recomendado) {
+                $recomendado->name = $recomendado->name;
+                $recomendado->id = $recomendado->id;
+                $recomendado->description = $recomendado->description;
+                $recomendado->price = $recomendado->price;
+                $recomendado->cantidad = $recomendado->cantidad;
+                $recomendado->imagen = $recomendado->imagen;
+                $recomendado->encargo = $recomendado->encargo;
+                $discount = Promotion::getDiscount($recomendado->id)[0] ?? null;
+                $recomendado->discountPercentage = $discount ? $discount->percentage : 0;
+            }
+
+            $reviews = Review::all2(intval($producto->id));
+
+            $discount = Promotion::getDiscount($producto->id)[0] ?? null;
+            $producto->discountPercentage = $discount ? $discount->percentage : 0;
+            $alertas = Review::getAlertas();
+            $router->render('ProductsSpects/productsSpects', [
+                'producto' => $producto,
+                'recomendados' => $recomendados,
+                'options' => $options,
+                'productId' => $resultado,
+                'reviews' => $reviews,
+                'alertas' => $alertas
             ]);
         }
     }
