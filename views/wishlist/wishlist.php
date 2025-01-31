@@ -21,33 +21,36 @@
                             <?php echo htmlspecialchars($product->name); ?>
                         </td>
                         <td class="table__td">
-                            <img src="<?php echo htmlspecialchars($product->imagen); ?>"
-                                alt="Imagen de <?php echo htmlspecialchars($product->name); ?>"
-                                class="wishImage">
-                        </td>
-                        <td class="table__td">
-                            <?php echo htmlspecialchars($product->price); ?>
-                        </td>
-                        <td class="table__td">
-                            <form action="cart/AddToCart" method="post" style="margin-bottom: 10px;">
-                                <input type="hidden" value="<?php echo htmlspecialchars($product->id); ?>" id="producto" name="producto">
-                                <input type="hidden" value="<?php echo htmlspecialchars($product->price); ?>" id="price" name="price">
-                                <div class="quantity-selector">
-                                    <label for="quantity">Cantidad:</label>
-                                    <select id="quantity" name="quantity">
-                                        <?php
-                                        for ($i = 1; $i <= $product->cantidad; $i++) {
-                                            echo '<option value="' . htmlspecialchars($i) . '">' . htmlspecialchars($i) . '</option>';
-                                        }
-                                        ?>
-                                    </select>
+                            <a href="/mostrarproducto?nombre=<?php echo $product->name; ?>">
+                                <div class="product-image">
+                                    <img src="<?php echo htmlspecialchars($product->imagen); ?>"
+                                        alt="Imagen de <?php echo htmlspecialchars($product->name); ?>"
+                                        class="wishImage">
                                 </div>
-                                <button class="btn" type="submit" id="addToCartButton" data-product="<?php echo htmlspecialchars($product->id); ?>">Agregar al Carrito</button>
-                            </form>
+                            </a>
+                        </td>
+                        <td class="table__td">
+
+                            <?php
+                            if ($product->discountPercentage > 0) {
+                                $discountedPrice = $product->price - ($product->price * $product->discountPercentage / 100);
+                            ?>
+                                <p style="color: green;">₡<?php echo number_format($discountedPrice, 2); ?></p>
+                                <p style="text-decoration: line-through; font-size: 1em;">₡<?php echo number_format($product->price, 2); ?></p>
+                            <?php
+                            } else {
+                            ?>
+                                <p>₡<?php echo number_format($product->price, 2); ?> </p>
+                            <?php
+                            }
+                            ?>
+                        </td>
+                        <td class="table__td">
                             <form action="/wishlist/eliminar" method="post" onsubmit="return confirm('Está seguro que quiere eliminar el producto de la lista de favoritos?')">
                                 <input type="hidden" value="<?php echo htmlspecialchars($product->id); ?>" id="producto" name="producto">
                                 <button style="background-color: red;" class="btn" type="submit" id="removeFromWishlistButton" data-product="<?php echo htmlspecialchars($product->id); ?>">Eliminar de la lista</button>
                             </form>
+
 
 
                         </td>

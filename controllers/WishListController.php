@@ -5,6 +5,7 @@ namespace Controllers;
 use MVC\Router;
 use Model\Product;
 use Model\Wishlist;
+use Model\Promotion;
 
 class WishListController
 {
@@ -21,6 +22,8 @@ class WishListController
                     $product = Product::find($list->productID);
                     if ($product->activo == 1) {
                         $product = Product::find($list->productID);
+                        $discount = Promotion::getDiscount($product->id)[0] ?? null;
+                        $product->discountPercentage = $discount ? $discount->percentage : 0;
                         $productList[] = $product;
                     }
                 }
