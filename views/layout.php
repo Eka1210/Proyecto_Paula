@@ -46,7 +46,7 @@ verificarAccesoAdmin();
         crossorigin=""></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css" referrerpolicy="no-referrer" />
 
-    
+
 </head>
 
 <body>
@@ -54,7 +54,7 @@ verificarAccesoAdmin();
         <a href="/" class="logo" style="width: 100px; height: auto;">
             <img src="/images/logo.png">
         </a>
-        
+
 
         <div class="actions">
             <?php if (!isset($_SESSION['login'])) { ?>
@@ -62,8 +62,10 @@ verificarAccesoAdmin();
             <?php } else { ?>
                 <a class="login" href="/logout">Cerrar Sesión</a>
                 <a class="login" href="/cuenta">Mi Cuenta</a>
-                <a class="carrito" href="/cart"> </a>
-                <a class="wishlist" href="/wishlist"> </a>
+                <?php if (!isset($_SESSION['admin'])) { ?>
+                    <a class="carrito" href="/cart"> </a>
+                    <a class="wishlist" href="/wishlist"> </a>
+                <?php } ?>
             <?php } ?>
         </div>
     </header>
@@ -83,7 +85,7 @@ verificarAccesoAdmin();
                     echo 'class="active"';
                 } ?> href="/">
                 Inicio</a>
-        <?php }?>
+        <?php } ?>
         <?php if (isset($_SESSION['admin'])) { ?>
             <a <?php if ($page == 'categorias') {
                     echo 'class="active"';
@@ -101,14 +103,14 @@ verificarAccesoAdmin();
                     echo 'class="active"';
                 } ?> href="/admin/productos">
                 Productos</a>
-        <?php }?>
+        <?php } ?>
         <?php if (isset($_SESSION['admin'])) { ?>
             <a <?php if ($page == 'admin') {
                     echo 'class="active"';
                 } ?> href="/admin/inventario">
                 Inventario</a>
         <?php } ?>
-        
+
         <?php if (isset($_SESSION['admin'])) { ?>
             <a <?php if ($page == 'admin') {
                     echo 'class="active"';
@@ -121,13 +123,13 @@ verificarAccesoAdmin();
                 } ?> href="/admin/reporte">
                 Reporte</a>
         <?php } ?>
-        
+
         <?php if (isset($_SESSION['admin'])) { ?>
             <a <?php if ($page == 'admin') {
                     echo 'class="active"';
                 } ?> href="/admin/pedidos">
                 Pedidos</a>
-        <?php } elseif (isset($_SESSION['login'])){ ?>
+        <?php } elseif (isset($_SESSION['login'])) { ?>
             <a <?php if ($page == 'Mis pedidos') {
                     echo 'class="active"';
                 } ?> href="/pedidos">
@@ -153,18 +155,18 @@ verificarAccesoAdmin();
     <?php echo $contenido; ?>
 
     <footer class="footer section">
-    <div class="container footer-content">
-        <p class="footer-title">Escríbenos</p>
-        <p class="footer-contact">
-            <a href="mailto:pj.solutions.notifications@gmail.com">pj.solutions.notifications@gmail.com</a>
-        </p>
-        <p class="footer-contact">
-            WhatsApp: <a href="tel:+50663016703">+506 6301 6703</a>
-        </p>
-        <p class="footer-location">Cartago, Costa Rica</p>
-        <p class="copyright">PJ Solutions &copy; Todos los derechos reservados.</p>
-    </div>
-</footer>
+        <div class="container footer-content">
+            <p class="footer-title">Escríbenos</p>
+            <p class="footer-contact">
+                <a href="mailto:pj.solutions.notifications@gmail.com">pj.solutions.notifications@gmail.com</a>
+            </p>
+            <p class="footer-contact">
+                WhatsApp: <a href="tel:+50663016703">+506 6301 6703</a>
+            </p>
+            <p class="footer-location">Cartago, Costa Rica</p>
+            <p class="copyright">PJ Solutions &copy; Todos los derechos reservados.</p>
+        </div>
+    </footer>
 
 
     <script src='/build/js/app.js'></script>
@@ -172,56 +174,55 @@ verificarAccesoAdmin();
 
 <script>
     function checkOverflow() {
-    const nav = document.querySelector('.navegacion');
-    const toggleNav = document.querySelector('.toggle-nav');
-    const links = nav.querySelectorAll('a');
+        const nav = document.querySelector('.navegacion');
+        const toggleNav = document.querySelector('.toggle-nav');
+        const links = nav.querySelectorAll('a');
 
-    // Calcular el ancho total de los enlaces visibles
-    let totalWidth = 0;
-    let hideFromIndex = -1;
+        // Calcular el ancho total de los enlaces visibles
+        let totalWidth = 0;
+        let hideFromIndex = -1;
 
-    links.forEach((link, index) => {
-        totalWidth += link.offsetWidth;
+        links.forEach((link, index) => {
+            totalWidth += link.offsetWidth;
 
-        if (totalWidth > nav.offsetWidth) {
-            if (hideFromIndex === -1) hideFromIndex = index;
-            link.style.display = 'none'; // Ocultar los que no caben
+            if (totalWidth > nav.offsetWidth) {
+                if (hideFromIndex === -1) hideFromIndex = index;
+                link.style.display = 'none'; // Ocultar los que no caben
+            } else {
+                link.style.display = 'block'; // Mostrar los visibles
+            }
+        });
+
+        // Mostrar el botón de flecha solo si hay elementos ocultos
+        if (hideFromIndex !== -1) {
+            toggleNav.style.display = 'block';
         } else {
-            link.style.display = 'block'; // Mostrar los visibles
+            toggleNav.style.display = 'none';
+        }
+    }
+
+    // Alternar visibilidad de elementos ocultos
+    document.querySelector('.toggle-nav').addEventListener('click', () => {
+        const nav = document.querySelector('.navegacion');
+        const links = nav.querySelectorAll('a');
+        const toggleNav = document.querySelector('.toggle-nav');
+
+        if (nav.classList.contains('expanded')) {
+            // Contraer: Restaurar el estado oculto de los enlaces
+            nav.classList.remove('expanded');
+            checkOverflow(); // Recalcular cuáles mostrar/ocultar
+        } else {
+            // Expandir: Mostrar todos los enlaces
+            nav.classList.add('expanded');
+            links.forEach(link => link.style.display = 'block'); // Mostrar todos
         }
     });
 
-    // Mostrar el botón de flecha solo si hay elementos ocultos
-    if (hideFromIndex !== -1) {
-        toggleNav.style.display = 'block';
-    } else {
-        toggleNav.style.display = 'none';
-    }
-}
+    // Detectar redimensionamiento de ventana
+    window.addEventListener('resize', checkOverflow);
 
-// Alternar visibilidad de elementos ocultos
-document.querySelector('.toggle-nav').addEventListener('click', () => {
-    const nav = document.querySelector('.navegacion');
-    const links = nav.querySelectorAll('a');
-    const toggleNav = document.querySelector('.toggle-nav');
-
-    if (nav.classList.contains('expanded')) {
-        // Contraer: Restaurar el estado oculto de los enlaces
-        nav.classList.remove('expanded');
-        checkOverflow(); // Recalcular cuáles mostrar/ocultar
-    } else {
-        // Expandir: Mostrar todos los enlaces
-        nav.classList.add('expanded');
-        links.forEach(link => link.style.display = 'block'); // Mostrar todos
-    }
-});
-
-// Detectar redimensionamiento de ventana
-window.addEventListener('resize', checkOverflow);
-
-// Verificar el estado inicial
-checkOverflow();
-
+    // Verificar el estado inicial
+    checkOverflow();
 </script>
 
 </html>
